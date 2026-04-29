@@ -672,8 +672,7 @@
 
 /* Focus indicators */
 .ldjem-menu-item a:focus {
-    outline: 2px solid var(--ldjem-color-active);
-    outline-offset: 2px;
+    outline: none;
 }
 
 /* High contrast mode */
