@@ -466,6 +466,75 @@ class LDJEM_Menu_Widget extends Widget_Base {
             ]
         );
 
+        $this->add_control(
+            'vertical_separator_heading',
+            [
+                'label'     => esc_html__('Vertical Separators', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'vertical_separator_enabled',
+            [
+                'label'   => esc_html__('Show Separators', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'yes' => esc_html__('Show', LDJEM_TEXT_DOMAIN),
+                    'no'  => esc_html__('Hide', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'yes',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-submenu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-submenu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-submenu > .ldjem-menu-item' => '--ldjem-vertical-item-separator-style: {{VALUE}};',
+                ],
+                'selectors_dictionary' => [
+                    'yes' => 'solid',
+                    'no'  => 'none',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'vertical_separator_width',
+            [
+                'label'      => esc_html__('Separator Width', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 8,
+                    ],
+                ],
+                'default' => [
+                    'size' => 1,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-submenu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-submenu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-submenu > .ldjem-menu-item' => '--ldjem-vertical-item-separator-width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'vertical_separator_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'vertical_separator_color',
+            [
+                'label'     => esc_html__('Separator Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#e0e0e0',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-submenu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-submenu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-submenu > .ldjem-menu-item' => '--ldjem-vertical-item-separator-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'vertical_separator_enabled' => 'yes',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
     }
 
@@ -526,6 +595,182 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'default'   => '#0073aa',
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-menu-item.current-menu-item > a' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_heading',
+            [
+                'label'     => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_hover',
+            [
+                'label'   => esc_html__('Hover Underline', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'none'      => esc_html__('None', LDJEM_TEXT_DOMAIN),
+                    'underline' => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'none',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover' => 'text-decoration-line: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_active',
+            [
+                'label'   => esc_html__('Active Underline', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'none'      => esc_html__('None', LDJEM_TEXT_DOMAIN),
+                    'underline' => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'none',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-line: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_color',
+            [
+                'label'     => esc_html__('Underline Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'menu_item_underline_thickness',
+            [
+                'label'      => esc_html__('Underline Thickness', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 1,
+                        'max' => 10,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-thickness: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'menu_item_underline_offset',
+            [
+                'label'      => esc_html__('Underline Offset', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 24,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-underline-offset: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_heading',
+            [
+                'label'     => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_hover',
+            [
+                'label'   => esc_html__('Hover Underline', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'none'      => esc_html__('None', LDJEM_TEXT_DOMAIN),
+                    'underline' => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'none',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover' => 'text-decoration-line: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_active',
+            [
+                'label'   => esc_html__('Active Underline', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'none'      => esc_html__('None', LDJEM_TEXT_DOMAIN),
+                    'underline' => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'none',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-line: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_underline_color',
+            [
+                'label'     => esc_html__('Underline Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'menu_item_underline_thickness',
+            [
+                'label'      => esc_html__('Underline Thickness', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 1,
+                        'max' => 10,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-thickness: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'menu_item_underline_offset',
+            [
+                'label'      => esc_html__('Underline Offset', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 24,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-underline-offset: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -2264,8 +2509,9 @@ class LDJEM_Menu_Widget extends Widget_Base {
             esc_attr($mobile_layout)
         );
 
-        // Render hamburger for non-offcanvas menu when enabled in settings
-        if (!empty($settings['mobile_hamburger_toggle']) && 'yes' === $settings['mobile_hamburger_toggle']) {
+        // Render hamburger for standard menu only.
+        // Off-canvas layout renders its own toggle to avoid duplicate buttons.
+        if (!empty($settings['mobile_hamburger_toggle']) && 'yes' === $settings['mobile_hamburger_toggle'] && !$this->should_render_offcanvas($settings)) {
             $this->render_hamburger_menu($settings);
         }
 
