@@ -1,0 +1,50 @@
+{
+  "name": "lancedesk/elementor-menu",
+  "description": "Responsive Elementor menu widget with device-aware layout control",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Lance Desk",
+      "email": "hello@lancedesk.com",
+      "homepage": "https://lancedesk.com",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://lancedesk.com",
+  "support": {
+    "email": "support@lancedesk.com",
+    "issues": "https://github.com/lancedesk/elementor-menu/issues",
+    "docs": "https://lancedesk.com/docs/elementor-menu/"
+  },
+  "require": {
+    "php": ">=7.4",
+    "composer/installers": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0",
+    "squizlabs/php_codesniffer": "^3.6",
+    "wp-coding-standards/wpcs": "^2.4",
+    "phpstan/phpstan": "^1.0"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "phpcs --standard=WordPress",
+    "lint-fix": "phpcbf --standard=WordPress"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "elementor",
+    "menu",
+    "navigation",
+    "responsive",
+    "widget"
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ]
+}

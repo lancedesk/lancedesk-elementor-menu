@@ -1,0 +1,2849 @@
+<?php
+/**
+ * LanceDesk Elementor Menu – Menu Widget
+ * 
+ * Core widget class extending Elementor Widget_Base
+ * Implements responsive menu with device-aware layout controls
+ * 
+ * @package     LDJEM
+ */
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Widget_Base;
+use Elementor\Repeater;
+use Elementor\Icons_Manager;
+
+/**
+ * Menu Widget Class
+ * 
+ * Main widget for displaying responsive menus in Elementor
+ */
+class LDJEM_Menu_Widget extends Widget_Base {
+
+    /**
+     * Get widget name
+     * 
+     * @return string Unique widget name (no spaces, lowercase with underscore)
+     */
+    public function get_name() {
+        return LDJEM_PREFIX . '_menu';
+    }
+
+    /**
+     * Get widget title
+     * 
+     * @return string Display name for widget selector
+     */
+    public function get_title() {
+        return esc_html__('LanceDesk Responsive Menu', LDJEM_TEXT_DOMAIN);
+    }
+
+    /**
+     * Get widget icon
+     * 
+     * @return string Elementor icon name
+     */
+    public function get_icon() {
+        return 'eicon-nav-menu';
+    }
+
+    /**
+     * Get widget categories
+     * 
+     * @return array Categories for widget grouping
+     */
+    public function get_categories() {
+        return ['navigation'];
+    }
+
+    /**
+     * Get widget keywords
+     * 
+     * @return array Keywords for search
+     */
+    public function get_keywords() {
+        return ['menu', 'navigation', 'nav', 'responsive', 'hamburger', 'mobile'];
+    }
+
+    /**
+     * Get custom help URL
+     * 
+     * @return string URL to documentation
+     */
+    public function get_custom_help_url() {
+        return LDJEM_Helpers::get_documentation_url();
+    }
+
+    /**
+     * Register widget controls
+     * 
+     * Called by Elementor to register all widget settings panels
+     * 
+     * @return void
+     */
+    protected function register_controls() {
+        // Content Tab - Menu Selection
+        $this->register_content_controls();
+
+        // Responsive Tab - Layout per device
+        $this->register_responsive_controls();
+
+        // Off-Canvas Menu controls
+        $this->register_offcanvas_controls();
+
+            // Preset & Configuration
+            $this->register_preset_controls();
+        
+            // Device-Specific Customization
+            $this->register_breakpoint_controls();
+
+        // Style Tab - Menu Items
+        $this->register_style_menu_items();
+
+        // Style Tab - Submenus
+        $this->register_style_submenus();
+
+        // Style Tab - Mobile Menu
+        $this->register_style_mobile_menu();
+
+        // Advanced Tab - Extra settings
+        $this->register_advanced_controls();
+    }
+
+    /**
+     * Register content tab controls (menu selection, depth, etc)
+     * 
+     * @return void
+     */
+    private function register_content_controls() {
+        $this->start_controls_section(
+            'section_content',
+            [
+                'label' => esc_html__('Content', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        // Menu Selection
+        $menu_options = LDJEM_Helpers::get_registered_menus();
+        if (empty($menu_options)) {
+            $menu_options = ['' => esc_html__('No menus available', LDJEM_TEXT_DOMAIN)];
+        }
+
+        $this->add_control(
+            'menu_id',
+            [
+                'label'       => esc_html__('Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'description' => esc_html__('Select a menu to display', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        // Menu Depth
+        $this->add_control(
+            'menu_depth',
+            [
+                'label'   => esc_html__('Menu Depth', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::NUMBER,
+                'min'     => 1,
+                'max'     => 4,
+                'step'    => 1,
+                'default' => 3,
+                'description' => esc_html__('Maximum number of nested levels to display', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        // Start Level
+        $this->add_control(
+            'start_level',
+            [
+                'label'   => esc_html__('Start Level', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::NUMBER,
+                'min'     => 0,
+                'max'     => 3,
+                'step'    => 1,
+                'default' => 0,
+                'description' => esc_html__('Begin displaying from this menu level', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        // Container Tag
+        $this->add_control(
+            'container_tag',
+            [
+                'label'   => esc_html__('Container Tag', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'nav' => 'nav',
+                    'div' => 'div',
+                    'ul'  => 'ul',
+                ],
+                'default' => 'nav',
+                'description' => esc_html__('HTML tag for menu wrapper', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        $this->add_control(
+            'submenu_accordion',
+            [
+                'label'        => esc_html__('Accordion Behavior', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('On', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('Off', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'description'  => esc_html__('When enabled, opening one submenu closes sibling submenus at the same level.', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register responsive layout controls (desktop, tablet, mobile)
+     * 
+     * @return void
+     */
+    private function register_responsive_controls() {
+        $this->start_controls_section(
+            'section_responsive',
+            [
+                'label' => esc_html__('Responsive Layout', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        // Desktop Layout
+        $this->add_control(
+            'heading_desktop_layout',
+            [
+                'label'     => esc_html__('Desktop Layout (>1024px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'desktop_layout',
+            [
+                'label'   => esc_html__('Layout Mode', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::CHOOSE,
+                'options' => [
+                    'horizontal' => [
+                        'title' => esc_html__('Horizontal', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-h-align-stretch',
+                    ],
+                    'vertical'   => [
+                        'title' => esc_html__('Vertical', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-v-align-stretch',
+                    ],
+                    'grid'       => [
+                        'title' => esc_html__('Grid', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-table',
+                    ],
+                ],
+                'default' => 'horizontal',
+            ]
+        );
+
+        $this->add_control(
+            'desktop_flex_direction',
+            [
+                'label'   => esc_html__('Flex Direction', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'row'    => esc_html__('Row (Left to Right)', LDJEM_TEXT_DOMAIN),
+                    'column' => esc_html__('Column (Top to Bottom)', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'row',
+                'condition' => [
+                    'desktop_layout!' => 'grid',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'desktop_align_items',
+            [
+                'label'   => esc_html__('Align Items', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'flex-start' => esc_html__('Start', LDJEM_TEXT_DOMAIN),
+                    'center'     => esc_html__('Center', LDJEM_TEXT_DOMAIN),
+                    'flex-end'   => esc_html__('End', LDJEM_TEXT_DOMAIN),
+                    'stretch'    => esc_html__('Stretch', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'center',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu' => 'align-items: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'desktop_justify_content',
+            [
+                'label'   => esc_html__('Justify Content', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'flex-start'    => esc_html__('Start', LDJEM_TEXT_DOMAIN),
+                    'center'        => esc_html__('Center', LDJEM_TEXT_DOMAIN),
+                    'flex-end'      => esc_html__('End', LDJEM_TEXT_DOMAIN),
+                    'space-between' => esc_html__('Space Between', LDJEM_TEXT_DOMAIN),
+                    'space-around'  => esc_html__('Space Around', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'flex-start',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu' => 'justify-content: {{VALUE}};',
+                ],
+            ]
+        );
+
+        // Tablet Layout
+        $this->add_control(
+            'heading_tablet_layout',
+            [
+                'label'     => esc_html__('Tablet Layout (768-1024px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'tablet_layout',
+            [
+                'label'   => esc_html__('Layout Mode', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::CHOOSE,
+                'options' => [
+                    'horizontal' => [
+                        'title' => esc_html__('Horizontal', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-h-align-stretch',
+                    ],
+                    'vertical'   => [
+                        'title' => esc_html__('Vertical', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-v-align-stretch',
+                    ],
+                    'grid'       => [
+                        'title' => esc_html__('Grid', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-table',
+                    ],
+                ],
+                'default' => 'horizontal',
+            ]
+        );
+
+        // Mobile Layout
+        $this->add_control(
+            'heading_mobile_layout',
+            [
+                'label'     => esc_html__('Mobile Layout (<768px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'mobile_layout',
+            [
+                'label'   => esc_html__('Layout Mode', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::CHOOSE,
+                'options' => [
+                    'vertical'   => [
+                        'title' => esc_html__('Vertical', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-v-align-stretch',
+                    ],
+                    'horizontal' => [
+                        'title' => esc_html__('Horizontal', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-h-align-stretch',
+                    ],
+                    'grid'       => [
+                        'title' => esc_html__('Grid', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-table',
+                    ],
+                ],
+                'default' => 'vertical',
+                'description' => esc_html__('Note: Vertical layout is recommended for mobile', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        // Hamburger Menu Toggle
+        $this->add_control(
+            'mobile_hamburger_toggle',
+            [
+                'label'   => esc_html__('Show Hamburger Menu', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SWITCHER,
+                'label_on'  => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off' => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'default' => 'yes',
+                'condition' => [
+                    'mobile_layout' => 'vertical',
+                ],
+            ]
+        );
+
+        // Hamburger Position
+        $this->add_control(
+            'mobile_hamburger_position',
+            [
+                'label'   => esc_html__('Hamburger Position', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::CHOOSE,
+                'options' => [
+                    'left'  => [
+                        'title' => esc_html__('Left', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-h-align-left',
+                    ],
+                    'right' => [
+                        'title' => esc_html__('Right', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-h-align-right',
+                    ],
+                ],
+                'default' => 'left',
+                // Always allow choosing hamburger position when the hamburger is enabled.
+                'condition' => [
+                    'mobile_hamburger_toggle' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'heading_vertical_layout_style',
+            [
+                'label'     => esc_html__('Vertical Layout Styling', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'vertical_item_alignment',
+            [
+                'label'   => esc_html__('Vertical Item Alignment', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'flex-start' => esc_html__('Left', LDJEM_TEXT_DOMAIN),
+                    'center'     => esc_html__('Center', LDJEM_TEXT_DOMAIN),
+                    'flex-end'   => esc_html__('Right', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'flex-start',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu > .ldjem-menu-item > a, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-menu > .ldjem-menu-item > a, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-menu > .ldjem-menu-item > a' => 'justify-content: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'vertical_item_padding',
+            [
+                'label'      => esc_html__('Vertical Item Padding', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu > .ldjem-menu-item > a, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-menu > .ldjem-menu-item > a, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-menu > .ldjem-menu-item > a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'vertical_item_margin',
+            [
+                'label'      => esc_html__('Vertical Item Margin', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-tablet-layout="vertical"] .ldjem-menu > .ldjem-menu-item, {{WRAPPER}} .ldjem-menu-wrapper[data-mobile-layout="vertical"] .ldjem-menu > .ldjem-menu-item' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register style controls for menu items
+     * 
+     * @return void
+     */
+    private function register_style_menu_items() {
+        $this->start_controls_section(
+            'section_style_menu_items',
+            [
+                'label' => esc_html__('Menu Items', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+        // Typography
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name'     => 'menu_item_typography',
+                'label'    => esc_html__('Typography', LDJEM_TEXT_DOMAIN),
+                'selector' => '{{WRAPPER}} .ldjem-menu-item a',
+            ]
+        );
+
+        // Color States
+        $this->add_control(
+            'menu_item_color_normal',
+            [
+                'label'     => esc_html__('Text Color (Normal)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#333333',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item a' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_color_hover',
+            [
+                'label'     => esc_html__('Text Color (Hover)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#0073aa',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item a:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_color_active',
+            [
+                'label'     => esc_html__('Text Color (Active)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#0073aa',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item.current-menu-item > a' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        // Spacing
+        $this->add_control(
+            'menu_item_padding',
+            [
+                'label'      => esc_html__('Padding', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'default'    => [
+                    'top'    => '12',
+                    'right'  => '16',
+                    'bottom' => '12',
+                    'left'   => '16',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_item_margin',
+            [
+                'label'      => esc_html__('Margin', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-item' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // Border
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name'     => 'menu_item_border',
+                'label'    => esc_html__('Border', LDJEM_TEXT_DOMAIN),
+                'selector' => '{{WRAPPER}} .ldjem-menu-item a',
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register style controls for submenus
+     * 
+     * @return void
+     */
+    private function register_style_submenus() {
+        $this->start_controls_section(
+            'section_style_submenus',
+            [
+                'label' => esc_html__('Submenus', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+        // Submenu Animation
+        $this->add_control(
+            'submenu_animation',
+            [
+                'label'   => esc_html__('Animation', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => LDJEM_Helpers::get_animation_options(),
+                'default' => 'fade',
+            ]
+        );
+
+        $this->add_control(
+            'submenu_animation_duration',
+            [
+                'label'      => esc_html__('Animation Duration (ms)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::NUMBER,
+                'min'        => 100,
+                'max'        => 1000,
+                'step'       => 100,
+                'default'    => 300,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-submenu' => 'transition-duration: {{VALUE}}ms;',
+                ],
+            ]
+        );
+
+        // Submenu Trigger
+        $this->add_control(
+            'submenu_trigger',
+            [
+                'label'   => esc_html__('Trigger on Desktop', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => LDJEM_Helpers::get_submenu_trigger_options(),
+                'default' => 'hover',
+            ]
+        );
+
+        $this->add_control(
+            'submenu_indicator_icon',
+            [
+                'label'   => esc_html__('Submenu Toggle Icon', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::ICONS,
+                'default' => [
+                    'value'   => 'fas fa-chevron-down',
+                    'library' => 'fa-solid',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'submenu_indicator_spacing',
+            [
+                'label'      => esc_html__('Toggle Icon Spacing', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 40,
+                    ],
+                ],
+                'default' => [
+                    'size' => 4,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-submenu-toggle' => '--ldjem-submenu-toggle-spacing: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // Submenu Colors
+        $this->add_control(
+            'submenu_background',
+            [
+                'label'     => esc_html__('Background Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#ffffff',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-submenu' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'submenu_text_color',
+            [
+                'label'     => esc_html__('Text Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#333333',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-submenu a' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'submenu_border_radius',
+            [
+                'label'      => esc_html__('Border Radius', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 30,
+                    ],
+                ],
+                'default' => [
+                    'size' => 8,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-submenu' => 'border-radius: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'submenu_panel_padding',
+            [
+                'label'      => esc_html__('Submenu Panel Padding', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-submenu' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'submenu_item_padding',
+            [
+                'label'      => esc_html__('Submenu Item Padding', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-submenu .ldjem-menu-item > a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name'     => 'submenu_border',
+                'label'    => esc_html__('Submenu Border', LDJEM_TEXT_DOMAIN),
+                'selector' => '{{WRAPPER}} .ldjem-submenu',
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Box_Shadow::get_type(),
+            [
+                'name'     => 'submenu_box_shadow',
+                'label'    => esc_html__('Dropdown Box Shadow', LDJEM_TEXT_DOMAIN),
+                'selector' => '{{WRAPPER}} .ldjem-submenu',
+            ]
+        );
+
+        $this->add_control(
+            'submenu_vertical_border_heading',
+            [
+                'label'     => esc_html__('Vertical Layout Nested Border', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'submenu_vertical_left_border_enabled',
+            [
+                'label'        => esc_html__('Show Left Border', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SELECT,
+                'options'      => [
+                    'yes' => esc_html__('Show', LDJEM_TEXT_DOMAIN),
+                    'no'  => esc_html__('Hide', LDJEM_TEXT_DOMAIN),
+                ],
+                'default'      => 'yes',
+                'selectors'    => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu-item-parent > .ldjem-submenu' => '--ldjem-vertical-submenu-border-style: {{VALUE}};',
+                ],
+                'selectors_dictionary' => [
+                    'yes' => 'solid',
+                    'no'  => 'none',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'submenu_vertical_left_border_width',
+            [
+                'label'      => esc_html__('Left Border Width', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 10,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 1,
+                    'unit' => 'px',
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu-item-parent > .ldjem-submenu' => '--ldjem-vertical-submenu-border-width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'submenu_vertical_left_border_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'submenu_vertical_left_border_color',
+            [
+                'label'     => esc_html__('Left Border Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#e0e0e0',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper[data-desktop-layout="vertical"] .ldjem-menu-item-parent > .ldjem-submenu' => '--ldjem-vertical-submenu-border-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'submenu_vertical_left_border_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register style controls for mobile menu (hamburger)
+     * 
+     * @return void
+     */
+    private function register_style_mobile_menu() {
+        $this->start_controls_section(
+            'section_style_mobile_menu',
+            [
+                'label' => esc_html__('Mobile Menu', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+        // Hamburger Icon
+        $this->add_control(
+            'hamburger_icon_size',
+            [
+                'label'      => esc_html__('Hamburger Icon Size', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 16,
+                        'max' => 64,
+                    ],
+                ],
+                'default' => [
+                    'unit' => 'px',
+                    'size' => 24,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger' => 'font-size: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_icon_color',
+            [
+                'label'     => esc_html__('Hamburger Icon Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#333333',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_icon',
+            [
+                'label'   => esc_html__('Toggle Icon', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::ICONS,
+                'default' => [
+                    'value'   => 'fas fa-bars',
+                    'library' => 'fa-solid',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_icon_hover_color',
+            [
+                'label'     => esc_html__('Hamburger Icon Hover Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_icon_active_color',
+            [
+                'label'     => esc_html__('Hamburger Icon Active Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger.is-open' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_bg_color',
+            [
+                'label'     => esc_html__('Hamburger Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_bg_hover_color',
+            [
+                'label'     => esc_html__('Hamburger Hover Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_bg_active_color',
+            [
+                'label'     => esc_html__('Hamburger Active Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-hamburger.is-open' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_padding',
+            [
+                'label'      => esc_html__('Hamburger Padding', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-hamburger' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hamburger_border_radius',
+            [
+                'label'      => esc_html__('Hamburger Border Radius', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 40,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-hamburger' => 'border-radius: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // Mobile Menu Background
+        $this->add_control(
+            'mobile_menu_background',
+            [
+                'label'     => esc_html__('Menu Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#ffffff',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu.mobile' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register off-canvas menu controls.
+     *
+     * @return void
+     */
+    private function register_offcanvas_controls() {
+        $this->start_controls_section(
+            'section_offcanvas_menu',
+            [
+                'label' => esc_html__('Off-Canvas Menu', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_enable',
+            [
+                'label'        => esc_html__('Enable Off-Canvas Menu', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_direction',
+            [
+                'label'     => esc_html__('Slide Direction', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::SELECT,
+                'options'   => [
+                    'left'   => esc_html__('Left', LDJEM_TEXT_DOMAIN),
+                    'right'  => esc_html__('Right', LDJEM_TEXT_DOMAIN),
+                    'top'    => esc_html__('Top', LDJEM_TEXT_DOMAIN),
+                    'bottom' => esc_html__('Bottom', LDJEM_TEXT_DOMAIN),
+                ],
+                'default'   => 'left',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_animation_duration',
+            [
+                'label'     => esc_html__('Animation Duration (ms)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 200,
+                'max'       => 1000,
+                'step'      => 50,
+                'default'   => 300,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_animation_easing',
+            [
+                'label'     => esc_html__('Animation Easing', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::SELECT,
+                'options'   => [
+                    'ease-in-out' => esc_html__('Ease In Out', LDJEM_TEXT_DOMAIN),
+                    'ease-in'     => esc_html__('Ease In', LDJEM_TEXT_DOMAIN),
+                    'ease-out'    => esc_html__('Ease Out', LDJEM_TEXT_DOMAIN),
+                    'linear'      => esc_html__('Linear', LDJEM_TEXT_DOMAIN),
+                ],
+                'default'   => 'ease-in-out',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_bg_color',
+            [
+                'label'     => esc_html__('Panel Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#ffffff',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_size',
+            [
+                'label'      => esc_html__('Panel Width (Left/Right, px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 640,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 300,
+                    'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_height',
+            [
+                'label'      => esc_html__('Panel Height (Top/Bottom, px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 900,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 400,
+                    'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_z_index',
+            [
+                'label'     => esc_html__('Panel Z-Index', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 100,
+                'max'       => 99999,
+                'step'      => 1,
+                'default'   => 999,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_show_header',
+            [
+                'label'        => esc_html__('Show Header', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_logo',
+            [
+                'label'     => esc_html__('Logo Image', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::MEDIA,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_logo_alt',
+            [
+                'label'     => esc_html__('Logo Alt Text', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::TEXT,
+                'default'   => esc_html__('Logo', LDJEM_TEXT_DOMAIN),
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_logo_link',
+            [
+                'label'     => esc_html__('Logo Link', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::URL,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_header_text',
+            [
+                'label'     => esc_html__('Header Text', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::TEXT,
+                'default'   => '',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_show_header_text',
+            [
+                'label'        => esc_html__('Show Header Text', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_header_bg_color',
+            [
+                'label'     => esc_html__('Header Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-header' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_header_text_color',
+            [
+                'label'     => esc_html__('Header Text Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-logo-text' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_show_close_btn',
+            [
+                'label'        => esc_html__('Show Close Button', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_icon',
+            [
+                'label'     => esc_html__('Close Icon', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::SELECT,
+                'options'   => [
+                    'x'       => esc_html__('X', LDJEM_TEXT_DOMAIN),
+                    'arrow'   => esc_html__('Arrow', LDJEM_TEXT_DOMAIN),
+                    'chevron' => esc_html__('Chevron', LDJEM_TEXT_DOMAIN),
+                ],
+                'default'   => 'x',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_color',
+            [
+                'label'     => esc_html__('Close Button Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#333333',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_bg',
+            [
+                'label'     => esc_html__('Close Button Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => 'transparent',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_size',
+            [
+                'label'      => esc_html__('Close Button Size', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 24,
+                        'max' => 72,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 40,
+                    'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_icon_size',
+            [
+                'label'      => esc_html__('Close Icon Size', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 12,
+                        'max' => 48,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 24,
+                    'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_radius',
+            [
+                'label'      => esc_html__('Close Button Border Radius', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 40,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 4,
+                    'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_border_width',
+            [
+                'label'      => esc_html__('Close Button Border Width', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 10,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 0,
+                    'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_border_color',
+            [
+                'label'     => esc_html__('Close Button Border Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => 'transparent',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_offset_top',
+            [
+                'label'     => esc_html__('Close Button Top Offset (px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 0,
+                'max'       => 40,
+                'step'      => 1,
+                'default'   => 0,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_close_btn_offset_right',
+            [
+                'label'     => esc_html__('Close Button Right Offset (px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 0,
+                'max'       => 40,
+                'step'      => 1,
+                'default'   => 0,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_show_footer',
+            [
+                'label'        => esc_html__('Show Social Footer', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_show_footer_title',
+            [
+                'label'        => esc_html__('Show Footer Title', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_footer_title',
+            [
+                'label'     => esc_html__('Footer Title', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::TEXT,
+                'default'   => esc_html__('Follow Us', LDJEM_TEXT_DOMAIN),
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                    'offcanvas_show_footer_title' => 'yes',
+                ],
+            ]
+        );
+
+        $social_repeater = new Repeater();
+
+        $social_repeater->add_control(
+            'social_platform',
+            [
+                'label'   => esc_html__('Platform', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'facebook'  => esc_html__('Facebook', LDJEM_TEXT_DOMAIN),
+                    'twitter'   => esc_html__('Twitter', LDJEM_TEXT_DOMAIN),
+                    'linkedin'  => esc_html__('LinkedIn', LDJEM_TEXT_DOMAIN),
+                    'instagram' => esc_html__('Instagram', LDJEM_TEXT_DOMAIN),
+                    'youtube'   => esc_html__('YouTube', LDJEM_TEXT_DOMAIN),
+                    'tiktok'    => esc_html__('TikTok', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'facebook',
+            ]
+        );
+
+        $social_repeater->add_control(
+            'social_url',
+            [
+                'label'       => esc_html__('URL', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::URL,
+                'placeholder' => 'https://example.com',
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_social_icons',
+            [
+                'label'     => esc_html__('Social Media Links', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::REPEATER,
+                'fields'    => $social_repeater->get_controls(),
+                'default'   => [
+                    [
+                        'social_platform' => 'facebook',
+                        'social_url'      => ['url' => 'https://facebook.com'],
+                    ],
+                    [
+                        'social_platform' => 'instagram',
+                        'social_url'      => ['url' => 'https://instagram.com'],
+                    ],
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_footer_bg_color',
+            [
+                'label'     => esc_html__('Footer Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-footer' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_footer_title_color',
+            [
+                'label'     => esc_html__('Footer Title Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-footer-title' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_social_icon_size',
+            [
+                'label'      => esc_html__('Social Icon Size', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 16,
+                        'max' => 64,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 36,
+                    'unit' => 'px',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_social_icon_bg_color',
+            [
+                'label'     => esc_html__('Social Icon Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-social-link' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_social_icon_color',
+            [
+                'label'     => esc_html__('Social Icon Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-social-link' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_social_icon_hover_bg_color',
+            [
+                'label'     => esc_html__('Social Icon Hover Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-social-link:hover' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_social_icon_hover_color',
+            [
+                'label'     => esc_html__('Social Icon Hover Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-social-link:hover' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_links_heading',
+            [
+                'label'     => esc_html__('Off-Canvas Menu Links', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name'      => 'offcanvas_link_typography',
+                'selector'  => '{{WRAPPER}} .ldjem-offcanvas-menu-item > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_link_color',
+            [
+                'label'     => esc_html__('Link Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_link_hover_color',
+            [
+                'label'     => esc_html__('Link Hover Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item > a:hover, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a:hover' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_link_active_color',
+            [
+                'label'     => esc_html__('Link Active Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item.is-active > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item.is-active > a' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_link_hover_bg',
+            [
+                'label'     => esc_html__('Link Hover Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item > a:hover, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a:hover' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_link_active_bg',
+            [
+                'label'     => esc_html__('Link Active Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item.is-active > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item.is-active > a' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register preset controls.
+     *
+     * @return void
+     */
+    private function register_preset_controls() {
+        $this->start_controls_section(
+            'section_offcanvas_presets',
+            [
+                'label' => esc_html__('Off-Canvas Presets', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $preset_options = ['none' => esc_html__('Custom (No Preset)', LDJEM_TEXT_DOMAIN)];
+        if (class_exists('LDJEM_Presets')) {
+            $preset_options = LDJEM_Presets::get_preset_labels();
+        }
+
+        $this->add_control(
+            'offcanvas_preset',
+            [
+                'label'       => esc_html__('Preset', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $preset_options,
+                'default'     => 'none',
+                'description' => esc_html__('Choose a starting preset, then customize controls below.', LDJEM_TEXT_DOMAIN),
+                'condition'   => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_preset_auto_apply',
+            [
+                'label'        => esc_html__('Auto-Apply Preset Updates', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'description'  => esc_html__('When enabled, selecting a preset will overwrite mapped off-canvas controls.', LDJEM_TEXT_DOMAIN),
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_preset!' => 'none',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register breakpoint behavior controls.
+     *
+     * @return void
+     */
+    private function register_breakpoint_controls() {
+        $this->start_controls_section(
+            'section_breakpoint_behavior',
+            [
+                'label' => esc_html__('Off-Canvas by Device', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_on_desktop',
+            [
+                'label'        => esc_html__('Enable on Desktop', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'no',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_on_tablet',
+            [
+                'label'        => esc_html__('Enable on Tablet', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_on_mobile',
+            [
+                'label'        => esc_html__('Enable on Mobile', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $direction_options = [
+            'inherit' => esc_html__('Inherit Global Direction', LDJEM_TEXT_DOMAIN),
+            'left'    => esc_html__('Left', LDJEM_TEXT_DOMAIN),
+            'right'   => esc_html__('Right', LDJEM_TEXT_DOMAIN),
+            'top'     => esc_html__('Top', LDJEM_TEXT_DOMAIN),
+            'bottom'  => esc_html__('Bottom', LDJEM_TEXT_DOMAIN),
+        ];
+
+        $this->add_control(
+            'offcanvas_device_heading_desktop',
+            [
+                'label'     => esc_html__('Desktop Overrides (>1024px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_direction_desktop',
+            [
+                'label'     => esc_html__('Desktop Direction', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::SELECT,
+                'options'   => $direction_options,
+                'default'   => 'inherit',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_animation_duration_desktop',
+            [
+                'label'     => esc_html__('Desktop Animation Duration (ms)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 200,
+                'max'       => 1000,
+                'step'      => 50,
+                'default'   => 0,
+                'description' => esc_html__('Set 0 to inherit global animation duration.', LDJEM_TEXT_DOMAIN),
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_size_desktop',
+            [
+                'label'      => esc_html__('Desktop Panel Width (px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 900,
+                    ],
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_height_desktop',
+            [
+                'label'      => esc_html__('Desktop Panel Height (px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 1000,
+                    ],
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_device_heading_tablet',
+            [
+                'label'     => esc_html__('Tablet Overrides (768-1024px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_direction_tablet',
+            [
+                'label'     => esc_html__('Tablet Direction', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::SELECT,
+                'options'   => $direction_options,
+                'default'   => 'inherit',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_animation_duration_tablet',
+            [
+                'label'     => esc_html__('Tablet Animation Duration (ms)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 200,
+                'max'       => 1000,
+                'step'      => 50,
+                'default'   => 0,
+                'description' => esc_html__('Set 0 to inherit global animation duration.', LDJEM_TEXT_DOMAIN),
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_size_tablet',
+            [
+                'label'      => esc_html__('Tablet Panel Width (px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 900,
+                    ],
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_height_tablet',
+            [
+                'label'      => esc_html__('Tablet Panel Height (px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 1000,
+                    ],
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_device_heading_mobile',
+            [
+                'label'     => esc_html__('Mobile Overrides (<768px)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_direction_mobile',
+            [
+                'label'     => esc_html__('Mobile Direction', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::SELECT,
+                'options'   => $direction_options,
+                'default'   => 'inherit',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_animation_duration_mobile',
+            [
+                'label'     => esc_html__('Mobile Animation Duration (ms)', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::NUMBER,
+                'min'       => 200,
+                'max'       => 1000,
+                'step'      => 50,
+                'default'   => 0,
+                'description' => esc_html__('Set 0 to inherit global animation duration.', LDJEM_TEXT_DOMAIN),
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_size_mobile',
+            [
+                'label'      => esc_html__('Mobile Panel Width (px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 900,
+                    ],
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_panel_height_mobile',
+            [
+                'label'      => esc_html__('Mobile Panel Height (px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 220,
+                        'max' => 1000,
+                    ],
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Register advanced controls
+     * 
+     * @return void
+     */
+    private function register_advanced_controls() {
+        $this->start_controls_section(
+            'section_advanced',
+            [
+                'label' => esc_html__('Advanced', LDJEM_TEXT_DOMAIN),
+                'tab'   => Controls_Manager::TAB_ADVANCED,
+            ]
+        );
+
+        // Custom CSS Class
+        $this->add_control(
+            'custom_css_class',
+            [
+                'label'       => esc_html__('Custom CSS Class', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::TEXT,
+                'description' => esc_html__('Add custom CSS classes (space-separated)', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        // Link Target
+        $this->add_control(
+            'link_target',
+            [
+                'label'   => esc_html__('Link Target', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    ''       => esc_html__('Default', LDJEM_TEXT_DOMAIN),
+                    '_blank' => esc_html__('New Window/Tab', LDJEM_TEXT_DOMAIN),
+                    '_self'  => esc_html__('Same Window', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => '',
+            ]
+        );
+
+        // Active Menu Item Marking
+        $this->add_control(
+            'mark_active_item',
+            [
+                'label'   => esc_html__('Mark Active Menu Item', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SWITCHER,
+                'label_on'  => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off' => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'default' => 'yes',
+                'description' => esc_html__('Highlight current page menu item', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        // Accessibility
+        $this->add_control(
+            'enable_accessibility',
+            [
+                'label'   => esc_html__('Enable Accessibility Features', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SWITCHER,
+                'label_on'  => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off' => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'default' => 'yes',
+                'description' => esc_html__('Include ARIA attributes and keyboard navigation', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        $this->add_control(
+            'enable_debug_output',
+            [
+                'label'        => esc_html__('Show Debug Output (Editor Only)', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('Prints layout and off-canvas diagnostics directly under this widget.', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Render widget output on the frontend
+     * 
+     * @return void
+     */
+    protected function render() {
+        $settings = $this->get_settings_for_display();
+        $preset_id = !empty($settings['offcanvas_preset']) ? sanitize_key($settings['offcanvas_preset']) : 'none';
+
+        if ('none' !== $preset_id && class_exists('LDJEM_Presets')) {
+            LDJEM_Presets::apply_preset($settings, $preset_id);
+        }
+
+        // Validate settings
+        $menu_id = LDJEM_Security::sanitize_menu_id(intval($settings['menu_id']));
+        if (false === $menu_id) {
+            if (current_user_can('edit_posts')) {
+                echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">';
+                echo '<strong>' . esc_html__('Menu Not Selected', LDJEM_TEXT_DOMAIN) . '</strong>';
+                echo '<p>' . esc_html__('Please select a menu in widget settings.', LDJEM_TEXT_DOMAIN) . '</p>';
+                echo '</div>';
+            }
+            return;
+        }
+
+        // Retrieve menu data
+        $menu_depth = LDJEM_Security::sanitize_int($settings['menu_depth'], 3);
+        $start_level = LDJEM_Security::sanitize_int($settings['start_level'], 0);
+        
+        // Get menu items with hierarchy
+        $menu_items = LDJEM_Helpers::get_menu_items($menu_id, $menu_depth, $start_level);
+
+        if (empty($menu_items)) {
+            if (current_user_can('edit_posts')) {
+                echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">';
+                echo '<strong>' . esc_html__('Menu is Empty', LDJEM_TEXT_DOMAIN) . '</strong>';
+                echo '<p>' . esc_html__('The selected menu has no items.', LDJEM_TEXT_DOMAIN) . '</p>';
+                echo '</div>';
+            }
+            return;
+        }
+
+        // Build CSS classes
+        $container_classes = ['ldjem-menu-wrapper'];
+        $container_classes[] = 'ldjem-layout-' . sanitize_key($settings['desktop_layout']);
+        $widget_id = $this->get_id();
+        $desktop_layout = !empty($settings['desktop_layout']) ? sanitize_key($settings['desktop_layout']) : 'horizontal';
+        $tablet_layout = !empty($settings['tablet_layout']) ? sanitize_key($settings['tablet_layout']) : $desktop_layout;
+        $mobile_layout = !empty($settings['mobile_layout']) ? sanitize_key($settings['mobile_layout']) : 'vertical';
+        $submenu_trigger = !empty($settings['submenu_trigger']) ? sanitize_key($settings['submenu_trigger']) : 'hover';
+        $submenu_accordion = (!empty($settings['submenu_accordion']) && 'yes' === $settings['submenu_accordion']) ? 'yes' : 'no';
+        if (!in_array($submenu_trigger, ['hover', 'click', 'hover_click'], true)) {
+            $submenu_trigger = 'hover';
+        }
+        if (!empty($settings['custom_css_class'])) {
+            $custom_classes = LDJEM_Security::sanitize_class($settings['custom_css_class']);
+            $container_classes[] = $custom_classes;
+        }
+
+        // Get container tag
+        $container_tag = sanitize_key($settings['container_tag']);
+        if (!in_array($container_tag, ['nav', 'div', 'ul'], true)) {
+            $container_tag = 'nav';
+        }
+
+        // Apply filters to allow extensions
+        $container_classes = apply_filters(LDJEM_PREFIX . '_menu_container_classes', $container_classes, $settings);
+        $container_tag = apply_filters(LDJEM_PREFIX . '_menu_container_tag', $container_tag, $settings);
+
+        // Open wrapper
+        printf(
+            '<%1$s class="%2$s" role="navigation" aria-label="%3$s" data-ldjem-id="%4$s" data-submenu-trigger="%5$s" data-submenu-accordion="%6$s" data-desktop-layout="%7$s" data-tablet-layout="%8$s" data-mobile-layout="%9$s">',
+            tag_escape($container_tag),
+            esc_attr(implode(' ', array_filter($container_classes))),
+            esc_attr__('Main Menu', LDJEM_TEXT_DOMAIN),
+            esc_attr($widget_id),
+            esc_attr($submenu_trigger),
+            esc_attr($submenu_accordion),
+            esc_attr($desktop_layout),
+            esc_attr($tablet_layout),
+            esc_attr($mobile_layout)
+        );
+
+        // Render hamburger for non-offcanvas menu when enabled in settings
+        if (!empty($settings['mobile_hamburger_toggle']) && 'yes' === $settings['mobile_hamburger_toggle']) {
+            $this->render_hamburger_menu($settings);
+        }
+
+        // Render menu items
+        printf(
+            '<ul class="ldjem-menu ldjem-menu-root">%s</ul>',
+            $this->render_menu_items($menu_items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        );
+
+        // Close wrapper
+        printf('</%s>', tag_escape($container_tag));
+
+        if ($this->should_render_offcanvas($settings)) {
+            $this->render_offcanvas_layout($menu_items, $settings);
+        }
+
+        $this->render_debug_output($settings);
+
+        // Enqueue frontend scripts
+        wp_enqueue_script(LDJEM_PREFIX . '-frontend');
+        wp_enqueue_style(LDJEM_PREFIX . '-frontend');
+        wp_enqueue_script(LDJEM_PREFIX . '-offcanvas');
+        wp_enqueue_style(LDJEM_PREFIX . '-offcanvas');
+    }
+
+    /**
+     * Render editor-only debug output.
+     *
+     * @param array $settings Widget settings.
+     * @return void
+     */
+    private function render_debug_output($settings) {
+        if (empty($settings['enable_debug_output']) || 'yes' !== $settings['enable_debug_output']) {
+            return;
+        }
+
+        if (!is_user_logged_in() || !current_user_can('edit_posts')) {
+            return;
+        }
+
+        $desktop_layout = !empty($settings['desktop_layout']) ? sanitize_key($settings['desktop_layout']) : 'horizontal';
+        $tablet_layout = !empty($settings['tablet_layout']) ? sanitize_key($settings['tablet_layout']) : $desktop_layout;
+        $mobile_layout = !empty($settings['mobile_layout']) ? sanitize_key($settings['mobile_layout']) : 'vertical';
+        $offcanvas_enable = !empty($settings['offcanvas_enable']) && 'yes' === $settings['offcanvas_enable'] ? 'yes' : 'no';
+        $offcanvas_on_desktop = !empty($settings['offcanvas_on_desktop']) && 'yes' === $settings['offcanvas_on_desktop'] ? 'yes' : 'no';
+        $offcanvas_on_tablet = !empty($settings['offcanvas_on_tablet']) && 'yes' === $settings['offcanvas_on_tablet'] ? 'yes' : 'no';
+        $offcanvas_on_mobile = !empty($settings['offcanvas_on_mobile']) && 'yes' === $settings['offcanvas_on_mobile'] ? 'yes' : 'no';
+
+        $debug = [
+            'widget_id' => $this->get_id(),
+            'desktop_layout' => $desktop_layout,
+            'tablet_layout' => $tablet_layout,
+            'mobile_layout' => $mobile_layout,
+            'offcanvas_enable' => $offcanvas_enable,
+            'offcanvas_on_desktop' => $offcanvas_on_desktop,
+            'offcanvas_on_tablet' => $offcanvas_on_tablet,
+            'offcanvas_on_mobile' => $offcanvas_on_mobile,
+            'offcanvas_rendered' => $this->should_render_offcanvas($settings) ? 'yes' : 'no',
+            'note' => 'When offcanvas_on_<device> is yes, off-canvas behavior overrides standard horizontal/vertical for that device.',
+        ];
+
+        $widget_id = $this->get_id();
+        echo '<pre class="ldjem-debug-output" data-ldjem-debug-widget="' . esc_attr($widget_id) . '" style="margin-top:10px;padding:10px;background:#101010;color:#9dff9d;font-size:12px;line-height:1.4;white-space:pre-wrap;word-break:break-word;border-radius:4px;">';
+        echo esc_html(wp_json_encode($debug, JSON_PRETTY_PRINT));
+        echo '</pre>';
+        echo '<div class="ldjem-debug-runtime" data-ldjem-debug-runtime="' . esc_attr($widget_id) . '" style="margin-top:6px;padding:8px 10px;background:#1a1a1a;color:#7fd3ff;font-size:12px;line-height:1.35;border-radius:4px;"></div>';
+        ?>
+        <script>
+        (function () {
+            var widgetId = <?php echo wp_json_encode($widget_id); ?>;
+            var runtimeEl = document.querySelector('[data-ldjem-debug-runtime="' + widgetId + '"]');
+            if (!runtimeEl) return;
+
+            var getDevice = function () {
+                if (window.elementorFrontend && typeof window.elementorFrontend.getCurrentDeviceMode === 'function') {
+                    var mode = window.elementorFrontend.getCurrentDeviceMode();
+                    if (mode === 'mobile' || mode === 'tablet') return mode;
+                }
+                var w = window.innerWidth || document.documentElement.clientWidth;
+                if (w <= 767) return 'mobile';
+                if (w <= 1024) return 'tablet';
+                return 'desktop';
+            };
+
+            var refresh = function (context) {
+                var wrapper = document.querySelector('.ldjem-menu-wrapper[data-ldjem-id="' + widgetId + '"]');
+                if (!wrapper) {
+                    runtimeEl.textContent = 'Runtime: wrapper not found';
+                    return;
+                }
+                var device = getDevice();
+                var offcanvasFlag = wrapper.getAttribute('data-offcanvas-' + device);
+                var activeLayout = wrapper.getAttribute('data-' + device + '-layout') || 'n/a';
+                runtimeEl.textContent =
+                    'Runtime (' + context + '): ' +
+                    'active_device=' + device +
+                    ', active_layout=' + activeLayout +
+                    ', offcanvas_active_for_device=' + (offcanvasFlag === 'yes' ? 'yes' : 'no');
+            };
+
+            refresh('init');
+            window.addEventListener('resize', function () { refresh('resize'); });
+            var observer = new MutationObserver(function () { refresh('preview-toggle'); });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+            if (document.body) {
+                observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+            }
+        })();
+        </script>
+        <?php
+    }
+
+    /**
+     * Render the off-canvas layout.
+     *
+     * @param array $menu_items Menu items.
+     * @param array $settings Widget settings.
+     * @return void
+     */
+    private function render_offcanvas_layout($menu_items, $settings) {
+        $widget_id = $this->get_id();
+        $direction = !empty($settings['offcanvas_direction']) ? sanitize_key($settings['offcanvas_direction']) : 'left';
+
+        if (!in_array($direction, ['left', 'right', 'top', 'bottom'], true)) {
+            $direction = 'left';
+        }
+
+        $animation_duration = !empty($settings['offcanvas_animation_duration']) ? intval($settings['offcanvas_animation_duration']) : 300;
+        $animation_easing = !empty($settings['offcanvas_animation_easing']) ? sanitize_key($settings['offcanvas_animation_easing']) : 'ease-in-out';
+        $bg_color = !empty($settings['offcanvas_bg_color']) ? sanitize_text_field($settings['offcanvas_bg_color']) : '#ffffff';
+        $z_index = !empty($settings['offcanvas_z_index']) ? intval($settings['offcanvas_z_index']) : 999;
+        $panel_size = !empty($settings['offcanvas_panel_size']['size']) ? intval($settings['offcanvas_panel_size']['size']) : 300;
+        $panel_height = !empty($settings['offcanvas_panel_height']['size']) ? intval($settings['offcanvas_panel_height']['size']) : 400;
+        $header_bg_color = isset($settings['offcanvas_header_bg_color']) ? sanitize_text_field($settings['offcanvas_header_bg_color']) : '';
+        $footer_bg_color = isset($settings['offcanvas_footer_bg_color']) ? sanitize_text_field($settings['offcanvas_footer_bg_color']) : '';
+        $bg_color = preg_replace('/\s*!important\s*$/i', '', $bg_color);
+        $header_bg_color = preg_replace('/\s*!important\s*$/i', '', $header_bg_color);
+        $footer_bg_color = preg_replace('/\s*!important\s*$/i', '', $footer_bg_color);
+        $offcanvas_on_desktop = !empty($settings['offcanvas_on_desktop']) && 'yes' === $settings['offcanvas_on_desktop'] ? 'yes' : 'no';
+        $offcanvas_on_tablet = !empty($settings['offcanvas_on_tablet']) && 'yes' === $settings['offcanvas_on_tablet'] ? 'yes' : 'no';
+        $offcanvas_on_mobile = !empty($settings['offcanvas_on_mobile']) && 'yes' === $settings['offcanvas_on_mobile'] ? 'yes' : 'no';
+        $direction_desktop = !empty($settings['offcanvas_direction_desktop']) ? sanitize_key($settings['offcanvas_direction_desktop']) : 'inherit';
+        $direction_tablet = !empty($settings['offcanvas_direction_tablet']) ? sanitize_key($settings['offcanvas_direction_tablet']) : 'inherit';
+        $direction_mobile = !empty($settings['offcanvas_direction_mobile']) ? sanitize_key($settings['offcanvas_direction_mobile']) : 'inherit';
+        $animation_duration_desktop = !empty($settings['offcanvas_animation_duration_desktop']) ? intval($settings['offcanvas_animation_duration_desktop']) : 0;
+        $animation_duration_tablet = !empty($settings['offcanvas_animation_duration_tablet']) ? intval($settings['offcanvas_animation_duration_tablet']) : 0;
+        $animation_duration_mobile = !empty($settings['offcanvas_animation_duration_mobile']) ? intval($settings['offcanvas_animation_duration_mobile']) : 0;
+        $panel_size_desktop = !empty($settings['offcanvas_panel_size_desktop']['size']) ? intval($settings['offcanvas_panel_size_desktop']['size']) : 0;
+        $panel_size_tablet = !empty($settings['offcanvas_panel_size_tablet']['size']) ? intval($settings['offcanvas_panel_size_tablet']['size']) : 0;
+        $panel_size_mobile = !empty($settings['offcanvas_panel_size_mobile']['size']) ? intval($settings['offcanvas_panel_size_mobile']['size']) : 0;
+        $panel_height_desktop = !empty($settings['offcanvas_panel_height_desktop']['size']) ? intval($settings['offcanvas_panel_height_desktop']['size']) : 0;
+        $panel_height_tablet = !empty($settings['offcanvas_panel_height_tablet']['size']) ? intval($settings['offcanvas_panel_height_tablet']['size']) : 0;
+        $panel_height_mobile = !empty($settings['offcanvas_panel_height_mobile']['size']) ? intval($settings['offcanvas_panel_height_mobile']['size']) : 0;
+        $close_btn_color = !empty($settings['offcanvas_close_btn_color']) ? sanitize_text_field($settings['offcanvas_close_btn_color']) : '#333333';
+        $close_btn_bg = !empty($settings['offcanvas_close_btn_bg']) ? sanitize_text_field($settings['offcanvas_close_btn_bg']) : 'transparent';
+        $close_btn_color = preg_replace('/\s*!important\s*$/i', '', $close_btn_color);
+        $close_btn_bg = preg_replace('/\s*!important\s*$/i', '', $close_btn_bg);
+        $close_btn_border_color = !empty($settings['offcanvas_close_btn_border_color']) ? sanitize_text_field($settings['offcanvas_close_btn_border_color']) : 'transparent';
+        $close_btn_border_color = preg_replace('/\s*!important\s*$/i', '', $close_btn_border_color);
+        $close_btn_size = !empty($settings['offcanvas_close_btn_size']['size']) ? intval($settings['offcanvas_close_btn_size']['size']) : 40;
+        $close_icon_size = !empty($settings['offcanvas_close_icon_size']['size']) ? intval($settings['offcanvas_close_icon_size']['size']) : 24;
+        $close_btn_radius = !empty($settings['offcanvas_close_btn_radius']['size']) ? intval($settings['offcanvas_close_btn_radius']['size']) : 4;
+        $close_btn_border_width = !empty($settings['offcanvas_close_btn_border_width']['size']) ? intval($settings['offcanvas_close_btn_border_width']['size']) : 0;
+        $close_btn_offset_top = !empty($settings['offcanvas_close_btn_offset_top']) ? intval($settings['offcanvas_close_btn_offset_top']) : 0;
+        $close_btn_offset_right = !empty($settings['offcanvas_close_btn_offset_right']) ? intval($settings['offcanvas_close_btn_offset_right']) : 0;
+        $desktop_layout = !empty($settings['desktop_layout']) ? sanitize_key($settings['desktop_layout']) : 'horizontal';
+        $tablet_layout = !empty($settings['tablet_layout']) ? sanitize_key($settings['tablet_layout']) : $desktop_layout;
+        $mobile_layout = !empty($settings['mobile_layout']) ? sanitize_key($settings['mobile_layout']) : 'vertical';
+        $allowed_easing = ['ease-in-out', 'ease-in', 'ease-out', 'linear'];
+        $allowed_direction = ['inherit', 'left', 'right', 'top', 'bottom'];
+        $allowed_layout = ['horizontal', 'vertical', 'grid'];
+
+        if (!in_array($animation_easing, $allowed_easing, true)) {
+            $animation_easing = 'ease-in-out';
+        }
+        if (!in_array($direction_desktop, $allowed_direction, true)) {
+            $direction_desktop = 'inherit';
+        }
+        if (!in_array($direction_tablet, $allowed_direction, true)) {
+            $direction_tablet = 'inherit';
+        }
+        if (!in_array($direction_mobile, $allowed_direction, true)) {
+            $direction_mobile = 'inherit';
+        }
+        if (!in_array($desktop_layout, $allowed_layout, true)) {
+            $desktop_layout = 'horizontal';
+        }
+        if (!in_array($tablet_layout, $allowed_layout, true)) {
+            $tablet_layout = $desktop_layout;
+        }
+        if (!in_array($mobile_layout, $allowed_layout, true)) {
+            $mobile_layout = 'vertical';
+        }
+
+        if ($z_index < 100) {
+            $z_index = 100;
+        }
+
+        printf(
+            '<div class="ldjem-menu-wrapper ldjem-menu-wrapper-offcanvas" data-ldjem-id="%1$s" data-ldjem-offcanvas="true" data-offcanvas-desktop="%2$s" data-offcanvas-tablet="%3$s" data-offcanvas-mobile="%4$s" data-direction-desktop="%5$s" data-direction-tablet="%6$s" data-direction-mobile="%7$s" data-animation-duration-desktop="%8$d" data-animation-duration-tablet="%9$d" data-animation-duration-mobile="%10$d" data-panel-size-desktop="%11$d" data-panel-size-tablet="%12$d" data-panel-size-mobile="%13$d" data-panel-height-desktop="%14$d" data-panel-height-tablet="%15$d" data-panel-height-mobile="%16$d" data-desktop-layout="%17$s" data-tablet-layout="%18$s" data-mobile-layout="%19$s">',
+            esc_attr($widget_id),
+            esc_attr($offcanvas_on_desktop),
+            esc_attr($offcanvas_on_tablet),
+            esc_attr($offcanvas_on_mobile),
+            esc_attr($direction_desktop),
+            esc_attr($direction_tablet),
+            esc_attr($direction_mobile),
+            intval($animation_duration_desktop),
+            intval($animation_duration_tablet),
+            intval($animation_duration_mobile),
+            intval($panel_size_desktop),
+            intval($panel_size_tablet),
+            intval($panel_size_mobile),
+            intval($panel_height_desktop),
+            intval($panel_height_tablet),
+            intval($panel_height_mobile),
+            esc_attr($desktop_layout),
+            esc_attr($tablet_layout),
+            esc_attr($mobile_layout)
+        );
+
+        $this->render_hamburger_menu($settings);
+
+        printf(
+            '<div class="ldjem-offcanvas-wrapper direction-%1$s" data-ldjem-id="%2$s" role="dialog" aria-modal="true" aria-hidden="true" aria-label="%3$s" style="--ldjem-offcanvas-bg: %4$s; --ldjem-offcanvas-animation-speed: %5$dms; --ldjem-offcanvas-easing: %6$s; --ldjem-offcanvas-z-index: %7$d; --ldjem-offcanvas-panel-size: %8$dpx; --ldjem-offcanvas-panel-height: %9$dpx; --ldjem-close-btn-color: %10$s; --ldjem-close-btn-bg: %11$s; --ldjem-close-btn-size: %12$dpx; --ldjem-close-icon-size: %13$dpx; --ldjem-close-btn-radius: %14$dpx; --ldjem-close-btn-offset-top: %15$dpx; --ldjem-close-btn-offset-right: %16$dpx; --ldjem-close-btn-border-width: %17$dpx; --ldjem-close-btn-border-color: %18$s;">',
+            esc_attr($direction),
+            esc_attr($widget_id),
+            esc_attr__('Main Menu', LDJEM_TEXT_DOMAIN),
+            esc_attr($bg_color),
+            intval($animation_duration),
+            esc_attr($animation_easing),
+            intval($z_index),
+            intval($panel_size),
+            intval($panel_height),
+            esc_attr($close_btn_color),
+            esc_attr($close_btn_bg),
+            intval($close_btn_size),
+            intval($close_icon_size),
+            intval($close_btn_radius),
+            intval($close_btn_offset_top),
+            intval($close_btn_offset_right),
+            intval($close_btn_border_width),
+            esc_attr($close_btn_border_color)
+        );
+
+        if (!empty($settings['offcanvas_show_header']) && 'yes' === $settings['offcanvas_show_header']) {
+            $header_style = !empty($header_bg_color) ? ' style="background-color: ' . esc_attr($header_bg_color) . ';"' : '';
+            echo '<div class="ldjem-offcanvas-header"' . $header_style . '>';
+            $this->render_offcanvas_header($settings);
+            echo '</div>';
+        }
+
+        echo '<div class="ldjem-offcanvas-menu-container">';
+        echo '<ul class="ldjem-offcanvas-menu">' . $this->render_offcanvas_menu_items($menu_items, 0, $settings) . '</ul>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '</div>';
+
+        if (!empty($settings['offcanvas_show_footer']) && 'yes' === $settings['offcanvas_show_footer']) {
+            $footer_style = !empty($footer_bg_color) ? ' style="background-color: ' . esc_attr($footer_bg_color) . ';"' : '';
+            echo '<div class="ldjem-offcanvas-footer"' . $footer_style . '>';
+            $this->render_offcanvas_footer($settings);
+            echo '</div>';
+        }
+
+        echo '</div>';
+        echo '</div>';
+    }
+
+    /**
+     * Determine whether the off-canvas layer should be rendered.
+     *
+     * @param array $settings Widget settings.
+     * @return bool
+     */
+    private function should_render_offcanvas($settings) {
+        if (empty($settings['offcanvas_enable']) || 'yes' !== $settings['offcanvas_enable']) {
+            return false;
+        }
+
+        $device_settings = [
+            'offcanvas_on_desktop',
+            'offcanvas_on_tablet',
+            'offcanvas_on_mobile',
+        ];
+
+        foreach ($device_settings as $device_setting) {
+            if (!empty($settings[$device_setting]) && 'yes' === $settings[$device_setting]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Render off-canvas header.
+     *
+     * @param array $settings Widget settings.
+     * @return void
+     */
+    private function render_offcanvas_header($settings) {
+        $logo = !empty($settings['offcanvas_logo']) ? $settings['offcanvas_logo'] : [];
+        $header_text = !empty($settings['offcanvas_header_text']) ? $settings['offcanvas_header_text'] : '';
+        $logo_alt = !empty($settings['offcanvas_logo_alt']) ? $settings['offcanvas_logo_alt'] : esc_html__('Logo', LDJEM_TEXT_DOMAIN);
+
+        echo '<div class="ldjem-offcanvas-logo">';
+
+        if (!empty($logo['url'])) {
+            $logo_link = !empty($settings['offcanvas_logo_link']['url']) ? $settings['offcanvas_logo_link']['url'] : '';
+
+            if (!empty($logo_link)) {
+                printf('<a href="%s">', esc_url($logo_link));
+            }
+
+            printf(
+                '<img src="%1$s" alt="%2$s">',
+                esc_url($logo['url']),
+                esc_attr($logo_alt)
+            );
+
+            if (!empty($logo_link)) {
+                echo '</a>';
+            }
+        }
+
+        if (!empty($settings['offcanvas_show_header_text']) && 'yes' === $settings['offcanvas_show_header_text'] && '' !== trim($header_text)) {
+            printf('<span class="ldjem-offcanvas-logo-text">%s</span>', esc_html($header_text));
+        }
+        echo '</div>';
+
+        if (!empty($settings['offcanvas_show_close_btn']) && 'yes' === $settings['offcanvas_show_close_btn']) {
+            $icon = !empty($settings['offcanvas_close_icon']) ? sanitize_key($settings['offcanvas_close_icon']) : 'x';
+
+            if (!in_array($icon, ['x', 'arrow', 'chevron'], true)) {
+                $icon = 'x';
+            }
+
+            printf(
+                '<button class="ldjem-offcanvas-close icon-%1$s" type="button" aria-label="%2$s"></button>',
+                esc_attr($icon),
+                esc_attr__('Close menu', LDJEM_TEXT_DOMAIN)
+            );
+        }
+    }
+
+    /**
+     * Render off-canvas footer.
+     *
+     * @param array $settings Widget settings.
+     * @return void
+     */
+    private function render_offcanvas_footer($settings) {
+        if (!empty($settings['offcanvas_show_footer_title']) && 'yes' === $settings['offcanvas_show_footer_title'] && !empty($settings['offcanvas_footer_title'])) {
+            printf('<div class="ldjem-offcanvas-footer-title">%s</div>', esc_html($settings['offcanvas_footer_title']));
+        }
+
+        if (empty($settings['offcanvas_social_icons']) || !is_array($settings['offcanvas_social_icons'])) {
+            return;
+        }
+
+        $icon_size = !empty($settings['offcanvas_social_icon_size']['size']) ? intval($settings['offcanvas_social_icon_size']['size']) : 36;
+        echo '<ul class="ldjem-offcanvas-social">';
+
+        foreach ($settings['offcanvas_social_icons'] as $social_item) {
+            $platform = !empty($social_item['social_platform']) ? sanitize_key($social_item['social_platform']) : 'facebook';
+            $url = !empty($social_item['social_url']['url']) ? esc_url($social_item['social_url']['url']) : '';
+
+            if (empty($url)) {
+                continue;
+            }
+
+            printf(
+                '<li class="ldjem-offcanvas-social-item"><a class="ldjem-offcanvas-social-link" href="%1$s" target="_blank" rel="noopener noreferrer" aria-label="%2$s" style="width: %3$dpx; height: %3$dpx;"><span aria-hidden="true">%4$s</span></a></li>',
+                esc_url($url),
+                esc_attr(ucfirst($platform)),
+                intval($icon_size),
+                esc_html($this->get_social_label($platform))
+            );
+        }
+
+        echo '</ul>';
+    }
+
+    /**
+     * Render off-canvas menu items.
+     *
+     * @param array $items Menu items.
+     * @param int $level Current nesting level.
+     * @param array $settings Widget settings.
+     * @return string
+     */
+    private function render_offcanvas_menu_items($items, $level = 0, $settings = []) {
+        if (empty($items)) {
+            return '';
+        }
+
+        $html = '';
+
+        foreach ($items as $item) {
+            $classes = [$level === 0 ? 'ldjem-offcanvas-menu-item' : 'ldjem-offcanvas-submenu-item'];
+
+            if (!empty($settings['mark_active_item']) && 'yes' === $settings['mark_active_item']) {
+                if (!empty($item->current)) {
+                    $classes[] = 'is-active';
+                    $classes[] = 'is-current';
+                }
+
+                if (!empty($item->current_item_ancestor)) {
+                    $classes[] = 'is-active';
+                }
+            }
+
+            if (!empty($item->children)) {
+                $classes[] = 'has-children';
+            }
+
+            $classes[] = 'level-' . intval($level);
+
+            $html .= sprintf(
+                '<li class="%1$s">',
+                esc_attr(implode(' ', $classes))
+            );
+
+            $html .= sprintf(
+                '<a href="%1$s"%2$s%3$s>%4$s</a>',
+                esc_url($item->url),
+                (!empty($settings['link_target']) && in_array($settings['link_target'], ['_blank', '_self'], true)) ? ' target="' . esc_attr($settings['link_target']) . '"' : '',
+                !empty($item->children) ? ' aria-haspopup="true" aria-expanded="false"' : '',
+                esc_html($item->title)
+            );
+
+            if (!empty($item->children)) {
+                $html .= sprintf(
+                    '<ul class="ldjem-offcanvas-submenu ldjem-offcanvas-submenu-level-%1$d">%2$s</ul>',
+                    intval($level + 1),
+                    $this->render_offcanvas_menu_items($item->children, $level + 1, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                );
+            }
+
+            $html .= '</li>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Short label for social platform icon.
+     *
+     * @param string $platform Platform key.
+     * @return string
+     */
+    private function get_social_label($platform) {
+        $labels = [
+            'facebook'  => 'F',
+            'twitter'   => 'X',
+            'linkedin'  => 'in',
+            'instagram' => 'IG',
+            'youtube'   => 'YT',
+            'tiktok'    => 'TT',
+        ];
+
+        return isset($labels[$platform]) ? $labels[$platform] : strtoupper(substr($platform, 0, 2));
+    }
+
+    /**
+     * Render hamburger menu button
+     * 
+     * @param array $settings Widget settings
+     * @return void
+     */
+    private function render_hamburger_menu($settings) {
+        $position = sanitize_key($settings['mobile_hamburger_position']);
+        if (!in_array($position, ['left', 'right'], true)) {
+            $position = 'left';
+        }
+
+        echo '<button class="ldjem-hamburger ldjem-hamburger-btn ldjem-hamburger-' . esc_attr($position) . '" type="button" aria-label="' . esc_attr__('Toggle Menu', LDJEM_TEXT_DOMAIN) . '" aria-expanded="false">';
+        if (!empty($settings['hamburger_icon']) && !empty($settings['hamburger_icon']['value'])) {
+            Icons_Manager::render_icon($settings['hamburger_icon'], ['aria-hidden' => 'true']);
+        } else {
+            echo '<span></span><span></span><span></span>';
+        }
+        echo '</button>';
+    }
+
+    /**
+     * Recursively render menu items
+     * 
+     * @param array  $items Menu items to render
+     * @param int    $level Current nesting level
+     * @param array  $settings Widget settings
+     * @return string HTML of menu items
+     */
+    private function render_menu_items($items, $level = 0, $settings = []) {
+        if (empty($items)) {
+            return '';
+        }
+
+        $html = '';
+
+        foreach ($items as $item) {
+            $classes = ['ldjem-menu-item'];
+
+            // Add active class if current page
+            if (!empty($settings['mark_active_item']) && 'yes' === $settings['mark_active_item']) {
+                if ($item->current) {
+                    $classes[] = 'current-menu-item';
+                }
+                if ($item->current_item_ancestor) {
+                    $classes[] = 'current-menu-ancestor';
+                }
+            }
+
+            // Add parent class if has children
+            if (!empty($item->children)) {
+                $classes[] = 'ldjem-menu-item-parent';
+            }
+
+            // Add level class
+            $classes[] = 'ldjem-menu-level-' . $level;
+
+            // Render menu item
+            $html .= sprintf(
+                '<li class="%s"><a href="%s"%s>%s</a>',
+                esc_attr(implode(' ', $classes)),
+                LDJEM_Security::escape_url($item->url),
+                (!empty($settings['link_target']) && in_array($settings['link_target'], ['_blank', '_self'], true)) ? ' target="' . esc_attr($settings['link_target']) . '"' : '',
+                LDJEM_Security::escape_html($item->title)
+            );
+
+            // Render submenu if has children
+            if (!empty($item->children)) {
+                $html .= '<button class="ldjem-submenu-toggle" type="button" aria-label="' . esc_attr__('Toggle submenu', LDJEM_TEXT_DOMAIN) . '" aria-expanded="false">';
+                if (!empty($settings['submenu_indicator_icon']) && !empty($settings['submenu_indicator_icon']['value'])) {
+                    ob_start();
+                    Icons_Manager::render_icon($settings['submenu_indicator_icon'], ['aria-hidden' => 'true']);
+                    $html .= ob_get_clean();
+                } else {
+                    $html .= '<span aria-hidden="true">&#9662;</span>';
+                }
+                $html .= '</button>';
+
+                $html .= sprintf(
+                    '<ul class="ldjem-submenu ldjem-submenu-level-%d">%s</ul>',
+                    $level + 1,
+                    $this->render_menu_items($item->children, $level + 1, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                );
+            }
+
+            $html .= '</li>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Render widget in plain text (for RSS, etc)
+     * 
+     * @return void
+     */
+    public function render_plain_content() {
+        echo esc_html__('LanceDesk Responsive Menu', LDJEM_TEXT_DOMAIN);
+    }
+
+    /**
+     * Get script dependencies
+     * 
+     * @return array Script handles to load before widget
+     */
+    public function get_script_depends() {
+        return [LDJEM_PREFIX . '-frontend', LDJEM_PREFIX . '-offcanvas'];
+    }
+
+    /**
+     * Get style dependencies
+     * 
+     * @return array Style handles to load before widget
+     */
+    public function get_style_depends() {
+        return [LDJEM_PREFIX . '-frontend', LDJEM_PREFIX . '-offcanvas'];
+    }
+}

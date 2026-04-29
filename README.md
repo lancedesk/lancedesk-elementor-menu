@@ -1,0 +1,66 @@
+# LanceDesk Elementor Menu
+
+Responsive Elementor menu widget for WordPress with per-device layout controls, flexible submenu triggers, and cleaner mobile navigation behavior.
+
+![Version](https://img.shields.io/badge/version-1.0.1-blue)
+![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)
+![WordPress](https://img.shields.io/badge/wordpress-5.0%2B-blue)
+![PHP](https://img.shields.io/badge/php-7.4%2B-blue)
+![Elementor](https://img.shields.io/badge/elementor-3.0%2B-blue)
+
+## Why This Plugin
+
+Most Elementor menu workflows require duplicated widgets and breakpoint visibility hacks.
+LanceDesk Elementor Menu is designed for modern WordPress builds where you want one menu widget that adapts cleanly across desktop, tablet, and mobile.
+
+## Key Features
+
+- Single widget instance for responsive WordPress navigation menus
+- Device-aware layout control: horizontal, vertical, grid
+- Submenu trigger modes: `Hover`, `Click`, `Hover & Click`
+- Optional accordion behavior for nested submenu UX
+- Off-canvas support for mobile/tablet navigation patterns
+- Submenu spacing, border, and nested vertical styling controls
+- Accessibility-focused ARIA and keyboard interaction support
+
+## Why It Matters
+
+This plugin is built for WordPress + Elementor navigation workflows.
+
+- Build one responsive menu instead of duplicating multiple widgets per breakpoint
+- Keep navigation behavior consistent across desktop, tablet, and mobile
+- Improve usability with configurable submenu triggers and accordion behavior
+- Reduce maintenance overhead when updating menus and template layouts
+
+Clear, consistent navigation improves user experience and can support better engagement across your site.
+
+## Requirements
+
+- WordPress 5.0+
+- PHP 7.4+
+- Elementor 3.0+
+
+## Installation
+
+1. Upload the plugin folder to `/wp-content/plugins/lancedesk-elementor-menu/` or install the zip in wp-admin.
+2. Activate the plugin.
+3. Open Elementor and drag `LanceDesk Responsive Menu` into your layout.
+4. Pick a WordPress menu and configure responsive layout behavior.
+
+## Changelog
+
+### 1.0.1
+
+- Improved submenu interaction behavior for click and hover/click modes
+- Added configurable submenu accordion behavior
+- Added submenu spacing and border customization controls
+- Improved editor/frontend consistency for submenu behavior
+- Added WordPress.org-compatible `readme.txt`
+
+### 1.0.0
+
+- Initial release
+
+## License
+
+GPL-2.0-or-later. See `LICENSE`.
