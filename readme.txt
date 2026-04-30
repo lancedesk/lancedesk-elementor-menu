@@ -4,7 +4,7 @@ Tags: elementor, menu, navigation menu, responsive menu, mobile menu, dropdown m
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,7 +70,7 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Changelog ==
 
-= 1.0.2 =
+= 1.0.3 =
 * Added device-specific menu selection mapping for standard and off-canvas output.
 * Improved Elementor editor behavior for off-canvas toggle/open/close interactions.
 * Fixed hamburger alignment control responsiveness in editor preview.
@@ -89,7 +89,7 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Upgrade Notice ==
 
-= 1.0.2 =
+= 1.0.3 =
 Recommended update for stable mobile/off-canvas editor previews and device-specific menu selection support.
 
 = 1.0.1 =
