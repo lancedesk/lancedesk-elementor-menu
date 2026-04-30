@@ -188,9 +188,9 @@ class LDJEM_Helpers {
      */
     public static function get_layout_options() {
         return [
-            'horizontal' => esc_html__('Horizontal', LDJEM_TEXT_DOMAIN),
-            'vertical'   => esc_html__('Vertical', LDJEM_TEXT_DOMAIN),
-            'grid'       => esc_html__('Grid', LDJEM_TEXT_DOMAIN),
+            'horizontal' => esc_html__('Horizontal', 'lancedesk-elementor-menu'),
+            'vertical'   => esc_html__('Vertical', 'lancedesk-elementor-menu'),
+            'grid'       => esc_html__('Grid', 'lancedesk-elementor-menu'),
         ];
     }
 
@@ -201,10 +201,10 @@ class LDJEM_Helpers {
      */
     public static function get_animation_options() {
         return [
-            'fade'   => esc_html__('Fade', LDJEM_TEXT_DOMAIN),
-            'slide'  => esc_html__('Slide', LDJEM_TEXT_DOMAIN),
-            'bounce' => esc_html__('Bounce', LDJEM_TEXT_DOMAIN),
-            'none'   => esc_html__('None', LDJEM_TEXT_DOMAIN),
+            'fade'   => esc_html__('Fade', 'lancedesk-elementor-menu'),
+            'slide'  => esc_html__('Slide', 'lancedesk-elementor-menu'),
+            'bounce' => esc_html__('Bounce', 'lancedesk-elementor-menu'),
+            'none'   => esc_html__('None', 'lancedesk-elementor-menu'),
         ];
     }
 
@@ -215,9 +215,9 @@ class LDJEM_Helpers {
      */
     public static function get_submenu_trigger_options() {
         return [
-            'hover'       => esc_html__('Hover', LDJEM_TEXT_DOMAIN),
-            'click'       => esc_html__('Click', LDJEM_TEXT_DOMAIN),
-            'hover_click' => esc_html__('Hover & Click', LDJEM_TEXT_DOMAIN),
+            'hover'       => esc_html__('Hover', 'lancedesk-elementor-menu'),
+            'click'       => esc_html__('Click', 'lancedesk-elementor-menu'),
+            'hover_click' => esc_html__('Hover & Click', 'lancedesk-elementor-menu'),
         ];
     }
 
@@ -264,11 +264,13 @@ class LDJEM_Helpers {
         if (!defined('WP_DEBUG') || !WP_DEBUG) {
             return;
         }
-
-        error_log(sprintf(
-            '[LDJEM_%s] %s',
-            strtoupper($context),
-            $message
-        ));
+        do_action(
+            'ldjem_debug_log',
+            sprintf(
+                '[LDJEM_%s] %s',
+                strtoupper($context),
+                $message
+            )
+        );
     }
 }

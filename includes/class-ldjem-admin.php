@@ -150,7 +150,8 @@ class LDJEM_Admin {
         printf(
             '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
             sprintf(
-                esc_html__('%s successfully activated! Start creating responsive menus in Elementor.', LDJEM_TEXT_DOMAIN),
+                /* translators: %s: Plugin name. */
+                esc_html__('%s successfully activated! Start creating responsive menus in Elementor.', 'lancedesk-elementor-menu'),
                 '<strong>LanceDesk Elementor Menu</strong>'
             )
         );
@@ -175,7 +176,7 @@ class LDJEM_Admin {
                 add_action('admin_notices', function() {
                     printf(
                         '<div class="notice notice-warning"><p>%s</p></div>',
-                        esc_html__('LanceDesk Elementor Menu requires Elementor plugin to be active.', LDJEM_TEXT_DOMAIN)
+                        esc_html__('LanceDesk Elementor Menu requires Elementor plugin to be active.', 'lancedesk-elementor-menu')
                     );
                 });
             }

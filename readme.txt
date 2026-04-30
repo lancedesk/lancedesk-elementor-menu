@@ -1,10 +1,10 @@
 === LanceDesk Elementor Menu ===
 Contributors: lancedesk
-Tags: elementor, menu, navigation menu, responsive menu, mobile menu, dropdown menu, mega menu, wordpress menu, elementor widget, accessibility
+Tags: elementor, menu, responsive menu, mobile menu, navigation
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,11 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Changelog ==
 
+= 1.0.5 =
+* Added translators comments for placeholder-based i18n strings.
+* Hardened request action sanitization and cleanup routines for Plugin Check compliance.
+* Removed discouraged debug/textdomain patterns and aligned metadata for WordPress.org scanning.
+
 = 1.0.4 =
 * Fixed duplicate Elementor control declarations that triggered control redeclare notices.
 * Added safe fallback for missing `mobile_hamburger_position` widget setting.
@@ -93,6 +98,9 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+Recommended compliance update to satisfy WordPress.org Plugin Check and submission scanner requirements.
 
 = 1.0.4 =
 Recommended maintenance update to eliminate Elementor control redeclare notices and undefined setting warnings.

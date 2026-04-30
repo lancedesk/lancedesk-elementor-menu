@@ -28,14 +28,14 @@ class LDJEM_Activator {
         // Check WordPress version
         if (version_compare(get_bloginfo('version'), '5.0', '<')) {
             wp_die(
-                esc_html__('LanceDesk Elementor Menu requires WordPress 5.0 or higher.', LDJEM_TEXT_DOMAIN)
+                esc_html__('LanceDesk Elementor Menu requires WordPress 5.0 or higher.', 'lancedesk-elementor-menu')
             );
         }
 
         // Check PHP version
         if (version_compare(PHP_VERSION, '7.4', '<')) {
             wp_die(
-                esc_html__('LanceDesk Elementor Menu requires PHP 7.4 or higher.', LDJEM_TEXT_DOMAIN)
+                esc_html__('LanceDesk Elementor Menu requires PHP 7.4 or higher.', 'lancedesk-elementor-menu')
             );
         }
 
@@ -43,7 +43,8 @@ class LDJEM_Activator {
         if (!self::is_elementor_active()) {
             wp_die(
                 sprintf(
-                    esc_html__('LanceDesk Elementor Menu requires %s to be installed and activated.', LDJEM_TEXT_DOMAIN),
+                    /* translators: %s: Required plugin name. */
+                    esc_html__('LanceDesk Elementor Menu requires %s to be installed and activated.', 'lancedesk-elementor-menu'),
                     'Elementor'
                 )
             );
@@ -53,7 +54,8 @@ class LDJEM_Activator {
         if (!self::is_elementor_version_compatible()) {
             wp_die(
                 sprintf(
-                    esc_html__('LanceDesk Elementor Menu requires Elementor %s or higher.', LDJEM_TEXT_DOMAIN),
+                    /* translators: %s: Minimum required Elementor version. */
+                    esc_html__('LanceDesk Elementor Menu requires Elementor %s or higher.', 'lancedesk-elementor-menu'),
                     '3.0'
                 )
             );

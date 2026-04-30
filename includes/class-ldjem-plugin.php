@@ -82,19 +82,6 @@ class LDJEM_Plugin {
     }
 
     /**
-     * Load plugin text domain for translations
-     * 
-     * @return void
-     */
-    public function load_textdomain() {
-        load_plugin_textdomain(
-            LDJEM_TEXT_DOMAIN,
-            false,
-            dirname(plugin_basename(LDJEM_PLUGIN_FILE)) . '/languages'
-        );
-    }
-
-    /**
      * Load plugin dependencies
      * 
      * @return void
@@ -130,9 +117,6 @@ class LDJEM_Plugin {
      * @return void
      */
     private function setup_hooks() {
-        // Load translations at init or later per WP guidance.
-        add_action('init', [$this, 'load_textdomain']);
-
         // Register widget with Elementor
         add_action('elementor/widgets/widgets_registered', [$this, 'register_widgets']);
 
@@ -155,11 +139,8 @@ class LDJEM_Plugin {
         // Register the widget
         try {
             $widgets_manager->register(new LDJEM_Menu_Widget());
-        } catch (Exception $e) {
-            // Log error if widget registration fails
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('LDJEM Widget Registration Error: ' . $e->getMessage());
-            }
+        } catch (Exception $e) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+            // Swallow registration failure to avoid hard-failing wp-admin.
         }
     }
 
@@ -196,13 +177,13 @@ class LDJEM_Plugin {
      * Prevent cloning
      */
     public function __clone() {
-        _doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed for this singleton.', LDJEM_TEXT_DOMAIN), LDJEM_VERSION);
+        _doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed for this singleton.', 'lancedesk-elementor-menu'), esc_html(LDJEM_VERSION));
     }
 
     /**
      * Prevent unserialization
      */
     public function __wakeup() {
-        _doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed for this singleton.', LDJEM_TEXT_DOMAIN), LDJEM_VERSION);
+        _doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed for this singleton.', 'lancedesk-elementor-menu'), esc_html(LDJEM_VERSION));
     }
 }

@@ -200,9 +200,26 @@ class LDJEM_Security {
     /**
      * Verify request is from Elementor editor
      * 
+     * @param string $action Optional request action value.
      * @return bool
      */
-    public static function is_elementor_editor() {
-        return isset($_REQUEST['action']) && 'elementor_ajax' === $_REQUEST['action'];
+    public static function is_elementor_editor($action = '') {
+        $request_action = '' !== $action ? $action : self::get_request_action();
+        if ('' === $request_action) {
+            return false;
+        }
+
+        $sanitized_action = sanitize_text_field($request_action);
+        return 'elementor_ajax' === $sanitized_action;
+    }
+
+    /**
+     * Safely read request action key.
+     *
+     * @return string
+     */
+    private static function get_request_action() {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only context check, no data mutation.
+        return isset($_REQUEST['action']) ? sanitize_text_field(wp_unslash($_REQUEST['action'])) : '';
     }
 }

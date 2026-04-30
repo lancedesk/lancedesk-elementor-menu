@@ -27,11 +27,12 @@ if (!defined('LDJEM_PREFIX')) {
  * - Resets any settings
  */
 function ldjem_uninstall_plugin() {
-    global $wpdb;
-
     // Get all blog IDs (for multisite support)
     if (is_multisite()) {
-        $blog_ids = $wpdb->get_col("SELECT blog_id FROM {$wpdb->blogs}");
+        $blog_ids = get_sites([
+            'fields' => 'ids',
+        ]);
+
         foreach ($blog_ids as $blog_id) {
             switch_to_blog($blog_id);
             ldjem_cleanup_blog_data();

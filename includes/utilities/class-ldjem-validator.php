@@ -31,7 +31,7 @@ class LDJEM_Validator {
         if (empty($menu_id)) {
             return new WP_Error(
                 'empty_menu_id',
-                esc_html__('Menu ID is required', LDJEM_TEXT_DOMAIN)
+                esc_html__('Menu ID is required', 'lancedesk-elementor-menu')
             );
         }
 
@@ -39,7 +39,7 @@ class LDJEM_Validator {
         if (empty($menu)) {
             return new WP_Error(
                 'invalid_menu_id',
-                esc_html__('Selected menu does not exist', LDJEM_TEXT_DOMAIN)
+                esc_html__('Selected menu does not exist', 'lancedesk-elementor-menu')
             );
         }
 
@@ -59,7 +59,8 @@ class LDJEM_Validator {
             return new WP_Error(
                 'invalid_depth',
                 sprintf(
-                    esc_html__('Menu depth must be between 1 and 4, got %d', LDJEM_TEXT_DOMAIN),
+                    /* translators: %d: Invalid menu depth value. */
+                    esc_html__('Menu depth must be between 1 and 4, got %d', 'lancedesk-elementor-menu'),
                     $depth
                 )
             );
@@ -82,7 +83,8 @@ class LDJEM_Validator {
             return new WP_Error(
                 'invalid_layout',
                 sprintf(
-                    esc_html__('Invalid layout option: %s', LDJEM_TEXT_DOMAIN),
+                    /* translators: %s: Invalid layout value. */
+                    esc_html__('Invalid layout option: %s', 'lancedesk-elementor-menu'),
                     $layout
                 )
             );
@@ -105,7 +107,8 @@ class LDJEM_Validator {
             return new WP_Error(
                 'invalid_animation',
                 sprintf(
-                    esc_html__('Invalid animation option: %s', LDJEM_TEXT_DOMAIN),
+                    /* translators: %s: Invalid animation value. */
+                    esc_html__('Invalid animation option: %s', 'lancedesk-elementor-menu'),
                     $animation
                 )
             );
@@ -128,7 +131,8 @@ class LDJEM_Validator {
             return new WP_Error(
                 'invalid_breakpoint',
                 sprintf(
-                    esc_html__('Invalid breakpoint: %s', LDJEM_TEXT_DOMAIN),
+                    /* translators: %s: Invalid breakpoint key. */
+                    esc_html__('Invalid breakpoint: %s', 'lancedesk-elementor-menu'),
                     $breakpoint
                 )
             );
@@ -151,7 +155,7 @@ class LDJEM_Validator {
         if (!is_string($classes)) {
             return new WP_Error(
                 'invalid_css_class_type',
-                esc_html__('CSS classes must be a string', LDJEM_TEXT_DOMAIN)
+                esc_html__('CSS classes must be a string', 'lancedesk-elementor-menu')
             );
         }
 
@@ -159,7 +163,7 @@ class LDJEM_Validator {
         if (!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $classes)) {
             return new WP_Error(
                 'invalid_css_class_characters',
-                esc_html__('CSS classes contain invalid characters', LDJEM_TEXT_DOMAIN)
+                esc_html__('CSS classes contain invalid characters', 'lancedesk-elementor-menu')
             );
         }
 
@@ -180,7 +184,8 @@ class LDJEM_Validator {
             return new WP_Error(
                 'invalid_alignment',
                 sprintf(
-                    esc_html__('Invalid alignment option: %s', LDJEM_TEXT_DOMAIN),
+                    /* translators: %s: Invalid alignment value. */
+                    esc_html__('Invalid alignment option: %s', 'lancedesk-elementor-menu'),
                     $alignment
                 )
             );
@@ -212,7 +217,7 @@ class LDJEM_Validator {
 
         return new WP_Error(
             'invalid_color_format',
-            esc_html__('Invalid color format', LDJEM_TEXT_DOMAIN)
+            esc_html__('Invalid color format', 'lancedesk-elementor-menu')
         );
     }
 
@@ -238,7 +243,8 @@ class LDJEM_Validator {
         return new WP_Error(
             'invalid_spacing_format',
             sprintf(
-                esc_html__('Invalid spacing format: %s', LDJEM_TEXT_DOMAIN),
+                /* translators: %s: Invalid spacing value. */
+                esc_html__('Invalid spacing format: %s', 'lancedesk-elementor-menu'),
                 $spacing
             )
         );
