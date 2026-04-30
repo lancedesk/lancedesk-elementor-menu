@@ -1272,94 +1272,6 @@ class LDJEM_Menu_Widget extends Widget_Base {
             ]
         );
 
-        $this->add_control(
-            'menu_item_underline_heading',
-            [
-                'label'     => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
-                'type'      => Controls_Manager::HEADING,
-                'separator' => 'before',
-            ]
-        );
-
-        $this->add_control(
-            'menu_item_underline_hover',
-            [
-                'label'   => esc_html__('Hover Underline', LDJEM_TEXT_DOMAIN),
-                'type'    => Controls_Manager::SELECT,
-                'options' => [
-                    'none'      => esc_html__('None', LDJEM_TEXT_DOMAIN),
-                    'underline' => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
-                ],
-                'default' => 'none',
-                'selectors' => [
-                    '{{WRAPPER}} .ldjem-menu-item > a:hover' => 'text-decoration-line: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'menu_item_underline_active',
-            [
-                'label'   => esc_html__('Active Underline', LDJEM_TEXT_DOMAIN),
-                'type'    => Controls_Manager::SELECT,
-                'options' => [
-                    'none'      => esc_html__('None', LDJEM_TEXT_DOMAIN),
-                    'underline' => esc_html__('Underline', LDJEM_TEXT_DOMAIN),
-                ],
-                'default' => 'none',
-                'selectors' => [
-                    '{{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-line: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'menu_item_underline_color',
-            [
-                'label'     => esc_html__('Underline Color', LDJEM_TEXT_DOMAIN),
-                'type'      => Controls_Manager::COLOR,
-                'selectors' => [
-                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_responsive_control(
-            'menu_item_underline_thickness',
-            [
-                'label'      => esc_html__('Underline Thickness', LDJEM_TEXT_DOMAIN),
-                'type'       => Controls_Manager::SLIDER,
-                'size_units' => ['px'],
-                'range'      => [
-                    'px' => [
-                        'min' => 1,
-                        'max' => 10,
-                    ],
-                ],
-                'selectors'  => [
-                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-thickness: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
-
-        $this->add_responsive_control(
-            'menu_item_underline_offset',
-            [
-                'label'      => esc_html__('Underline Offset', LDJEM_TEXT_DOMAIN),
-                'type'       => Controls_Manager::SLIDER,
-                'size_units' => ['px'],
-                'range'      => [
-                    'px' => [
-                        'min' => 0,
-                        'max' => 24,
-                    ],
-                ],
-                'selectors'  => [
-                    '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-underline-offset: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
-
         // Spacing
         $this->add_control(
             'menu_item_padding',
@@ -4285,7 +4197,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
      * @return void
      */
     private function render_hamburger_menu($settings) {
-        $position = sanitize_key($settings['mobile_hamburger_position']);
+        $position = sanitize_key(isset($settings['mobile_hamburger_position']) ? $settings['mobile_hamburger_position'] : 'left');
         if (!in_array($position, ['left', 'center', 'right'], true)) {
             $position = 'left';
         }

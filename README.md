@@ -2,7 +2,7 @@
 
 Responsive Elementor menu widget for WordPress with per-device layout controls, flexible submenu triggers, and cleaner mobile navigation behavior.
 
-![Version](https://img.shields.io/badge/version-1.0.3-blue)
+![Version](https://img.shields.io/badge/version-1.0.4-blue)
 ![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)
 ![WordPress](https://img.shields.io/badge/wordpress-5.0%2B-blue)
 ![PHP](https://img.shields.io/badge/php-7.4%2B-blue)
@@ -50,6 +50,12 @@ Clear, consistent navigation improves user experience and can support better eng
 4. Pick a WordPress menu and configure responsive layout behavior.
 
 ## Changelog
+
+### 1.0.4
+
+- Fixed duplicate Elementor control registration for menu underline controls
+- Fixed missing `mobile_hamburger_position` setting fallback to avoid PHP warnings
+- Reduced noisy PHP notices in widget render/control initialization paths
 
 ### 1.0.3
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LanceDesk Elementor Menu
  * Description: Responsive Elementor menu widget with device-aware layout control. Build responsive menus in Elementor with per-device layout settings (horizontal/vertical) without creating multiple widget instances.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Lance Desk
  * Author URI: https://lancedesk.com
  * License: GPL-2.0+
@@ -34,7 +34,7 @@ if (!defined('ABSPATH')) {
 /**
  * Define Plugin Constants
  */
-define('LDJEM_VERSION', '1.0.3');
+define('LDJEM_VERSION', '1.0.4');
 define('LDJEM_PLUGIN_FILE', __FILE__);
 define('LDJEM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('LDJEM_PLUGIN_URL', plugin_dir_url(__FILE__));
