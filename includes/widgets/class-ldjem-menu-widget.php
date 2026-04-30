@@ -150,6 +150,155 @@ class LDJEM_Menu_Widget extends Widget_Base {
             ]
         );
 
+        $this->add_control(
+            'use_device_specific_menus',
+            [
+                'label'        => esc_html__('Use Device-Specific Menus', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('Allow desktop, tablet, and mobile to use different menus.', LDJEM_TEXT_DOMAIN),
+            ]
+        );
+
+        $this->add_control(
+            'menu_id_desktop',
+            [
+                'label'       => esc_html__('Desktop Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'condition'   => [
+                    'use_device_specific_menus' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_id_tablet',
+            [
+                'label'       => esc_html__('Tablet Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'condition'   => [
+                    'use_device_specific_menus' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'menu_id_mobile',
+            [
+                'label'       => esc_html__('Mobile Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'condition'   => [
+                    'use_device_specific_menus' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'use_offcanvas_device_specific_menus',
+            [
+                'label'        => esc_html__('Use Off-Canvas Specific Menus', LDJEM_TEXT_DOMAIN),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
+                'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('When enabled, off-canvas can use different menus per device.', LDJEM_TEXT_DOMAIN),
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_menu_id_desktop',
+            [
+                'label'       => esc_html__('Off-Canvas Desktop Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'conditions'  => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'use_offcanvas_device_specific_menus',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_menu_id_tablet',
+            [
+                'label'       => esc_html__('Off-Canvas Tablet Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'conditions'  => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'use_offcanvas_device_specific_menus',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_menu_id_mobile',
+            [
+                'label'       => esc_html__('Off-Canvas Mobile Menu', LDJEM_TEXT_DOMAIN),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => $menu_options,
+                'default'     => '',
+                'label_block' => true,
+                'conditions'  => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'use_offcanvas_device_specific_menus',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
         // Menu Depth
         $this->add_control(
             'menu_depth',
@@ -224,6 +373,171 @@ class LDJEM_Menu_Widget extends Widget_Base {
             ]
         );
 
+        $this->add_control(
+            'responsive_status_heading',
+            [
+                'label'     => esc_html__('Device Off-Canvas Status', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_offcanvas_disabled',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Desktop: Standard | Tablet: Standard | Mobile: Standard', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'condition'       => [
+                    'offcanvas_enable!' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_desktop_on',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Desktop: Off-Canvas', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
+                'conditions'      => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_desktop_off',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Desktop: Standard', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'conditions'      => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_tablet_on',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Tablet: Off-Canvas', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
+                'conditions'      => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_tablet',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_tablet_off',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Tablet: Standard', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'conditions'      => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_tablet',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_mobile_on',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Mobile: Off-Canvas', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
+                'conditions'      => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_mobile',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'responsive_status_mobile_off',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Mobile: Standard', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'conditions'      => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_mobile',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
         // Desktop Layout
         $this->add_control(
             'heading_desktop_layout',
@@ -231,6 +545,45 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Desktop Layout (>1024px)', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'desktop_layout_offcanvas_notice',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Desktop off-canvas is enabled. Desktop responsive layout controls are disabled here; configure Desktop Off-Canvas settings in the Off-Canvas sections below.', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'conditions'      => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -254,6 +607,21 @@ class LDJEM_Menu_Widget extends Widget_Base {
                     ],
                 ],
                 'default' => 'horizontal',
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -267,8 +635,30 @@ class LDJEM_Menu_Widget extends Widget_Base {
                     'column' => esc_html__('Column (Top to Bottom)', LDJEM_TEXT_DOMAIN),
                 ],
                 'default' => 'row',
-                'condition' => [
-                    'desktop_layout!' => 'grid',
+                'conditions' => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'desktop_layout',
+                            'operator' => '!==',
+                            'value'    => 'grid',
+                        ],
+                        [
+                            'relation' => 'or',
+                            'terms'    => [
+                                [
+                                    'name'     => 'offcanvas_enable',
+                                    'operator' => '!==',
+                                    'value'    => 'yes',
+                                ],
+                                [
+                                    'name'     => 'offcanvas_on_desktop',
+                                    'operator' => '!==',
+                                    'value'    => 'yes',
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ]
         );
@@ -287,6 +677,21 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'default' => 'center',
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-menu' => 'align-items: {{VALUE}};',
+                ],
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
                 ],
             ]
         );
@@ -307,6 +712,21 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-menu' => 'justify-content: {{VALUE}};',
                 ],
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_desktop',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -317,6 +737,45 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Tablet Layout (768-1024px)', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_tablet',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'tablet_layout_offcanvas_notice',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Tablet off-canvas is enabled. Tablet responsive layout controls are disabled here; configure Tablet Off-Canvas settings in the Off-Canvas sections below.', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'conditions'      => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_tablet',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -340,6 +799,21 @@ class LDJEM_Menu_Widget extends Widget_Base {
                     ],
                 ],
                 'default' => 'horizontal',
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_tablet',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -350,6 +824,45 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Mobile Layout (<768px)', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_mobile',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mobile_layout_offcanvas_notice',
+            [
+                'type'            => Controls_Manager::RAW_HTML,
+                'raw'             => esc_html__('Mobile off-canvas is enabled. Mobile responsive layout controls are disabled here; configure Mobile Off-Canvas settings in the Off-Canvas sections below.', LDJEM_TEXT_DOMAIN),
+                'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+                'conditions'      => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_mobile',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -374,6 +887,21 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 ],
                 'default' => 'vertical',
                 'description' => esc_html__('Note: Vertical layout is recommended for mobile', LDJEM_TEXT_DOMAIN),
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'offcanvas_enable',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'name'     => 'offcanvas_on_mobile',
+                            'operator' => '!==',
+                            'value'    => 'yes',
+                        ],
+                    ],
+                ],
             ]
         );
 
@@ -386,8 +914,30 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label_on'  => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
                 'label_off' => esc_html__('No', LDJEM_TEXT_DOMAIN),
                 'default' => 'yes',
-                'condition' => [
-                    'mobile_layout' => 'vertical',
+                'conditions' => [
+                    'relation' => 'and',
+                    'terms'    => [
+                        [
+                            'name'     => 'mobile_layout',
+                            'operator' => '===',
+                            'value'    => 'vertical',
+                        ],
+                        [
+                            'relation' => 'or',
+                            'terms'    => [
+                                [
+                                    'name'     => 'offcanvas_enable',
+                                    'operator' => '!==',
+                                    'value'    => 'yes',
+                                ],
+                                [
+                                    'name'     => 'offcanvas_on_mobile',
+                                    'operator' => '!==',
+                                    'value'    => 'yes',
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ]
         );
@@ -403,15 +953,50 @@ class LDJEM_Menu_Widget extends Widget_Base {
                         'title' => esc_html__('Left', LDJEM_TEXT_DOMAIN),
                         'icon'  => 'eicon-h-align-left',
                     ],
+                    'center' => [
+                        'title' => esc_html__('Center', LDJEM_TEXT_DOMAIN),
+                        'icon'  => 'eicon-h-align-center',
+                    ],
                     'right' => [
                         'title' => esc_html__('Right', LDJEM_TEXT_DOMAIN),
                         'icon'  => 'eicon-h-align-right',
                     ],
                 ],
                 'default' => 'left',
-                // Always allow choosing hamburger position when the hamburger is enabled.
-                'condition' => [
-                    'mobile_hamburger_toggle' => 'yes',
+                // Make position live in Elementor editor without requiring full re-render.
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-menu-wrapper .ldjem-hamburger' => '{{VALUE}};',
+                ],
+                'selectors_dictionary' => [
+                    'left' => 'margin-left: 0; margin-right: auto',
+                    'center' => 'margin-left: auto; margin-right: auto',
+                    'right' => 'margin-left: auto; margin-right: 0',
+                ],
+                // Allow position control for both standard and off-canvas hamburger.
+                'conditions' => [
+                    'relation' => 'or',
+                    'terms'    => [
+                        [
+                            'name'     => 'mobile_hamburger_toggle',
+                            'operator' => '===',
+                            'value'    => 'yes',
+                        ],
+                        [
+                            'relation' => 'and',
+                            'terms'    => [
+                                [
+                                    'name'     => 'offcanvas_enable',
+                                    'operator' => '===',
+                                    'value'    => 'yes',
+                                ],
+                                [
+                                    'name'     => 'offcanvas_on_mobile',
+                                    'operator' => '===',
+                                    'value'    => 'yes',
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ]
         );
@@ -1109,7 +1694,8 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#333333',
                 'selectors' => [
-                    '{{WRAPPER}} .ldjem-hamburger' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-hamburger, {{WRAPPER}} .ldjem-hamburger i, {{WRAPPER}} .ldjem-hamburger svg' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-hamburger svg, {{WRAPPER}} .ldjem-hamburger svg *' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
                 ],
             ]
         );
@@ -1132,7 +1718,8 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Hamburger Icon Hover Color', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .ldjem-hamburger:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-hamburger:hover, {{WRAPPER}} .ldjem-hamburger:hover i, {{WRAPPER}} .ldjem-hamburger:hover svg' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-hamburger:hover svg, {{WRAPPER}} .ldjem-hamburger:hover svg *' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
                 ],
             ]
         );
@@ -1143,7 +1730,8 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Hamburger Icon Active Color', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .ldjem-hamburger.is-open' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-hamburger.is-open, {{WRAPPER}} .ldjem-hamburger.is-open i, {{WRAPPER}} .ldjem-hamburger.is-open svg' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-hamburger.is-open svg, {{WRAPPER}} .ldjem-hamburger.is-open svg *' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
                 ],
             ]
         );
@@ -1208,6 +1796,15 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'selectors'  => [
                     '{{WRAPPER}} .ldjem-hamburger' => 'border-radius: {{SIZE}}{{UNIT}};',
                 ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name'     => 'hamburger_border',
+                'label'    => esc_html__('Hamburger Border', LDJEM_TEXT_DOMAIN),
+                'selector' => '{{WRAPPER}} .ldjem-hamburger',
             ]
         );
 
@@ -1311,7 +1908,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#ffffff',
                 'selectors' => [
-                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-bg: {{VALUE}}; background-color: {{VALUE}};',
                 ],
                 'condition' => [
                     'offcanvas_enable' => 'yes',
@@ -1356,6 +1953,27 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'default'    => [
                     'size' => 400,
                     'unit' => 'px',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_panel_offset_top',
+            [
+                'label'      => esc_html__('Panel Top Offset', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper.direction-left, {{WRAPPER}} .ldjem-offcanvas-wrapper.direction-right' => 'top: {{SIZE}}{{UNIT}}; height: calc(100vh - {{SIZE}}{{UNIT}});',
                 ],
                 'condition'  => [
                     'offcanvas_enable' => 'yes',
@@ -1465,6 +2083,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Header Background', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-bg: {{VALUE}};',
                     '{{WRAPPER}} .ldjem-offcanvas-header' => 'background-color: {{VALUE}};',
                 ],
                 'condition' => [
@@ -1483,6 +2102,97 @@ class LDJEM_Menu_Widget extends Widget_Base {
                     '{{WRAPPER}} .ldjem-offcanvas-logo-text' => 'color: {{VALUE}};',
                 ],
                 'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_header_border_color',
+            [
+                'label'     => esc_html__('Header Border Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-border-color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-header' => 'border-bottom-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_header_separator_enabled',
+            [
+                'label'   => esc_html__('Show Header Separator', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'yes' => esc_html__('Show', LDJEM_TEXT_DOMAIN),
+                    'no'  => esc_html__('Hide', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'yes',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-border-style: {{VALUE}};',
+                ],
+                'selectors_dictionary' => [
+                    'yes' => 'solid',
+                    'no'  => 'none',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_header_separator_width',
+            [
+                'label'      => esc_html__('Header Separator Width', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 8,
+                    ],
+                ],
+                'default'    => [
+                    'size' => 1,
+                    'unit' => 'px',
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-border-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-header' => 'border-bottom-width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                    'offcanvas_header_separator_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_logo_max_width',
+            [
+                'label'      => esc_html__('Logo Max Width', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 24,
+                        'max' => 240,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-logo-max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-logo img' => 'max-width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_header' => 'yes',
                 ],
@@ -1529,6 +2239,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Close Button Color', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#333333',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-close-btn-color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-close' => 'color: {{VALUE}};',
+                ],
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_close_btn' => 'yes',
@@ -1542,6 +2256,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Close Button Background', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => 'transparent',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-close-btn-bg: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-close' => 'background-color: {{VALUE}};',
+                ],
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_close_btn' => 'yes',
@@ -1647,6 +2365,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'label'     => esc_html__('Close Button Border Color', LDJEM_TEXT_DOMAIN),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => 'transparent',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-close-btn-border-color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-close' => 'border-color: {{VALUE}};',
+                ],
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_close_btn' => 'yes',
@@ -1680,6 +2402,116 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'step'      => 1,
                 'default'   => 0,
                 'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_focus_outline_color',
+            [
+                'label'     => esc_html__('Focus Outline Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#4A90E2',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-focus-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_mobile_header_style_heading',
+            [
+                'label'     => esc_html__('Mobile Header Overrides', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_mobile_header_padding',
+            [
+                'label'      => esc_html__('Header Padding (Mobile <=576px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-padding-mobile: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_mobile_header_min_height',
+            [
+                'label'      => esc_html__('Header Min Height (Mobile <=576px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 40,
+                        'max' => 140,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-min-height-mobile: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_mobile_close_btn_size',
+            [
+                'label'      => esc_html__('Close Button Size (Mobile <=576px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 24,
+                        'max' => 72,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-close-btn-size-mobile: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_close_btn' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_mobile_close_icon_size',
+            [
+                'label'      => esc_html__('Close Icon Size (Mobile <=576px)', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 12,
+                        'max' => 48,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-close-icon-size-mobile: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_close_btn' => 'yes',
                 ],
@@ -1789,6 +2621,22 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-footer' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_footer' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_footer_border_color',
+            [
+                'label'     => esc_html__('Footer Border Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-footer-border-color: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-footer' => 'border-top-color: {{VALUE}};',
                 ],
                 'condition' => [
                     'offcanvas_enable' => 'yes',
@@ -1984,6 +2832,150 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 ],
                 'condition' => [
                     'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_nested_submenu_bg',
+            [
+                'label'     => esc_html__('Nested Submenu Background', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-nested-submenu-bg: {{VALUE}};',
+                    '{{WRAPPER}} .ldjem-offcanvas-submenu-item.has-children > .ldjem-offcanvas-submenu' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_link_padding',
+            [
+                'label'      => esc_html__('Link Padding', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_item_margin',
+            [
+                'label'      => esc_html__('Item Margin', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-item, {{WRAPPER}} .ldjem-offcanvas-submenu-item' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_nav_top_spacing',
+            [
+                'label'      => esc_html__('Header To Nav Spacing', LDJEM_TEXT_DOMAIN),
+                'description'=> esc_html__('Space between the off-canvas header (logo section) and the navigation list.', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'em', 'rem'],
+                'range'      => [
+                    'px'  => ['min' => 0, 'max' => 120],
+                    'em'  => ['min' => 0, 'max' => 8],
+                    'rem' => ['min' => 0, 'max' => 8],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-menu-container' => 'padding-top: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_separator_heading',
+            [
+                'label'     => esc_html__('Item Separators', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_separator_enabled',
+            [
+                'label'   => esc_html__('Show Separators', LDJEM_TEXT_DOMAIN),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'yes' => esc_html__('Show', LDJEM_TEXT_DOMAIN),
+                    'no'  => esc_html__('Hide', LDJEM_TEXT_DOMAIN),
+                ],
+                'default' => 'yes',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-separator-style: {{VALUE}};',
+                ],
+                'selectors_dictionary' => [
+                    'yes' => 'solid',
+                    'no'  => 'none',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_separator_width',
+            [
+                'label'      => esc_html__('Separator Width', LDJEM_TEXT_DOMAIN),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range'      => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 8,
+                    ],
+                ],
+                'default' => [
+                    'size' => 1,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-separator-width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_separator_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_separator_color',
+            [
+                'label'     => esc_html__('Separator Color', LDJEM_TEXT_DOMAIN),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#f0f0f0',
+                'selectors' => [
+                    '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-separator-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_separator_enabled' => 'yes',
                 ],
             ]
         );
@@ -2413,13 +3405,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'enable_debug_output',
             [
-                'label'        => esc_html__('Show Debug Output (Editor Only)', LDJEM_TEXT_DOMAIN),
+                'label'        => esc_html__('Show Debug Output', LDJEM_TEXT_DOMAIN),
                 'type'         => Controls_Manager::SWITCHER,
                 'label_on'     => esc_html__('Yes', LDJEM_TEXT_DOMAIN),
                 'label_off'    => esc_html__('No', LDJEM_TEXT_DOMAIN),
                 'return_value' => 'yes',
                 'default'      => '',
-                'description'  => esc_html__('Prints layout and off-canvas diagnostics directly under this widget.', LDJEM_TEXT_DOMAIN),
+                'description'  => esc_html__('When enabled, prints layout and off-canvas diagnostics under this widget in Elementor editor/preview.', LDJEM_TEXT_DOMAIN),
             ]
         );
 
@@ -2439,30 +3431,29 @@ class LDJEM_Menu_Widget extends Widget_Base {
             LDJEM_Presets::apply_preset($settings, $preset_id);
         }
 
-        // Validate settings
-        $menu_id = LDJEM_Security::sanitize_menu_id(intval($settings['menu_id']));
-        if (false === $menu_id) {
+        // Resolve menus (global + per-device + off-canvas per-device).
+        $menu_depth = LDJEM_Security::sanitize_int($settings['menu_depth'], 3);
+        $start_level = LDJEM_Security::sanitize_int($settings['start_level'], 0);
+        $menu_sets = $this->resolve_menu_sets($settings);
+        $menu_items_map = $this->build_menu_items_map($menu_sets, $menu_depth, $start_level);
+
+        if (empty($menu_items_map)) {
             if (current_user_can('edit_posts')) {
                 echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">';
                 echo '<strong>' . esc_html__('Menu Not Selected', LDJEM_TEXT_DOMAIN) . '</strong>';
-                echo '<p>' . esc_html__('Please select a menu in widget settings.', LDJEM_TEXT_DOMAIN) . '</p>';
+                echo '<p>' . esc_html__('Please select at least one valid menu in widget settings.', LDJEM_TEXT_DOMAIN) . '</p>';
                 echo '</div>';
             }
             return;
         }
 
-        // Retrieve menu data
-        $menu_depth = LDJEM_Security::sanitize_int($settings['menu_depth'], 3);
-        $start_level = LDJEM_Security::sanitize_int($settings['start_level'], 0);
-        
-        // Get menu items with hierarchy
-        $menu_items = LDJEM_Helpers::get_menu_items($menu_id, $menu_depth, $start_level);
+        $menu_items = $this->pick_initial_menu_items($menu_sets['standard'], $menu_items_map);
 
         if (empty($menu_items)) {
             if (current_user_can('edit_posts')) {
                 echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">';
                 echo '<strong>' . esc_html__('Menu is Empty', LDJEM_TEXT_DOMAIN) . '</strong>';
-                echo '<p>' . esc_html__('The selected menu has no items.', LDJEM_TEXT_DOMAIN) . '</p>';
+                echo '<p>' . esc_html__('All selected menus are empty for the current depth/start-level settings.', LDJEM_TEXT_DOMAIN) . '</p>';
                 echo '</div>';
             }
             return;
@@ -2475,6 +3466,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $desktop_layout = !empty($settings['desktop_layout']) ? sanitize_key($settings['desktop_layout']) : 'horizontal';
         $tablet_layout = !empty($settings['tablet_layout']) ? sanitize_key($settings['tablet_layout']) : $desktop_layout;
         $mobile_layout = !empty($settings['mobile_layout']) ? sanitize_key($settings['mobile_layout']) : 'vertical';
+        $offcanvas_enable = !empty($settings['offcanvas_enable']) && 'yes' === $settings['offcanvas_enable'] ? 'yes' : 'no';
+        $offcanvas_on_desktop = !empty($settings['offcanvas_on_desktop']) && 'yes' === $settings['offcanvas_on_desktop'] ? 'yes' : 'no';
+        $offcanvas_on_tablet = !empty($settings['offcanvas_on_tablet']) && 'yes' === $settings['offcanvas_on_tablet'] ? 'yes' : 'no';
+        $offcanvas_on_mobile = !empty($settings['offcanvas_on_mobile']) && 'yes' === $settings['offcanvas_on_mobile'] ? 'yes' : 'no';
         $submenu_trigger = !empty($settings['submenu_trigger']) ? sanitize_key($settings['submenu_trigger']) : 'hover';
         $submenu_accordion = (!empty($settings['submenu_accordion']) && 'yes' === $settings['submenu_accordion']) ? 'yes' : 'no';
         if (!in_array($submenu_trigger, ['hover', 'click', 'hover_click'], true)) {
@@ -2497,7 +3492,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
 
         // Open wrapper
         printf(
-            '<%1$s class="%2$s" role="navigation" aria-label="%3$s" data-ldjem-id="%4$s" data-submenu-trigger="%5$s" data-submenu-accordion="%6$s" data-desktop-layout="%7$s" data-tablet-layout="%8$s" data-mobile-layout="%9$s">',
+            '<%1$s class="%2$s" role="navigation" aria-label="%3$s" data-ldjem-id="%4$s" data-submenu-trigger="%5$s" data-submenu-accordion="%6$s" data-desktop-layout="%7$s" data-tablet-layout="%8$s" data-mobile-layout="%9$s" data-offcanvas-enabled="%10$s" data-offcanvas-desktop="%11$s" data-offcanvas-tablet="%12$s" data-offcanvas-mobile="%13$s" data-menu-id-desktop="%14$d" data-menu-id-tablet="%15$d" data-menu-id-mobile="%16$d">',
             tag_escape($container_tag),
             esc_attr(implode(' ', array_filter($container_classes))),
             esc_attr__('Main Menu', LDJEM_TEXT_DOMAIN),
@@ -2506,7 +3501,14 @@ class LDJEM_Menu_Widget extends Widget_Base {
             esc_attr($submenu_accordion),
             esc_attr($desktop_layout),
             esc_attr($tablet_layout),
-            esc_attr($mobile_layout)
+            esc_attr($mobile_layout),
+            esc_attr($offcanvas_enable),
+            esc_attr($offcanvas_on_desktop),
+            esc_attr($offcanvas_on_tablet),
+            esc_attr($offcanvas_on_mobile),
+            intval($menu_sets['standard']['desktop']),
+            intval($menu_sets['standard']['tablet']),
+            intval($menu_sets['standard']['mobile'])
         );
 
         // Render hamburger for standard menu only.
@@ -2520,12 +3522,14 @@ class LDJEM_Menu_Widget extends Widget_Base {
             '<ul class="ldjem-menu ldjem-menu-root">%s</ul>',
             $this->render_menu_items($menu_items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         );
+        $this->render_standard_menu_templates($menu_sets['standard'], $menu_items_map, $settings);
 
         // Close wrapper
         printf('</%s>', tag_escape($container_tag));
 
         if ($this->should_render_offcanvas($settings)) {
-            $this->render_offcanvas_layout($menu_items, $settings);
+            $offcanvas_items = $this->pick_initial_menu_items($menu_sets['offcanvas'], $menu_items_map);
+            $this->render_offcanvas_layout($offcanvas_items, $settings, $menu_sets['offcanvas'], $menu_items_map);
         }
 
         $this->render_debug_output($settings);
@@ -2535,6 +3539,144 @@ class LDJEM_Menu_Widget extends Widget_Base {
         wp_enqueue_style(LDJEM_PREFIX . '-frontend');
         wp_enqueue_script(LDJEM_PREFIX . '-offcanvas');
         wp_enqueue_style(LDJEM_PREFIX . '-offcanvas');
+    }
+
+    /**
+     * Resolve standard/off-canvas menu IDs per device with fallbacks.
+     *
+     * @param array $settings Widget settings.
+     * @return array
+     */
+    private function resolve_menu_sets($settings) {
+        $base_menu_id = LDJEM_Security::sanitize_menu_id(intval($settings['menu_id']));
+        if (false === $base_menu_id) {
+            $base_menu_id = 0;
+        }
+
+        $use_device_specific = !empty($settings['use_device_specific_menus']) && 'yes' === $settings['use_device_specific_menus'];
+        $use_offcanvas_specific = !empty($settings['use_offcanvas_device_specific_menus']) && 'yes' === $settings['use_offcanvas_device_specific_menus'];
+
+        $standard_desktop = $base_menu_id;
+        $standard_tablet = $base_menu_id;
+        $standard_mobile = $base_menu_id;
+
+        if ($use_device_specific) {
+            $standard_desktop = $this->resolve_menu_id_from_setting($settings, 'menu_id_desktop', $base_menu_id);
+            $standard_tablet = $this->resolve_menu_id_from_setting($settings, 'menu_id_tablet', $standard_desktop ?: $base_menu_id);
+            $standard_mobile = $this->resolve_menu_id_from_setting($settings, 'menu_id_mobile', $standard_tablet ?: ($standard_desktop ?: $base_menu_id));
+        }
+
+        $offcanvas_desktop = $standard_desktop;
+        $offcanvas_tablet = $standard_tablet;
+        $offcanvas_mobile = $standard_mobile;
+
+        if ($use_offcanvas_specific) {
+            $offcanvas_desktop = $this->resolve_menu_id_from_setting($settings, 'offcanvas_menu_id_desktop', $standard_desktop);
+            $offcanvas_tablet = $this->resolve_menu_id_from_setting($settings, 'offcanvas_menu_id_tablet', $standard_tablet);
+            $offcanvas_mobile = $this->resolve_menu_id_from_setting($settings, 'offcanvas_menu_id_mobile', $standard_mobile);
+        }
+
+        return [
+            'standard' => [
+                'desktop' => intval($standard_desktop),
+                'tablet'  => intval($standard_tablet),
+                'mobile'  => intval($standard_mobile),
+            ],
+            'offcanvas' => [
+                'desktop' => intval($offcanvas_desktop),
+                'tablet'  => intval($offcanvas_tablet),
+                'mobile'  => intval($offcanvas_mobile),
+            ],
+        ];
+    }
+
+    /**
+     * Resolve single menu id setting with fallback.
+     *
+     * @param array  $settings Widget settings.
+     * @param string $setting_key Setting key.
+     * @param int    $fallback_id Fallback menu ID.
+     * @return int
+     */
+    private function resolve_menu_id_from_setting($settings, $setting_key, $fallback_id) {
+        $menu_id = 0;
+        if (isset($settings[$setting_key])) {
+            $sanitized = LDJEM_Security::sanitize_menu_id(intval($settings[$setting_key]));
+            if (false !== $sanitized) {
+                $menu_id = intval($sanitized);
+            }
+        }
+        if ($menu_id > 0) {
+            return $menu_id;
+        }
+        return intval($fallback_id);
+    }
+
+    /**
+     * Build map of menu items keyed by menu ID.
+     *
+     * @param array $menu_sets Standard and off-canvas menu IDs.
+     * @param int   $menu_depth Depth.
+     * @param int   $start_level Start level.
+     * @return array
+     */
+    private function build_menu_items_map($menu_sets, $menu_depth, $start_level) {
+        $ids = [];
+        foreach (['standard', 'offcanvas'] as $set_key) {
+            foreach (['desktop', 'tablet', 'mobile'] as $device) {
+                $candidate = !empty($menu_sets[$set_key][$device]) ? intval($menu_sets[$set_key][$device]) : 0;
+                if ($candidate > 0) {
+                    $ids[$candidate] = $candidate;
+                }
+            }
+        }
+
+        $items_map = [];
+        foreach ($ids as $menu_id) {
+            $items_map[$menu_id] = LDJEM_Helpers::get_menu_items($menu_id, $menu_depth, $start_level);
+        }
+
+        return $items_map;
+    }
+
+    /**
+     * Pick first non-empty menu items from a device map.
+     *
+     * @param array $device_menu_ids Menu IDs keyed by device.
+     * @param array $menu_items_map Items keyed by menu ID.
+     * @return array
+     */
+    private function pick_initial_menu_items($device_menu_ids, $menu_items_map) {
+        foreach (['desktop', 'tablet', 'mobile'] as $device) {
+            $menu_id = !empty($device_menu_ids[$device]) ? intval($device_menu_ids[$device]) : 0;
+            if ($menu_id > 0 && !empty($menu_items_map[$menu_id])) {
+                return $menu_items_map[$menu_id];
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Render hidden templates for device-specific standard menus.
+     *
+     * @param array $standard_menu_ids Standard menu IDs by device.
+     * @param array $menu_items_map Items keyed by menu ID.
+     * @param array $settings Widget settings.
+     * @return void
+     */
+    private function render_standard_menu_templates($standard_menu_ids, $menu_items_map, $settings) {
+        echo '<div class="ldjem-menu-device-templates" hidden aria-hidden="true">';
+        foreach (['desktop', 'tablet', 'mobile'] as $device) {
+            $menu_id = !empty($standard_menu_ids[$device]) ? intval($standard_menu_ids[$device]) : 0;
+            $items = ($menu_id > 0 && isset($menu_items_map[$menu_id])) ? $menu_items_map[$menu_id] : [];
+            printf(
+                '<ul class="ldjem-menu-template ldjem-menu-template-%1$s" data-ldjem-menu-variant="standard-%1$s" data-menu-id="%2$d">%3$s</ul>',
+                esc_attr($device),
+                intval($menu_id),
+                $this->render_menu_items($items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            );
+        }
+        echo '</div>';
     }
 
     /**
@@ -2559,6 +3701,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $offcanvas_on_desktop = !empty($settings['offcanvas_on_desktop']) && 'yes' === $settings['offcanvas_on_desktop'] ? 'yes' : 'no';
         $offcanvas_on_tablet = !empty($settings['offcanvas_on_tablet']) && 'yes' === $settings['offcanvas_on_tablet'] ? 'yes' : 'no';
         $offcanvas_on_mobile = !empty($settings['offcanvas_on_mobile']) && 'yes' === $settings['offcanvas_on_mobile'] ? 'yes' : 'no';
+        $menu_sets = $this->resolve_menu_sets($settings);
 
         $debug = [
             'widget_id' => $this->get_id(),
@@ -2569,6 +3712,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'offcanvas_on_desktop' => $offcanvas_on_desktop,
             'offcanvas_on_tablet' => $offcanvas_on_tablet,
             'offcanvas_on_mobile' => $offcanvas_on_mobile,
+            'use_device_specific_menus' => !empty($settings['use_device_specific_menus']) && 'yes' === $settings['use_device_specific_menus'] ? 'yes' : 'no',
+            'use_offcanvas_device_specific_menus' => !empty($settings['use_offcanvas_device_specific_menus']) && 'yes' === $settings['use_offcanvas_device_specific_menus'] ? 'yes' : 'no',
+            'standard_menu_ids' => $menu_sets['standard'],
+            'offcanvas_menu_ids' => $menu_sets['offcanvas'],
             'offcanvas_rendered' => $this->should_render_offcanvas($settings) ? 'yes' : 'no',
             'note' => 'When offcanvas_on_<device> is yes, off-canvas behavior overrides standard horizontal/vertical for that device.',
         ];
@@ -2577,18 +3724,52 @@ class LDJEM_Menu_Widget extends Widget_Base {
         echo '<pre class="ldjem-debug-output" data-ldjem-debug-widget="' . esc_attr($widget_id) . '" style="margin-top:10px;padding:10px;background:#101010;color:#9dff9d;font-size:12px;line-height:1.4;white-space:pre-wrap;word-break:break-word;border-radius:4px;">';
         echo esc_html(wp_json_encode($debug, JSON_PRETTY_PRINT));
         echo '</pre>';
+        echo '<button type="button" class="ldjem-debug-copy-btn" data-ldjem-debug-copy="' . esc_attr($widget_id) . '" style="margin-top:8px;padding:6px 10px;border:1px solid #2b7ec9;border-radius:4px;background:#14324a;color:#9bd6ff;font-size:12px;cursor:pointer;">Copy Debug Log</button>';
         echo '<div class="ldjem-debug-runtime" data-ldjem-debug-runtime="' . esc_attr($widget_id) . '" style="margin-top:6px;padding:8px 10px;background:#1a1a1a;color:#7fd3ff;font-size:12px;line-height:1.35;border-radius:4px;"></div>';
         ?>
         <script>
         (function () {
             var widgetId = <?php echo wp_json_encode($widget_id); ?>;
             var runtimeEl = document.querySelector('[data-ldjem-debug-runtime="' + widgetId + '"]');
-            if (!runtimeEl) return;
+            var debugEl = document.querySelector('[data-ldjem-debug-widget="' + widgetId + '"]');
+            var copyBtn = document.querySelector('[data-ldjem-debug-copy="' + widgetId + '"]');
+            if (!runtimeEl || !debugEl || !copyBtn) return;
+
+            var topDoc = null;
+            try {
+                topDoc = window.top && window.top.document ? window.top.document : null;
+            } catch (e) {
+                topDoc = null;
+            }
+
+            var getClassSummary = function (docRef) {
+                if (!docRef || !docRef.documentElement) {
+                    return 'n/a';
+                }
+                var htmlClass = docRef.documentElement.className || '';
+                var bodyClass = docRef.body ? (docRef.body.className || '') : '';
+                return 'html=' + htmlClass + ' | body=' + bodyClass;
+            };
 
             var getDevice = function () {
                 if (window.elementorFrontend && typeof window.elementorFrontend.getCurrentDeviceMode === 'function') {
                     var mode = window.elementorFrontend.getCurrentDeviceMode();
-                    if (mode === 'mobile' || mode === 'tablet') return mode;
+                    if (mode === 'mobile' || mode === 'tablet' || mode === 'desktop') return mode;
+                }
+                var classPool = [
+                    (document.documentElement && document.documentElement.className) || '',
+                    (document.body && document.body.className) || '',
+                    (topDoc && topDoc.documentElement && topDoc.documentElement.className) || '',
+                    (topDoc && topDoc.body && topDoc.body.className) || ''
+                ].join(' ');
+                if (classPool.indexOf('elementor-device-mobile') !== -1 || classPool.indexOf('elementor-editor-device-mobile') !== -1) {
+                    return 'mobile';
+                }
+                if (classPool.indexOf('elementor-device-tablet') !== -1 || classPool.indexOf('elementor-editor-device-tablet') !== -1) {
+                    return 'tablet';
+                }
+                if (classPool.indexOf('elementor-device-desktop') !== -1 || classPool.indexOf('elementor-editor-device-desktop') !== -1) {
+                    return 'desktop';
                 }
                 var w = window.innerWidth || document.documentElement.clientWidth;
                 if (w <= 767) return 'mobile';
@@ -2605,12 +3786,129 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 var device = getDevice();
                 var offcanvasFlag = wrapper.getAttribute('data-offcanvas-' + device);
                 var activeLayout = wrapper.getAttribute('data-' + device + '-layout') || 'n/a';
-                runtimeEl.textContent =
-                    'Runtime (' + context + '): ' +
-                    'active_device=' + device +
-                    ', active_layout=' + activeLayout +
-                    ', offcanvas_active_for_device=' + (offcanvasFlag === 'yes' ? 'yes' : 'no');
+                var configuredDesktopLayout = wrapper.getAttribute('data-desktop-layout') || 'n/a';
+                var configuredTabletLayout = wrapper.getAttribute('data-tablet-layout') || 'n/a';
+                var configuredMobileLayout = wrapper.getAttribute('data-mobile-layout') || 'n/a';
+                var offcanvasDesktop = wrapper.getAttribute('data-offcanvas-desktop') || 'no';
+                var offcanvasTablet = wrapper.getAttribute('data-offcanvas-tablet') || 'no';
+                var offcanvasMobile = wrapper.getAttribute('data-offcanvas-mobile') || 'no';
+                var offcanvasWrapper = document.querySelector('.ldjem-menu-wrapper-offcanvas[data-ldjem-id="' + widgetId + '"] .ldjem-offcanvas-wrapper');
+                var offcanvasRoot = document.querySelector('.ldjem-menu-wrapper-offcanvas[data-ldjem-id="' + widgetId + '"]');
+                var standardHamburger = wrapper.querySelector('.ldjem-hamburger');
+                var offcanvasHamburger = offcanvasWrapper ? offcanvasWrapper.closest('.ldjem-menu-wrapper-offcanvas').querySelector('.ldjem-hamburger') : null;
+                var hamburger = offcanvasFlag === 'yes' ? offcanvasHamburger : standardHamburger;
+                var standardWrapper = document.querySelector('.ldjem-menu-wrapper[data-ldjem-id="' + widgetId + '"]:not(.ldjem-menu-wrapper-offcanvas)');
+                var hamburgerTargetScope = offcanvasFlag === 'yes' ? 'offcanvas' : 'standard';
+                var hamburgerIcon = hamburger ? hamburger.querySelector('svg, i') : null;
+                var header = offcanvasWrapper ? offcanvasWrapper.querySelector('.ldjem-offcanvas-header') : null;
+                var closeBtn = offcanvasWrapper ? offcanvasWrapper.querySelector('.ldjem-offcanvas-close') : null;
+                var logoImg = offcanvasWrapper ? offcanvasWrapper.querySelector('.ldjem-offcanvas-logo img') : null;
+                var hamburgerCss = hamburger ? window.getComputedStyle(hamburger) : null;
+                var iconCss = hamburgerIcon ? window.getComputedStyle(hamburgerIcon) : null;
+                var headerCss = header ? window.getComputedStyle(header) : null;
+                var closeCss = closeBtn ? window.getComputedStyle(closeBtn) : null;
+                var logoCss = logoImg ? window.getComputedStyle(logoImg) : null;
+                var styleDump = [
+                    'Runtime (' + context + '):',
+                    'active_device=' + device,
+                    'configured_layouts={desktop:' + configuredDesktopLayout + ', tablet:' + configuredTabletLayout + ', mobile:' + configuredMobileLayout + '}',
+                    'configured_layout_for_active_device=' + activeLayout,
+                    'offcanvas_device_flags={desktop:' + offcanvasDesktop + ', tablet:' + offcanvasTablet + ', mobile:' + offcanvasMobile + '}',
+                    'effective_layout=' + (offcanvasFlag === 'yes' ? 'offcanvas' : activeLayout),
+                    'offcanvas_active_for_device=' + (offcanvasFlag === 'yes' ? 'yes' : 'no'),
+                    'hamburger_target_scope=' + hamburgerTargetScope,
+                    'dom_presence={standard_wrapper:' + (standardWrapper ? 'yes' : 'no') + ', offcanvas_wrapper:' + (offcanvasRoot ? 'yes' : 'no') + ', standard_hamburger:' + (standardHamburger ? 'yes' : 'no') + ', offcanvas_hamburger:' + (offcanvasHamburger ? 'yes' : 'no') + ', selected_hamburger:' + (hamburger ? 'yes' : 'no') + '}',
+                    'iframe_classes={' + getClassSummary(document) + '}',
+                    'top_classes={' + getClassSummary(topDoc) + '}',
+                    'header_bg=' + (headerCss ? headerCss.backgroundColor : 'n/a'),
+                    'header_bg_image=' + (headerCss ? headerCss.backgroundImage : 'n/a'),
+                    'close_color=' + (closeCss ? closeCss.color : 'n/a'),
+                    'logo_max_width=' + (logoCss ? logoCss.maxWidth : 'n/a'),
+                    'hamburger_display=' + (hamburgerCss ? hamburgerCss.display : 'n/a'),
+                    'hamburger_size=' + (hamburgerCss ? (hamburgerCss.width + 'x' + hamburgerCss.height) : 'n/a'),
+                    'hamburger_color=' + (hamburgerCss ? hamburgerCss.color : 'n/a'),
+                    'hamburger_has_icon=' + (hamburgerIcon ? 'yes' : 'no'),
+                    'hamburger_icon_color=' + (iconCss ? iconCss.color : 'n/a'),
+                    'hamburger_force_fallback=' + (hamburger && hamburger.classList.contains('ldjem-hamburger-force-fallback') ? 'yes' : 'no'),
+                    'hamburger_position_class=' + (hamburger ? Array.from(hamburger.classList).filter(function (cn) { return cn.indexOf('ldjem-hamburger-') === 0; }).join(',') : 'n/a'),
+                    'hamburger_scope=' + (offcanvasFlag === 'yes' ? 'offcanvas-wrapper' : 'standard-wrapper'),
+                    'offcanvas_root_classes=' + (offcanvasRoot ? offcanvasRoot.className : 'n/a'),
+                    'offcanvas_open_class=' + (offcanvasWrapper && offcanvasWrapper.classList.contains('is-open') ? 'yes' : 'no'),
+                    'offcanvas_aria_hidden=' + (offcanvasWrapper ? (offcanvasWrapper.getAttribute('aria-hidden') || '') : 'n/a'),
+                    'editor_preview_open_attr=' + (offcanvasRoot ? (offcanvasRoot.getAttribute('data-ldjem-editor-preview-open') || '') : 'n/a'),
+                    '--ldjem-offcanvas-bg=' + (offcanvasWrapper ? offcanvasWrapper.style.getPropertyValue('--ldjem-offcanvas-bg') : ''),
+                    '--ldjem-offcanvas-header-bg=' + (offcanvasWrapper ? offcanvasWrapper.style.getPropertyValue('--ldjem-offcanvas-header-bg') : ''),
+                    '--ldjem-close-btn-color=' + (offcanvasWrapper ? offcanvasWrapper.style.getPropertyValue('--ldjem-close-btn-color') : '')
+                ];
+                runtimeEl.textContent = styleDump.join('\n');
+                if (window.console && console.info) {
+                    console.info('[LDJEM debug][' + widgetId + ']', styleDump.join(' | '));
+                }
             };
+
+            var copyText = function (text) {
+                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    return navigator.clipboard.writeText(text);
+                }
+                return new Promise(function (resolve, reject) {
+                    var temp = document.createElement('textarea');
+                    temp.value = text;
+                    temp.setAttribute('readonly', 'readonly');
+                    temp.style.position = 'fixed';
+                    temp.style.opacity = '0';
+                    document.body.appendChild(temp);
+                    temp.select();
+                    var ok = false;
+                    try {
+                        ok = document.execCommand('copy');
+                    } catch (err) {
+                        ok = false;
+                    }
+                    document.body.removeChild(temp);
+                    if (ok) {
+                        resolve();
+                    } else {
+                        reject(new Error('copy_failed'));
+                    }
+                });
+            };
+
+            copyBtn.addEventListener('click', function () {
+                var payload = [
+                    '[LDJEM Debug JSON]',
+                    debugEl.textContent || '',
+                    '',
+                    '[LDJEM Runtime]',
+                    runtimeEl.textContent || ''
+                ].join('\n');
+                var defaultLabel = 'Copy Debug Log';
+                copyBtn.disabled = true;
+                copyText(payload).then(function () {
+                    copyBtn.textContent = 'Copied';
+                }).catch(function () {
+                    copyBtn.textContent = 'Copy Failed';
+                }).finally(function () {
+                    setTimeout(function () {
+                        copyBtn.disabled = false;
+                        copyBtn.textContent = defaultLabel;
+                    }, 1400);
+                });
+            });
+
+            if (window.jQuery) {
+                window.jQuery(document).on('ldjem:offcanvas:hamburger-click ldjem:offcanvas:native-click-capture ldjem:offcanvas:toggle-attempt ldjem:offcanvas:overlay-bridge ldjem:offcanvas:opened ldjem:offcanvas:closed ldjem:offcanvas:debug', function (event, payload) {
+                    if (!payload || payload.widgetId !== widgetId) {
+                        return;
+                    }
+                    var now = new Date();
+                    var hh = String(now.getHours()).padStart(2, '0');
+                    var mm = String(now.getMinutes()).padStart(2, '0');
+                    var ss = String(now.getSeconds()).padStart(2, '0');
+                    var base = runtimeEl.textContent || '';
+                    var line = '[event ' + hh + ':' + mm + ':' + ss + '] ' + event.type + ' ' + JSON.stringify(payload);
+                    runtimeEl.textContent = base ? (base + '\n' + line) : line;
+                });
+            }
 
             refresh('init');
             window.addEventListener('resize', function () { refresh('resize'); });
@@ -2618,6 +3916,12 @@ class LDJEM_Menu_Widget extends Widget_Base {
             observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
             if (document.body) {
                 observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+            }
+            if (topDoc && topDoc.documentElement) {
+                observer.observe(topDoc.documentElement, { attributes: true, attributeFilter: ['class'] });
+            }
+            if (topDoc && topDoc.body) {
+                observer.observe(topDoc.body, { attributes: true, attributeFilter: ['class'] });
             }
         })();
         </script>
@@ -2629,9 +3933,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
      *
      * @param array $menu_items Menu items.
      * @param array $settings Widget settings.
+     * @param array $offcanvas_menu_ids Off-canvas menu IDs keyed by device.
+     * @param array $menu_items_map Items keyed by menu ID.
      * @return void
      */
-    private function render_offcanvas_layout($menu_items, $settings) {
+    private function render_offcanvas_layout($menu_items, $settings, $offcanvas_menu_ids = [], $menu_items_map = []) {
         $widget_id = $this->get_id();
         $direction = !empty($settings['offcanvas_direction']) ? sanitize_key($settings['offcanvas_direction']) : 'left';
 
@@ -2641,15 +3947,9 @@ class LDJEM_Menu_Widget extends Widget_Base {
 
         $animation_duration = !empty($settings['offcanvas_animation_duration']) ? intval($settings['offcanvas_animation_duration']) : 300;
         $animation_easing = !empty($settings['offcanvas_animation_easing']) ? sanitize_key($settings['offcanvas_animation_easing']) : 'ease-in-out';
-        $bg_color = !empty($settings['offcanvas_bg_color']) ? sanitize_text_field($settings['offcanvas_bg_color']) : '#ffffff';
         $z_index = !empty($settings['offcanvas_z_index']) ? intval($settings['offcanvas_z_index']) : 999;
         $panel_size = !empty($settings['offcanvas_panel_size']['size']) ? intval($settings['offcanvas_panel_size']['size']) : 300;
         $panel_height = !empty($settings['offcanvas_panel_height']['size']) ? intval($settings['offcanvas_panel_height']['size']) : 400;
-        $header_bg_color = isset($settings['offcanvas_header_bg_color']) ? sanitize_text_field($settings['offcanvas_header_bg_color']) : '';
-        $footer_bg_color = isset($settings['offcanvas_footer_bg_color']) ? sanitize_text_field($settings['offcanvas_footer_bg_color']) : '';
-        $bg_color = preg_replace('/\s*!important\s*$/i', '', $bg_color);
-        $header_bg_color = preg_replace('/\s*!important\s*$/i', '', $header_bg_color);
-        $footer_bg_color = preg_replace('/\s*!important\s*$/i', '', $footer_bg_color);
         $offcanvas_on_desktop = !empty($settings['offcanvas_on_desktop']) && 'yes' === $settings['offcanvas_on_desktop'] ? 'yes' : 'no';
         $offcanvas_on_tablet = !empty($settings['offcanvas_on_tablet']) && 'yes' === $settings['offcanvas_on_tablet'] ? 'yes' : 'no';
         $offcanvas_on_mobile = !empty($settings['offcanvas_on_mobile']) && 'yes' === $settings['offcanvas_on_mobile'] ? 'yes' : 'no';
@@ -2665,12 +3965,6 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $panel_height_desktop = !empty($settings['offcanvas_panel_height_desktop']['size']) ? intval($settings['offcanvas_panel_height_desktop']['size']) : 0;
         $panel_height_tablet = !empty($settings['offcanvas_panel_height_tablet']['size']) ? intval($settings['offcanvas_panel_height_tablet']['size']) : 0;
         $panel_height_mobile = !empty($settings['offcanvas_panel_height_mobile']['size']) ? intval($settings['offcanvas_panel_height_mobile']['size']) : 0;
-        $close_btn_color = !empty($settings['offcanvas_close_btn_color']) ? sanitize_text_field($settings['offcanvas_close_btn_color']) : '#333333';
-        $close_btn_bg = !empty($settings['offcanvas_close_btn_bg']) ? sanitize_text_field($settings['offcanvas_close_btn_bg']) : 'transparent';
-        $close_btn_color = preg_replace('/\s*!important\s*$/i', '', $close_btn_color);
-        $close_btn_bg = preg_replace('/\s*!important\s*$/i', '', $close_btn_bg);
-        $close_btn_border_color = !empty($settings['offcanvas_close_btn_border_color']) ? sanitize_text_field($settings['offcanvas_close_btn_border_color']) : 'transparent';
-        $close_btn_border_color = preg_replace('/\s*!important\s*$/i', '', $close_btn_border_color);
         $close_btn_size = !empty($settings['offcanvas_close_btn_size']['size']) ? intval($settings['offcanvas_close_btn_size']['size']) : 40;
         $close_icon_size = !empty($settings['offcanvas_close_icon_size']['size']) ? intval($settings['offcanvas_close_icon_size']['size']) : 24;
         $close_btn_radius = !empty($settings['offcanvas_close_btn_radius']['size']) ? intval($settings['offcanvas_close_btn_radius']['size']) : 4;
@@ -2711,7 +4005,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         }
 
         printf(
-            '<div class="ldjem-menu-wrapper ldjem-menu-wrapper-offcanvas" data-ldjem-id="%1$s" data-ldjem-offcanvas="true" data-offcanvas-desktop="%2$s" data-offcanvas-tablet="%3$s" data-offcanvas-mobile="%4$s" data-direction-desktop="%5$s" data-direction-tablet="%6$s" data-direction-mobile="%7$s" data-animation-duration-desktop="%8$d" data-animation-duration-tablet="%9$d" data-animation-duration-mobile="%10$d" data-panel-size-desktop="%11$d" data-panel-size-tablet="%12$d" data-panel-size-mobile="%13$d" data-panel-height-desktop="%14$d" data-panel-height-tablet="%15$d" data-panel-height-mobile="%16$d" data-desktop-layout="%17$s" data-tablet-layout="%18$s" data-mobile-layout="%19$s">',
+            '<div class="ldjem-menu-wrapper ldjem-menu-wrapper-offcanvas" data-ldjem-id="%1$s" data-ldjem-offcanvas="true" data-offcanvas-desktop="%2$s" data-offcanvas-tablet="%3$s" data-offcanvas-mobile="%4$s" data-direction-desktop="%5$s" data-direction-tablet="%6$s" data-direction-mobile="%7$s" data-animation-duration-desktop="%8$d" data-animation-duration-tablet="%9$d" data-animation-duration-mobile="%10$d" data-panel-size-desktop="%11$d" data-panel-size-tablet="%12$d" data-panel-size-mobile="%13$d" data-panel-height-desktop="%14$d" data-panel-height-tablet="%15$d" data-panel-height-mobile="%16$d" data-desktop-layout="%17$s" data-tablet-layout="%18$s" data-mobile-layout="%19$s" data-menu-id-desktop="%20$d" data-menu-id-tablet="%21$d" data-menu-id-mobile="%22$d">',
             esc_attr($widget_id),
             esc_attr($offcanvas_on_desktop),
             esc_attr($offcanvas_on_tablet),
@@ -2730,47 +4024,56 @@ class LDJEM_Menu_Widget extends Widget_Base {
             intval($panel_height_mobile),
             esc_attr($desktop_layout),
             esc_attr($tablet_layout),
-            esc_attr($mobile_layout)
+            esc_attr($mobile_layout),
+            !empty($offcanvas_menu_ids['desktop']) ? intval($offcanvas_menu_ids['desktop']) : 0,
+            !empty($offcanvas_menu_ids['tablet']) ? intval($offcanvas_menu_ids['tablet']) : 0,
+            !empty($offcanvas_menu_ids['mobile']) ? intval($offcanvas_menu_ids['mobile']) : 0
         );
 
         $this->render_hamburger_menu($settings);
 
         printf(
-            '<div class="ldjem-offcanvas-wrapper direction-%1$s" data-ldjem-id="%2$s" role="dialog" aria-modal="true" aria-hidden="true" aria-label="%3$s" style="--ldjem-offcanvas-bg: %4$s; --ldjem-offcanvas-animation-speed: %5$dms; --ldjem-offcanvas-easing: %6$s; --ldjem-offcanvas-z-index: %7$d; --ldjem-offcanvas-panel-size: %8$dpx; --ldjem-offcanvas-panel-height: %9$dpx; --ldjem-close-btn-color: %10$s; --ldjem-close-btn-bg: %11$s; --ldjem-close-btn-size: %12$dpx; --ldjem-close-icon-size: %13$dpx; --ldjem-close-btn-radius: %14$dpx; --ldjem-close-btn-offset-top: %15$dpx; --ldjem-close-btn-offset-right: %16$dpx; --ldjem-close-btn-border-width: %17$dpx; --ldjem-close-btn-border-color: %18$s;">',
+            '<div class="ldjem-offcanvas-wrapper direction-%1$s" data-ldjem-id="%2$s" role="dialog" aria-modal="true" aria-hidden="true" aria-label="%3$s" style="--ldjem-offcanvas-animation-speed: %4$dms; --ldjem-offcanvas-easing: %5$s; --ldjem-offcanvas-z-index: %6$d; --ldjem-offcanvas-panel-size: %7$dpx; --ldjem-offcanvas-panel-height: %8$dpx; --ldjem-close-btn-size: %9$dpx; --ldjem-close-icon-size: %10$dpx; --ldjem-close-btn-radius: %11$dpx; --ldjem-close-btn-offset-top: %12$dpx; --ldjem-close-btn-offset-right: %13$dpx; --ldjem-close-btn-border-width: %14$dpx;">',
             esc_attr($direction),
             esc_attr($widget_id),
             esc_attr__('Main Menu', LDJEM_TEXT_DOMAIN),
-            esc_attr($bg_color),
             intval($animation_duration),
             esc_attr($animation_easing),
             intval($z_index),
             intval($panel_size),
             intval($panel_height),
-            esc_attr($close_btn_color),
-            esc_attr($close_btn_bg),
             intval($close_btn_size),
             intval($close_icon_size),
             intval($close_btn_radius),
             intval($close_btn_offset_top),
             intval($close_btn_offset_right),
-            intval($close_btn_border_width),
-            esc_attr($close_btn_border_color)
+            intval($close_btn_border_width)
         );
 
         if (!empty($settings['offcanvas_show_header']) && 'yes' === $settings['offcanvas_show_header']) {
-            $header_style = !empty($header_bg_color) ? ' style="background-color: ' . esc_attr($header_bg_color) . ';"' : '';
-            echo '<div class="ldjem-offcanvas-header"' . $header_style . '>';
+            echo '<div class="ldjem-offcanvas-header">';
             $this->render_offcanvas_header($settings);
             echo '</div>';
         }
 
         echo '<div class="ldjem-offcanvas-menu-container">';
         echo '<ul class="ldjem-offcanvas-menu">' . $this->render_offcanvas_menu_items($menu_items, 0, $settings) . '</ul>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="ldjem-offcanvas-device-templates" hidden aria-hidden="true">';
+        foreach (['desktop', 'tablet', 'mobile'] as $device) {
+            $menu_id = !empty($offcanvas_menu_ids[$device]) ? intval($offcanvas_menu_ids[$device]) : 0;
+            $items = ($menu_id > 0 && isset($menu_items_map[$menu_id])) ? $menu_items_map[$menu_id] : [];
+            printf(
+                '<ul class="ldjem-offcanvas-menu-template ldjem-offcanvas-menu-template-%1$s" data-ldjem-menu-variant="offcanvas-%1$s" data-menu-id="%2$d">%3$s</ul>',
+                esc_attr($device),
+                intval($menu_id),
+                $this->render_offcanvas_menu_items($items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            );
+        }
+        echo '</div>';
         echo '</div>';
 
         if (!empty($settings['offcanvas_show_footer']) && 'yes' === $settings['offcanvas_show_footer']) {
-            $footer_style = !empty($footer_bg_color) ? ' style="background-color: ' . esc_attr($footer_bg_color) . ';"' : '';
-            echo '<div class="ldjem-offcanvas-footer"' . $footer_style . '>';
+            echo '<div class="ldjem-offcanvas-footer">';
             $this->render_offcanvas_footer($settings);
             echo '</div>';
         }
@@ -2983,16 +4286,21 @@ class LDJEM_Menu_Widget extends Widget_Base {
      */
     private function render_hamburger_menu($settings) {
         $position = sanitize_key($settings['mobile_hamburger_position']);
-        if (!in_array($position, ['left', 'right'], true)) {
+        if (!in_array($position, ['left', 'center', 'right'], true)) {
             $position = 'left';
         }
 
-        echo '<button class="ldjem-hamburger ldjem-hamburger-btn ldjem-hamburger-' . esc_attr($position) . '" type="button" aria-label="' . esc_attr__('Toggle Menu', LDJEM_TEXT_DOMAIN) . '" aria-expanded="false">';
-        if (!empty($settings['hamburger_icon']) && !empty($settings['hamburger_icon']['value'])) {
-            Icons_Manager::render_icon($settings['hamburger_icon'], ['aria-hidden' => 'true']);
-        } else {
-            echo '<span></span><span></span><span></span>';
+        $has_custom_icon = !empty($settings['hamburger_icon']) && !empty($settings['hamburger_icon']['value']);
+        $button_classes = 'ldjem-hamburger ldjem-hamburger-btn ldjem-hamburger-' . esc_attr($position);
+        if ($has_custom_icon) {
+            $button_classes .= ' has-custom-icon';
         }
+
+        echo '<button class="' . esc_attr($button_classes) . '" type="button" aria-label="' . esc_attr__('Toggle Menu', LDJEM_TEXT_DOMAIN) . '" aria-expanded="false">';
+        if ($has_custom_icon) {
+            Icons_Manager::render_icon($settings['hamburger_icon'], ['aria-hidden' => 'true']);
+        }
+        echo '<span class="ldjem-hamburger-fallback-bar" aria-hidden="true"></span><span class="ldjem-hamburger-fallback-bar" aria-hidden="true"></span><span class="ldjem-hamburger-fallback-bar" aria-hidden="true"></span>';
         echo '</button>';
     }
 

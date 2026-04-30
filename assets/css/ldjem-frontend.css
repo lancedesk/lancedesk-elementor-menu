@@ -165,9 +165,9 @@
 .ldjem-menu-wrapper .ldjem-submenu-toggle {
     -webkit-appearance: none;
     appearance: none;
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
+    border: none;
+    box-shadow: none;
+    background: transparent;
     border-radius: 0;
     outline: none;
     position: relative;
@@ -177,15 +177,15 @@
 }
 
 .ldjem-menu-wrapper .ldjem-hamburger-right {
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    float: none !important;
+    margin-left: auto;
+    margin-right: 0;
+    float: none;
 }
 
 .ldjem-menu-wrapper .ldjem-hamburger-left {
-    margin-right: auto !important;
-    margin-left: 0 !important;
-    float: none !important;
+    margin-right: auto;
+    margin-left: 0;
+    float: none;
 }
 
 .ldjem-menu-wrapper .ldjem-hamburger i,
@@ -354,11 +354,11 @@
     }
 
     /* Hamburger hidden on desktop */
-    .ldjem-hamburger {
+    .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger {
         display: none !important;
     }
 
-    .ldjem-menu-overlay {
+    .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-menu-overlay {
         display: none !important;
     }
 }
@@ -392,7 +392,7 @@
         width: auto !important;
     }
 
-    .ldjem-menu-wrapper[data-tablet-layout="horizontal"] .ldjem-hamburger {
+    .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-tablet-layout="horizontal"] .ldjem-hamburger {
         display: none !important;
     }
 
@@ -626,8 +626,8 @@
         display: block;
     }
 
-    .ldjem-hamburger,
-    .ldjem-menu-overlay {
+    .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger,
+    .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-menu-overlay {
         display: none !important;
     }
 }
@@ -731,9 +731,10 @@ body.elementor-editor-active .ldjem-menu-wrapper[data-submenu-trigger="hover_cli
 
 /* Hamburger styles for standard (non-offcanvas) menu wrapper */
 .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     width: 48px;
     height: 48px;
     background: transparent;
@@ -744,7 +745,7 @@ body.elementor-editor-active .ldjem-menu-wrapper[data-submenu-trigger="hover_cli
     position: relative;
 }
 
-.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger span {
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger .ldjem-hamburger-fallback-bar {
     display: block;
     width: 24px;
     height: 2px;
@@ -753,20 +754,33 @@ body.elementor-editor-active .ldjem-menu-wrapper[data-submenu-trigger="hover_cli
     transition: all 0.3s ease;
 }
 
-.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.is-open span:nth-child(1) {
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.has-custom-icon .ldjem-hamburger-fallback-bar {
+    display: none;
+}
+
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.ldjem-hamburger-force-fallback .ldjem-hamburger-fallback-bar {
+    display: block;
+}
+
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.ldjem-hamburger-force-fallback i,
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.ldjem-hamburger-force-fallback svg {
+    display: none !important;
+}
+
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.is-open .ldjem-hamburger-fallback-bar:nth-of-type(1) {
     transform: rotate(45deg) translate(8px, 8px);
 }
 
-.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.is-open span:nth-child(2) {
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.is-open .ldjem-hamburger-fallback-bar:nth-of-type(2) {
     opacity: 0;
 }
 
-.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.is-open span:nth-child(3) {
+.ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas) .ldjem-hamburger.is-open .ldjem-hamburger-fallback-bar:nth-of-type(3) {
     transform: rotate(-45deg) translate(7px, -7px);
 }
 
 /* Position helpers for hamburger inside wrapper */
-.ldjem-hamburger-left { order: -1; margin-right: auto !important; }
-.ldjem-hamburger-right { margin-left: auto !important; }
+.ldjem-hamburger-left { order: -1; margin-right: auto; }
+.ldjem-hamburger-right { margin-left: auto; }
 .ldjem-hamburger-center { margin-left: auto; margin-right: auto; }
 

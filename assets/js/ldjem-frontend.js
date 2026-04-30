@@ -142,11 +142,47 @@
          * Determine current preview device.
          */
         getCurrentDevice: function () {
+            var topDoc = null;
+            try {
+                topDoc = window.top && window.top.document ? window.top.document : null;
+            } catch (e) {
+                topDoc = null;
+            }
+
+            var hasClassToken = function (docRef, token) {
+                if (!docRef || !docRef.documentElement || !docRef.documentElement.classList) {
+                    return false;
+                }
+                if (docRef.documentElement.classList.contains(token)) {
+                    return true;
+                }
+                return !!(docRef.body && docRef.body.classList && docRef.body.classList.contains(token));
+            };
+
+            var hasMobileClass =
+                hasClassToken(document, 'elementor-device-mobile') ||
+                hasClassToken(document, 'elementor-editor-device-mobile') ||
+                hasClassToken(topDoc, 'elementor-device-mobile') ||
+                hasClassToken(topDoc, 'elementor-editor-device-mobile');
+
+            var hasTabletClass =
+                hasClassToken(document, 'elementor-device-tablet') ||
+                hasClassToken(document, 'elementor-editor-device-tablet') ||
+                hasClassToken(topDoc, 'elementor-device-tablet') ||
+                hasClassToken(topDoc, 'elementor-editor-device-tablet');
+
             if (window.elementorFrontend && typeof window.elementorFrontend.getCurrentDeviceMode === 'function') {
                 var mode = window.elementorFrontend.getCurrentDeviceMode();
-                if (mode === 'mobile' || mode === 'tablet') {
+                if (mode === 'mobile' || mode === 'tablet' || mode === 'desktop') {
                     return mode;
                 }
+            }
+
+            if (hasMobileClass) {
+                return 'mobile';
+            }
+            if (hasTabletClass) {
+                return 'tablet';
             }
 
             var width = window.innerWidth || document.documentElement.clientWidth;
@@ -209,7 +245,36 @@
                     });
                 }
 
+                self.syncDeviceMenuTemplate($wrapper, device);
+
             });
+        },
+
+        /**
+         * Swap menu HTML from hidden per-device templates.
+         */
+        syncDeviceMenuTemplate: function ($wrapper, device) {
+            var $menuRoot = $wrapper.find('.ldjem-menu.ldjem-menu-root').first();
+            if (!$menuRoot.length) {
+                return;
+            }
+
+            var variant = 'standard-' + device;
+            var $template = $wrapper.find('.ldjem-menu-device-templates [data-ldjem-menu-variant="' + variant + '"]').first();
+            if (!$template.length) {
+                return;
+            }
+
+            var html = $template.html() || '';
+            if ($menuRoot.data('ldjemRenderedVariant') === variant && $menuRoot.data('ldjemRenderedHtml') === html) {
+                return;
+            }
+
+            $menuRoot.html(html);
+            $menuRoot.data('ldjemRenderedVariant', variant);
+            $menuRoot.data('ldjemRenderedHtml', html);
+            $wrapper.attr('data-active-standard-menu-variant', variant);
+            $wrapper.attr('data-active-standard-menu-id', $template.attr('data-menu-id') || '');
         },
 
         /**
@@ -285,6 +350,12 @@
          * Check if viewport is mobile
          */
         isMobile: function () {
+            if (this.getCurrentDevice() === 'mobile') {
+                return true;
+            }
+            if (this.getCurrentDevice() === 'tablet') {
+                return false;
+            }
             if (document.body.classList.contains('elementor-device-mobile')) {
                 return true;
             }
@@ -437,6 +508,28 @@
     $(document).ready(function () {
         $('.ldjem-menu-wrapper').ldjemMenu();
 
+        var ensureHamburgerFallback = function () {
+            document.querySelectorAll('.ldjem-menu-wrapper[data-ldjem-id] .ldjem-hamburger.has-custom-icon').forEach(function (btn) {
+                var iconEl = btn.querySelector('svg, i');
+                var forceFallback = false;
+
+                if (!iconEl) {
+                    forceFallback = true;
+                } else {
+                    if (iconEl.tagName && iconEl.tagName.toLowerCase() === 'i') {
+                        var pseudo = window.getComputedStyle(iconEl, '::before').content;
+                        if (!pseudo || pseudo === 'none' || pseudo === 'normal' || pseudo === '""') {
+                            forceFallback = true;
+                        }
+                    }
+                }
+
+                btn.classList.toggle('ldjem-hamburger-force-fallback', forceFallback);
+            });
+        };
+
+        ensureHamburgerFallback();
+
         // Also support manual initialization
         if (typeof ldjemFrontend !== 'undefined') {
             // Available for custom scripts to hook into
@@ -546,6 +639,7 @@
                 window.LanceDeskMenu.cacheSelectors();
                 window.LanceDeskMenu.applyResponsiveLayout('elementor-preview-toggle');
                 window.LanceDeskMenu.debugLayoutState('elementor-preview-toggle');
+                ensureHamburgerFallback();
             }
         });
         if (document.documentElement) {
@@ -554,6 +648,34 @@
         if (document.body) {
             observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
         }
+        try {
+            if (window.top && window.top.document) {
+                if (window.top.document.documentElement) {
+                    observer.observe(window.top.document.documentElement, { attributes: true, attributeFilter: ['class'] });
+                }
+                if (window.top.document.body) {
+                    observer.observe(window.top.document.body, { attributes: true, attributeFilter: ['class'] });
+                }
+            }
+        } catch (e) {
+            // Ignore cross-frame access errors.
+        }
+
+        // Fallback watcher: Elementor preview mode can change without reliable mutation events.
+        var lastDeviceMode = null;
+        setInterval(function () {
+            if (!window.LanceDeskMenu) {
+                return;
+            }
+            var device = window.LanceDeskMenu.getCurrentDevice();
+            if (device !== lastDeviceMode) {
+                lastDeviceMode = device;
+                window.LanceDeskMenu.cacheSelectors();
+                window.LanceDeskMenu.applyResponsiveLayout('device-poll');
+                window.LanceDeskMenu.debugLayoutState('device-poll');
+                ensureHamburgerFallback();
+            }
+        }, 700);
     });
 
     /**

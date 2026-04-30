@@ -2,9 +2,9 @@
 Contributors: lancedesk
 Tags: elementor, menu, navigation menu, responsive menu, mobile menu, dropdown menu, mega menu, wordpress menu, elementor widget, accessibility
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,8 @@ Instead of duplicating multiple menu widgets and hiding them per breakpoint, you
 * Device-specific layout controls (desktop/tablet/mobile)
 * Submenu trigger options: Hover, Click, Hover & Click
 * Optional accordion behavior for cleaner submenu interaction
-* Off-canvas support with responsive controls
+* Off-canvas support with responsive controls and editor-preview reliability
+* Device-specific menu selection for standard and off-canvas modes
 * Accessibility-focused markup and keyboard support
 * WordPress coding standards and GPL-compatible licensing
 
@@ -69,6 +70,13 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Changelog ==
 
+= 1.0.2 =
+* Added device-specific menu selection mapping for standard and off-canvas output.
+* Improved Elementor editor behavior for off-canvas toggle/open/close interactions.
+* Fixed hamburger alignment control responsiveness in editor preview.
+* Improved device-mode synchronization across desktop/tablet/mobile previews.
+* Added richer opt-in debug diagnostics for support and QA workflows.
+
 = 1.0.1 =
 * Improved submenu interaction logic for click and hover/click modes.
 * Added submenu accordion behavior control.
@@ -80,6 +88,9 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Recommended update for stable mobile/off-canvas editor previews and device-specific menu selection support.
 
 = 1.0.1 =
 Recommended update with submenu behavior improvements and new styling controls.

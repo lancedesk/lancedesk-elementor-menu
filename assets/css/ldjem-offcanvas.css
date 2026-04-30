@@ -19,6 +19,15 @@
   flex-direction: column;
 }
 
+/* Keep off-canvas background stable even when header logo/link markup changes */
+.ldjem-offcanvas-wrapper,
+.ldjem-offcanvas-header,
+.ldjem-offcanvas-menu-container,
+.ldjem-offcanvas-menu,
+.ldjem-offcanvas-footer {
+  background-color: var(--ldjem-offcanvas-bg, #ffffff);
+}
+
 
 /* ============================================================================
    OFF-CANVAS DIRECTIONS: LEFT, RIGHT, TOP, BOTTOM
@@ -27,9 +36,9 @@
 /* LEFT DIRECTION */
 .ldjem-offcanvas-wrapper.direction-left {
   left: 0;
-  top: 0;
+  top: var(--ldjem-offcanvas-offset-top, 0px);
   width: var(--ldjem-offcanvas-panel-size, 300px);
-  height: 100vh;
+  height: calc(100vh - var(--ldjem-offcanvas-offset-top, 0px));
   max-width: 85vw;
   transform: translateX(-100%);
   transition: transform var(--ldjem-offcanvas-animation-speed, 300ms) var(--ldjem-offcanvas-easing, ease-in-out);
@@ -42,9 +51,9 @@
 /* RIGHT DIRECTION */
 .ldjem-offcanvas-wrapper.direction-right {
   right: 0;
-  top: 0;
+  top: var(--ldjem-offcanvas-offset-top, 0px);
   width: var(--ldjem-offcanvas-panel-size, 300px);
-  height: 100vh;
+  height: calc(100vh - var(--ldjem-offcanvas-offset-top, 0px));
   max-width: 85vw;
   transform: translateX(100%);
   transition: transform var(--ldjem-offcanvas-animation-speed, 300ms) var(--ldjem-offcanvas-easing, ease-in-out);
@@ -93,9 +102,18 @@
   align-items: center;
   justify-content: space-between;
   padding: 22px 24px;
-  background-color: inherit;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: var(--ldjem-offcanvas-header-bg, var(--ldjem-offcanvas-bg, #ffffff)) !important;
+  background-image: none !important;
+  border-bottom-width: var(--ldjem-offcanvas-header-border-width, 1px);
+  border-bottom-style: var(--ldjem-offcanvas-header-border-style, solid);
+  border-bottom-color: var(--ldjem-offcanvas-header-border-color, #e0e0e0);
   min-height: 64px;
+}
+
+/* Neutralize theme anchor backgrounds in header/logo area */
+.ldjem-offcanvas-header,
+.ldjem-offcanvas-header * {
+  background-image: none;
 }
 
 .ldjem-offcanvas-logo {
@@ -106,18 +124,21 @@
   min-width: 0;
 }
 
-.ldjem-offcanvas-logo img {
-  max-width: 60px;
+.ldjem-menu-wrapper-offcanvas .ldjem-offcanvas-logo img {
+  max-width: var(--ldjem-offcanvas-logo-max-width, 60px);
   height: auto;
   display: block;
+  background: transparent;
+  filter: none;
 }
 
-.ldjem-offcanvas-logo a {
+.ldjem-menu-wrapper-offcanvas .ldjem-offcanvas-logo a {
   color: inherit;
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 10px;
+  background-color: transparent;
 }
 
 .ldjem-offcanvas-logo-text {
@@ -130,16 +151,15 @@
 }
 
 /* Close Button */
-.ldjem-offcanvas-close {
+.ldjem-menu-wrapper-offcanvas .ldjem-offcanvas-close {
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--ldjem-close-btn-size, 40px);
   height: var(--ldjem-close-btn-size, 40px);
   background: var(--ldjem-close-btn-bg, transparent);
-  border-style: solid;
-  border-width: var(--ldjem-close-btn-border-width, 0px);
-  border-color: var(--ldjem-close-btn-border-color, transparent);
+  border: var(--ldjem-close-btn-border-width, 0px) solid var(--ldjem-close-btn-border-color, transparent);
+  box-shadow: none;
   cursor: pointer;
   color: var(--ldjem-close-btn-color, #333333);
   font-size: var(--ldjem-close-icon-size, 24px);
@@ -159,12 +179,15 @@
 }
 
 .ldjem-offcanvas-close:focus {
-  outline: 2px solid #4A90E2;
+  outline: 2px solid var(--ldjem-offcanvas-focus-color, #4A90E2);
   outline-offset: 2px;
 }
 
 .ldjem-offcanvas-close::before {
   content: '✕';
+  color: inherit;
+  font-size: inherit;
+  line-height: 1;
 }
 
 /* Alternative close icon styles */
@@ -200,7 +223,9 @@
   position: relative;
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom-width: var(--ldjem-offcanvas-separator-width, 1px);
+  border-bottom-style: var(--ldjem-offcanvas-separator-style, solid);
+  border-bottom-color: var(--ldjem-offcanvas-separator-color, #f0f0f0);
 }
 
 .ldjem-offcanvas-menu-item > a {
@@ -225,7 +250,7 @@
 }
 
 .ldjem-offcanvas-menu-item > a:focus {
-  outline: 2px solid #4A90E2;
+  outline: 2px solid var(--ldjem-offcanvas-focus-color, #4A90E2);
   outline-offset: -2px;
 }
 
@@ -261,7 +286,9 @@
 .ldjem-offcanvas-submenu-item {
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom-width: var(--ldjem-offcanvas-separator-width, 1px);
+  border-bottom-style: var(--ldjem-offcanvas-separator-style, solid);
+  border-bottom-color: var(--ldjem-offcanvas-separator-color, #f0f0f0);
 }
 
 .ldjem-offcanvas-submenu-item > a {
@@ -285,7 +312,7 @@
 }
 
 .ldjem-offcanvas-submenu-item > a:focus {
-  outline: 2px solid #4A90E2;
+  outline: 2px solid var(--ldjem-offcanvas-focus-color, #4A90E2);
   outline-offset: -2px;
 }
 
@@ -298,7 +325,7 @@
 /* Deep nesting support (3+ levels) */
 
 .ldjem-offcanvas-submenu-item.has-children .ldjem-offcanvas-submenu {
-  background-color: #fafafa;
+  background-color: var(--ldjem-offcanvas-nested-submenu-bg, #fafafa);
 }
 
 /* ============================================================================
@@ -308,7 +335,7 @@
 .ldjem-offcanvas-footer {
   padding: 22px 24px;
   background-color: inherit;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--ldjem-offcanvas-footer-border-color, #e0e0e0);
   min-height: 88px;
   display: flex;
   flex-direction: column;
@@ -362,7 +389,7 @@
 }
 
 .ldjem-offcanvas-social-link:focus {
-  outline: 2px solid #4A90E2;
+  outline: 2px solid var(--ldjem-offcanvas-focus-color, #4A90E2);
   outline-offset: 2px;
 }
 
@@ -482,8 +509,8 @@ body.ldjem-offcanvas-open {
 
 @media (max-width: 576px) {
   .ldjem-offcanvas-header {
-    padding: 18px 16px;
-    min-height: 60px;
+    padding: var(--ldjem-offcanvas-header-padding-mobile, 18px 16px);
+    min-height: var(--ldjem-offcanvas-header-min-height-mobile, 60px);
   }
 
   .ldjem-offcanvas-logo-text {
@@ -492,30 +519,9 @@ body.ldjem-offcanvas-open {
   }
 
   .ldjem-offcanvas-close {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-  }
-
-  .ldjem-offcanvas-menu-item > a {
-    padding: 12px 16px;
-    font-size: 15px;
-    font-weight: 500;
-  }
-
-  .ldjem-offcanvas-menu-item.has-children > a::after {
-    font-size: 9px;
-    margin-left: 8px;
-  }
-
-  .ldjem-offcanvas-submenu-item > a {
-    padding: 10px 16px 10px 40px;
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  .ldjem-offcanvas-submenu-item.has-children > a::after {
-    font-size: 9px;
+    width: var(--ldjem-offcanvas-close-btn-size-mobile, 36px);
+    height: var(--ldjem-offcanvas-close-btn-size-mobile, 36px);
+    font-size: var(--ldjem-offcanvas-close-icon-size-mobile, 20px);
   }
 
   .ldjem-offcanvas-footer {
@@ -602,7 +608,7 @@ body.ldjem-offcanvas-open {
 }
 
 .ldjem-menu-wrapper-offcanvas.ldjem-offcanvas-enabled-device .ldjem-hamburger {
-  display: inline-flex !important;
+  display: flex !important;
 }
 
 .ldjem-menu-wrapper-offcanvas.ldjem-offcanvas-enabled-device .ldjem-offcanvas-wrapper {
@@ -615,6 +621,55 @@ body.ldjem-offcanvas-open {
 
 .ldjem-menu-wrapper-offcanvas.ldjem-offcanvas-disabled-device .ldjem-hamburger,
 .ldjem-menu-wrapper-offcanvas.ldjem-offcanvas-disabled-device .ldjem-offcanvas-wrapper {
+  display: none !important;
+}
+
+/* Mobile preview hard-override: when off-canvas is enabled for mobile, never hide hamburger */
+@media (max-width: 767px) {
+  .ldjem-menu-wrapper-offcanvas.ldjem-offcanvas-enabled-device[data-offcanvas-mobile="yes"] .ldjem-hamburger,
+  html.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="yes"] .ldjem-hamburger,
+  body.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="yes"] .ldjem-hamburger {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Off-canvas hamburger visual styles (fallback bars + icon) */
+.ldjem-menu-wrapper-offcanvas .ldjem-hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+  position: relative;
+}
+
+.ldjem-menu-wrapper-offcanvas .ldjem-hamburger .ldjem-hamburger-fallback-bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+.ldjem-menu-wrapper-offcanvas .ldjem-hamburger.has-custom-icon .ldjem-hamburger-fallback-bar {
+  display: none;
+}
+
+.ldjem-menu-wrapper-offcanvas .ldjem-hamburger.ldjem-hamburger-force-fallback .ldjem-hamburger-fallback-bar {
+  display: block;
+}
+
+.ldjem-menu-wrapper-offcanvas .ldjem-hamburger.ldjem-hamburger-force-fallback i,
+.ldjem-menu-wrapper-offcanvas .ldjem-hamburger.ldjem-hamburger-force-fallback svg {
   display: none !important;
 }
 
@@ -652,31 +707,90 @@ body.ldjem-offcanvas-open {
   }
 }
 
+/* Elementor editor preview: keep off-canvas panel visible on enabled devices */
+html.elementor-editor-active .ldjem-menu-wrapper-offcanvas.ldjem-editor-preview-open .ldjem-offcanvas-wrapper,
+body.elementor-editor-active .ldjem-menu-wrapper-offcanvas.ldjem-editor-preview-open .ldjem-offcanvas-wrapper,
+html.elementor-editor-active .ldjem-menu-wrapper-offcanvas[data-ldjem-editor-preview-open="yes"] .ldjem-offcanvas-wrapper,
+body.elementor-editor-active .ldjem-menu-wrapper-offcanvas[data-ldjem-editor-preview-open="yes"] .ldjem-offcanvas-wrapper {
+  transform: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 /* Elementor device preview support */
 body.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="yes"] .ldjem-hamburger,
 html.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="yes"] .ldjem-hamburger,
 body.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="yes"] .ldjem-hamburger,
-html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="yes"] .ldjem-hamburger {
-  display: inline-flex !important;
+html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="yes"] .ldjem-hamburger,
+body.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="yes"] .ldjem-hamburger,
+html.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="yes"] .ldjem-hamburger {
+  display: flex !important;
 }
 
 body.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="yes"] .ldjem-menu-fallback,
 html.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="yes"] .ldjem-menu-fallback,
 body.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="yes"] .ldjem-menu-fallback,
-html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="yes"] .ldjem-menu-fallback {
+html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="yes"] .ldjem-menu-fallback,
+body.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="yes"] .ldjem-menu-fallback,
+html.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="yes"] .ldjem-menu-fallback {
   display: none !important;
 }
 
 body.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="no"] .ldjem-hamburger,
 html.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="no"] .ldjem-hamburger,
 body.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="no"] .ldjem-hamburger,
-html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="no"] .ldjem-hamburger {
+html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="no"] .ldjem-hamburger,
+body.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="no"] .ldjem-hamburger,
+html.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="no"] .ldjem-hamburger {
   display: none !important;
 }
 
 body.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="no"] .ldjem-menu-fallback,
 html.elementor-device-mobile .ldjem-menu-wrapper-offcanvas[data-offcanvas-mobile="no"] .ldjem-menu-fallback,
 body.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="no"] .ldjem-menu-fallback,
-html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="no"] .ldjem-menu-fallback {
+html.elementor-device-tablet .ldjem-menu-wrapper-offcanvas[data-offcanvas-tablet="no"] .ldjem-menu-fallback,
+body.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="no"] .ldjem-menu-fallback,
+html.elementor-device-desktop .ldjem-menu-wrapper-offcanvas[data-offcanvas-desktop="no"] .ldjem-menu-fallback {
   display: flex !important;
+}
+
+/* Hide standard menu only for the currently active off-canvas device. */
+.ldjem-menu-wrapper.ldjem-offcanvas-hide-standard {
+  display: none !important;
+}
+
+/* Prevent first-load flash of standard menu before JS sync. */
+@media (min-width: 1025px) {
+  .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-desktop="yes"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-tablet="yes"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-mobile="yes"] {
+    display: none !important;
+  }
+}
+
+/* Elementor preview mode can report mobile/tablet using classes, not viewport width. */
+html.elementor-device-mobile .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-mobile="yes"],
+body.elementor-device-mobile .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-mobile="yes"] {
+  display: none !important;
+}
+
+html.elementor-device-tablet .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-tablet="yes"],
+body.elementor-device-tablet .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-tablet="yes"] {
+  display: none !important;
+}
+
+html.elementor-device-desktop .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-desktop="yes"],
+body.elementor-device-desktop .ldjem-menu-wrapper:not(.ldjem-menu-wrapper-offcanvas)[data-offcanvas-enabled="yes"][data-offcanvas-desktop="yes"] {
+  display: none !important;
 }

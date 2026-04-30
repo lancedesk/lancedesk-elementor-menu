@@ -45,6 +45,7 @@
             }
 
             model._ldjemPresetBound = true;
+            model._ldjemPositionBound = true;
             model.on('change:settings:offcanvas_preset', function() {
                 var presetId = model.getSetting('offcanvas_preset');
                 if (!self.isPresetAutoApplyEnabled(model)) {
@@ -63,6 +64,37 @@
 
                 self.applyPresetToModel(model, presetId);
             });
+
+            model.on('change:settings:mobile_hamburger_position', function() {
+                self.applyHamburgerPositionClass(model);
+            });
+
+            // Apply once when panel opens to ensure editor DOM is in sync.
+            setTimeout(function() {
+                self.applyHamburgerPositionClass(model);
+            }, 50);
+        },
+
+        applyHamburgerPositionClass: function(model) {
+            var widgetId = model && model.get ? model.get('id') : '';
+            if (!widgetId) {
+                return;
+            }
+
+            var position = model.getSetting('mobile_hamburger_position') || 'left';
+            if (['left', 'center', 'right'].indexOf(position) === -1) {
+                position = 'left';
+            }
+
+            var widgetSelector = '.elementor-element-' + widgetId;
+            var $buttons = jQuery(widgetSelector + ' .ldjem-hamburger-btn');
+            if (!$buttons.length) {
+                return;
+            }
+
+            $buttons
+                .removeClass('ldjem-hamburger-left ldjem-hamburger-center ldjem-hamburger-right')
+                .addClass('ldjem-hamburger-' + position);
         },
 
         isPresetAutoApplyEnabled: function(model) {

@@ -9,12 +9,13 @@
 (function ($) {
   'use strict';
 
-  window.__LDJEM_OFFCANVAS_BUILD = 'ldjem-offcanvas-2026-04-29-0154';
+  window.__LDJEM_OFFCANVAS_BUILD = 'ldjem-offcanvas-2026-04-30-1812';
 
   /**
    * Off-Canvas Menu Handler
    */
   window.LDJEMOffCanvas = window.LDJEMOffCanvas || {};
+  const LDJEMOffCanvas = window.LDJEMOffCanvas;
 
   /**
    * Initialize off-canvas menu for a specific widget
@@ -26,13 +27,30 @@
     const $closeBtn = $(`[data-ldjem-id="${widgetId}"] .ldjem-offcanvas-close`);
     const $menuItems = $(`[data-ldjem-id="${widgetId}"] .ldjem-offcanvas-menu-item`);
     const $wrapper = $(`[data-ldjem-id="${widgetId}"].ldjem-menu-wrapper-offcanvas`);
+    let state = null;
+
+    function emitDebug(stage, extra) {
+      $(document).trigger('ldjem:offcanvas:debug', [{
+        widgetId: widgetId,
+        stage: stage,
+        device: getCurrentDevice(),
+        enabledForDevice: $wrapper.attr(`data-offcanvas-${getCurrentDevice()}`) === 'yes' ? 'yes' : 'no',
+        hamburgerCount: $hamburger.length,
+        offcanvasCount: $offcanvas.length,
+        isOpen: state ? (state.isOpen ? 'yes' : 'no') : 'no',
+        extra: extra || {}
+      }]);
+    }
+
+    emitDebug('init-selectors');
 
     if (!$offcanvas.length) {
+      emitDebug('init-no-offcanvas');
       return;
     }
 
     // Store state
-    const state = {
+    state = {
       isOpen: false,
       widgetId: widgetId,
       settings: settings || {},
@@ -43,19 +61,55 @@
       return;
     }
 
+    function isEditorActive() {
+      return !!(
+        (document.body && document.body.classList.contains('elementor-editor-active')) ||
+        (document.documentElement && document.documentElement.classList.contains('elementor-editor-active'))
+      );
+    }
+
     function getCurrentDevice() {
+      let topDoc = null;
+      try {
+        topDoc = window.top && window.top.document ? window.top.document : null;
+      } catch (e) {
+        topDoc = null;
+      }
+
+      function hasClassToken(docRef, token) {
+        if (!docRef || !docRef.documentElement || !docRef.documentElement.classList) {
+          return false;
+        }
+        if (docRef.documentElement.classList.contains(token)) {
+          return true;
+        }
+        return !!(docRef.body && docRef.body.classList && docRef.body.classList.contains(token));
+      }
+
+      const hasMobileClass =
+        hasClassToken(document, 'elementor-device-mobile') ||
+        hasClassToken(document, 'elementor-editor-device-mobile') ||
+        hasClassToken(topDoc, 'elementor-device-mobile') ||
+        hasClassToken(topDoc, 'elementor-editor-device-mobile');
+
+      const hasTabletClass =
+        hasClassToken(document, 'elementor-device-tablet') ||
+        hasClassToken(document, 'elementor-editor-device-tablet') ||
+        hasClassToken(topDoc, 'elementor-device-tablet') ||
+        hasClassToken(topDoc, 'elementor-editor-device-tablet');
+
       // Elementor editor preview mode is the source of truth when available.
       if (window.elementorFrontend && typeof window.elementorFrontend.getCurrentDeviceMode === 'function') {
         const mode = window.elementorFrontend.getCurrentDeviceMode();
-        if (mode === 'mobile' || mode === 'tablet') {
+        if (mode === 'mobile' || mode === 'tablet' || mode === 'desktop') {
           return mode;
         }
       }
 
-      if (document.documentElement.classList.contains('elementor-device-mobile') || document.body.classList.contains('elementor-device-mobile')) {
+      if (hasMobileClass) {
         return 'mobile';
       }
-      if (document.documentElement.classList.contains('elementor-device-tablet') || document.body.classList.contains('elementor-device-tablet')) {
+      if (hasTabletClass) {
         return 'tablet';
       }
 
@@ -84,13 +138,36 @@
     function syncDeviceState(context) {
       const device = getCurrentDevice();
       const enabled = isOffcanvasEnabledForCurrentDevice();
+      const $standardWrapper = $(`[data-ldjem-id="${widgetId}"].ldjem-menu-wrapper`).not('.ldjem-menu-wrapper-offcanvas');
+      const $localHamburger = $wrapper.find('.ldjem-hamburger');
+      const $fallbackMenu = $wrapper.find('.ldjem-menu-fallback');
       $wrapper
         .removeClass('ldjem-device-desktop ldjem-device-tablet ldjem-device-mobile')
         .addClass(`ldjem-device-${device}`)
         .toggleClass('ldjem-offcanvas-disabled-device', !enabled)
         .toggleClass('ldjem-offcanvas-enabled-device', enabled);
+      $standardWrapper
+        .toggleClass('ldjem-offcanvas-hide-standard', enabled)
+        .attr('data-offcanvas-active-device', enabled ? 'yes' : 'no');
       applyDeviceOverrides(device);
+      syncOffcanvasMenuTemplate(device);
       logLayoutDebug(context || 'sync', device, enabled);
+
+      // Keep preview-open marker aligned with real open state only.
+      const showEditorPreview = isEditorActive() && enabled && !!state.isOpen;
+      $wrapper.toggleClass('ldjem-editor-preview-open', showEditorPreview);
+      $wrapper.attr('data-ldjem-editor-preview-open', showEditorPreview ? 'yes' : 'no');
+
+      // Enforce visibility as a JS fallback in editor/runtime when CSS state can lag.
+      $localHamburger.css('display', '');
+      $fallbackMenu.css('display', '');
+      if (enabled) {
+        $localHamburger.css('display', 'flex');
+        $fallbackMenu.css('display', 'none');
+      } else {
+        $localHamburger.css('display', 'none');
+        $fallbackMenu.css('display', 'flex');
+      }
 
       if (!enabled && state.isOpen) {
         closeMenu();
@@ -131,18 +208,72 @@
       }
     }
 
+    function syncOffcanvasMenuTemplate(device) {
+      const variant = `offcanvas-${device}`;
+      const $menuRoot = $wrapper.find('.ldjem-offcanvas-menu').first();
+      const $template = $wrapper.find(`.ldjem-offcanvas-device-templates [data-ldjem-menu-variant="${variant}"]`).first();
+      if (!$menuRoot.length || !$template.length) {
+        return;
+      }
+
+      const html = $template.html() || '';
+      if ($menuRoot.data('ldjemRenderedVariant') === variant && $menuRoot.data('ldjemRenderedHtml') === html) {
+        return;
+      }
+
+      $menuRoot.html(html);
+      $menuRoot.data('ldjemRenderedVariant', variant);
+      $menuRoot.data('ldjemRenderedHtml', html);
+      $wrapper.attr('data-active-offcanvas-menu-variant', variant);
+      $wrapper.attr('data-active-offcanvas-menu-id', $template.attr('data-menu-id') || '');
+      emitDebug('offcanvas-menu-template-sync', {
+        variant: variant,
+        menuId: $template.attr('data-menu-id') || ''
+      });
+    }
+
     /**
      * Open off-canvas menu
      */
     function openMenu() {
+      emitDebug('open-request', {
+        source: 'openMenu'
+      });
       if (state.isOpen) return;
-      if (!isOffcanvasEnabledForCurrentDevice()) return;
+      if (!isOffcanvasEnabledForCurrentDevice()) {
+        emitDebug('open-blocked', {
+          reason: 'offcanvas_disabled_for_device',
+          source: 'openMenu'
+        });
+        $(document).trigger('ldjem:offcanvas:toggle-attempt', [{
+          widgetId: widgetId,
+          action: 'open',
+          allowed: false,
+          reason: 'offcanvas_disabled_for_device',
+          device: getCurrentDevice(),
+          source: 'openMenu'
+        }]);
+        return;
+      }
 
       state.isOpen = true;
 
       $offcanvas.addClass('is-open');
       $offcanvas.attr('aria-hidden', 'false');
       $hamburger.attr('aria-expanded', 'true');
+      $wrapper.addClass('ldjem-editor-preview-open').attr('data-ldjem-editor-preview-open', 'yes');
+      emitDebug('open-applied', {
+        offcanvasHasOpenClass: $offcanvas.hasClass('is-open') ? 'yes' : 'no',
+        offcanvasAriaHidden: $offcanvas.attr('aria-hidden') || '',
+        hamburgerAriaExpanded: $hamburger.attr('aria-expanded') || ''
+      });
+      setTimeout(function () {
+        emitDebug('open-post-frame', {
+          offcanvasHasOpenClass: $offcanvas.hasClass('is-open') ? 'yes' : 'no',
+          offcanvasAriaHidden: $offcanvas.attr('aria-hidden') || '',
+          hamburgerAriaExpanded: $hamburger.attr('aria-expanded') || ''
+        });
+      }, 40);
 
       // Prevent body scroll
       $('body').addClass('ldjem-offcanvas-open');
@@ -152,12 +283,23 @@
 
       // Trigger custom event
       $(document).trigger('ldjem:offcanvas:opened', [widgetId]);
+      $(document).trigger('ldjem:offcanvas:toggle-attempt', [{
+        widgetId: widgetId,
+        action: 'open',
+        allowed: true,
+        reason: 'opened',
+        device: getCurrentDevice(),
+        source: 'openMenu'
+      }]);
     }
 
     /**
      * Close off-canvas menu
      */
     function closeMenu() {
+      emitDebug('close-request', {
+        source: 'closeMenu'
+      });
       if (!state.isOpen) return;
 
       state.isOpen = false;
@@ -165,6 +307,12 @@
       $offcanvas.removeClass('is-open');
       $offcanvas.attr('aria-hidden', 'true');
       $hamburger.attr('aria-expanded', 'false');
+      $wrapper.removeClass('ldjem-editor-preview-open').attr('data-ldjem-editor-preview-open', 'no');
+      emitDebug('close-applied', {
+        offcanvasHasOpenClass: $offcanvas.hasClass('is-open') ? 'yes' : 'no',
+        offcanvasAriaHidden: $offcanvas.attr('aria-hidden') || '',
+        hamburgerAriaExpanded: $hamburger.attr('aria-expanded') || ''
+      });
 
       // Restore body scroll
       $('body').removeClass('ldjem-offcanvas-open');
@@ -174,12 +322,23 @@
 
       // Trigger custom event
       $(document).trigger('ldjem:offcanvas:closed', [widgetId]);
+      $(document).trigger('ldjem:offcanvas:toggle-attempt', [{
+        widgetId: widgetId,
+        action: 'close',
+        allowed: true,
+        reason: 'closed',
+        device: getCurrentDevice(),
+        source: 'closeMenu'
+      }]);
     }
 
     /**
      * Toggle off-canvas menu
      */
     function toggleMenu() {
+      emitDebug('toggle-called', {
+        stateWasOpen: state.isOpen ? 'yes' : 'no'
+      });
       if (state.isOpen) {
         closeMenu();
       } else {
@@ -187,10 +346,44 @@
       }
     }
 
-    // Event: Hamburger click
-    $hamburger.on('click.ldjem', function (e) {
+    // Event: Hamburger click (delegated so it survives Elementor re-renders)
+    $(document).off('click.ldjem-hamburger-' + widgetId);
+    $(document).on('click.ldjem-hamburger-' + widgetId, `[data-ldjem-id="${widgetId}"] .ldjem-hamburger-btn`, function (e) {
+      emitDebug('hamburger-click-received', {
+        targetTag: e && e.target && e.target.tagName ? e.target.tagName.toLowerCase() : 'unknown',
+        source: 'hamburger-handler'
+      });
       e.preventDefault();
+      $(document).trigger('ldjem:offcanvas:hamburger-click', [{
+        widgetId: widgetId,
+        device: getCurrentDevice(),
+        enabledForDevice: isOffcanvasEnabledForCurrentDevice() ? 'yes' : 'no',
+        source: 'hamburger'
+      }]);
       toggleMenu();
+    });
+
+    // Capture-phase tracer to confirm whether clicks reach DOM target in editor.
+    if (isEditorActive() && !window.__ldjemNativeClickTraceBound) {
+      window.__ldjemNativeClickTraceBound = true;
+      document.addEventListener('click', function (evt) {
+        const target = evt.target && evt.target.closest ? evt.target.closest('.ldjem-hamburger-btn') : null;
+        if (!target) {
+          return;
+        }
+        const holder = target.closest('[data-ldjem-id]');
+        const tracedWidgetId = holder ? holder.getAttribute('data-ldjem-id') : '';
+        $(document).trigger('ldjem:offcanvas:native-click-capture', [{
+          widgetId: tracedWidgetId,
+          source: 'native-capture',
+          targetClass: target.className || '',
+          defaultPrevented: evt.defaultPrevented ? 'yes' : 'no'
+        }]);
+      }, true);
+    }
+    emitDebug('handlers-bound', {
+      closeButtonCount: $closeBtn.length,
+      menuItemCount: $menuItems.length
     });
 
     // Event: Close button click
@@ -376,6 +569,7 @@
    */
   $.fn.ldjemOffCanvas = function (options) {
     const settings = $.extend({}, options);
+    const forceInit = !!settings.force;
 
     return this.each(function () {
       const $this = $(this);
@@ -385,22 +579,39 @@
         return;
       }
 
+       if (!forceInit && $this.data('ldjem-offcanvas-state')) {
+        return;
+      }
+
       LDJEMOffCanvas.init(widgetId, settings);
     });
   };
+
+  function initAllOffcanvas(context, force) {
+    $('.ldjem-offcanvas-wrapper').each(function () {
+      const $this = $(this);
+      const widgetId = $this.data('ldjem-id');
+      if (!widgetId) {
+        return;
+      }
+      $this.ldjemOffCanvas({ force: !!force });
+      const state = $this.data('ldjem-offcanvas-state');
+      if (state && state.syncDeviceState) {
+        state.syncDeviceState(context || 'init-scan');
+      }
+    });
+  }
+  LDJEMOffCanvas.initAllOffcanvas = initAllOffcanvas;
 
   /**
    * Auto-initialize off-canvas menus on page load
    */
   $(document).ready(function () {
-    $('.ldjem-offcanvas-wrapper').each(function () {
-      const $this = $(this);
-      const widgetId = $this.data('ldjem-id');
-
-      if (widgetId) {
-        LDJEMOffCanvas.init(widgetId);
-      }
-    });
+    initAllOffcanvas('dom-ready', true);
+    // Elementor editor may inject widget DOM slightly later.
+    setTimeout(function () { initAllOffcanvas('dom-ready-100'); }, 100);
+    setTimeout(function () { initAllOffcanvas('dom-ready-500'); }, 500);
+    setTimeout(function () { initAllOffcanvas('dom-ready-1200'); }, 1200);
   });
 
   /**
@@ -442,38 +653,125 @@
 })(jQuery);
 
 /* Elementor Editor Support - Reinitialize on widget update */
-if (window.elementorFrontend) {
-  elementorFrontend.hooks.addAction(
-    'frontend/element_ready/ldjem_menu.default',
-    function ($scope) {
-      $scope.find('.ldjem-offcanvas-wrapper').ldjemOffCanvas();
-      // Keep preview responsive modes in sync.
-      setTimeout(function () {
-        $scope.find('.ldjem-offcanvas-wrapper').each(function () {
-          const state = $(this).data('ldjem-offcanvas-state');
-          if (state && state.syncDeviceState) {
-            state.syncDeviceState('elementor-ready');
-          }
-        });
-      }, 100);
-    }
-  );
-
-  // Elementor device preview toggles do not always fire window resize.
-  // Observe class changes and force sync/log when preview mode changes.
-  const previewObserver = new MutationObserver(function () {
-    jQuery('.ldjem-offcanvas-wrapper').each(function () {
-      const state = jQuery(this).data('ldjem-offcanvas-state');
-      if (state && state.syncDeviceState) {
-        state.syncDeviceState('elementor-preview-toggle');
+if (window.jQuery) {
+  (function ($) {
+    function bindElementorHooks() {
+      if (!window.elementorFrontend || !window.elementorFrontend.hooks || window.__ldjemElementorHookBound) {
+        return false;
       }
-    });
-  });
+      window.__ldjemElementorHookBound = true;
+      elementorFrontend.hooks.addAction(
+        'frontend/element_ready/ldjem_menu.default',
+        function ($scope) {
+          $scope.find('.ldjem-offcanvas-wrapper').ldjemOffCanvas({ force: true });
+          // Keep preview responsive modes in sync.
+          setTimeout(function () {
+            $scope.find('.ldjem-offcanvas-wrapper').each(function () {
+              const state = $(this).data('ldjem-offcanvas-state');
+              if (state && state.syncDeviceState) {
+                state.syncDeviceState('elementor-ready');
+              }
+            });
+          }, 100);
+        }
+      );
+      return true;
+    }
 
-  if (document.documentElement) {
-    previewObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-  }
-  if (document.body) {
-    previewObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-  }
+    bindElementorHooks();
+    // Elementor runtime can appear after this script in editor iframe.
+    setTimeout(bindElementorHooks, 200);
+    setTimeout(bindElementorHooks, 700);
+    setTimeout(bindElementorHooks, 1500);
+
+    // Elementor device preview toggles do not always fire window resize.
+    // Observe class changes and force sync/log when preview mode changes.
+    const previewObserver = new MutationObserver(function () {
+      jQuery('.ldjem-offcanvas-wrapper').each(function () {
+        const state = jQuery(this).data('ldjem-offcanvas-state');
+        if (state && state.syncDeviceState) {
+          state.syncDeviceState('elementor-preview-toggle');
+        }
+      });
+    });
+
+    if (document.documentElement) {
+      previewObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (document.body) {
+      previewObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    }
+    try {
+      if (window.top && window.top.document) {
+        if (window.top.document.documentElement) {
+          previewObserver.observe(window.top.document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        }
+        if (window.top.document.body) {
+          previewObserver.observe(window.top.document.body, { attributes: true, attributeFilter: ['class'] });
+        }
+      }
+    } catch (e) {
+      // Ignore cross-frame access errors.
+    }
+
+    // Fallback watcher: periodic sync avoids stale editor preview states.
+    setInterval(function () {
+      jQuery('.ldjem-offcanvas-wrapper').each(function () {
+        const state = jQuery(this).data('ldjem-offcanvas-state');
+        if (state && state.syncDeviceState) {
+          state.syncDeviceState('device-poll');
+        }
+      });
+      if (document.body && document.body.classList.contains('elementor-editor-active') && window.LDJEMOffCanvas && window.LDJEMOffCanvas.initAllOffcanvas) {
+        window.LDJEMOffCanvas.initAllOffcanvas('editor-poll', false);
+      }
+    }, 700);
+
+  // Elementor overlay can intercept clicks in edit mode.
+  // Bridge overlay-clicks that land on top of the hamburger area.
+    if (!window.__ldjemEditorOverlayBridgeBound) {
+      window.__ldjemEditorOverlayBridgeBound = true;
+      document.addEventListener('click', function (evt) {
+      if (!document.body || !document.body.classList.contains('elementor-editor-active')) {
+        return;
+      }
+      const overlay = evt.target.closest('.elementor-widget-ldjem_menu .elementor-element-overlay, .elementor-element.elementor-widget-ldjem_menu > .elementor-element-overlay');
+      if (!overlay) {
+        return;
+      }
+
+      const widget = overlay.closest('.elementor-widget-ldjem_menu, .elementor-element.elementor-widget-ldjem_menu');
+      if (!widget) {
+        return;
+      }
+
+      const widgetIdClass = Array.from(widget.classList).find(function (cls) {
+        return cls.indexOf('elementor-element-') === 0 && cls !== 'elementor-element-edit-mode';
+      });
+      const widgetId = widgetIdClass ? widgetIdClass.replace('elementor-element-', '') : '';
+      const hamburger = widget.querySelector('.ldjem-menu-wrapper-offcanvas .ldjem-hamburger-btn');
+      if (!hamburger) {
+        return;
+      }
+
+      const rect = hamburger.getBoundingClientRect();
+      const x = evt.clientX;
+      const y = evt.clientY;
+      const hitHamburger = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+      if (!hitHamburger) {
+        return;
+      }
+
+      evt.preventDefault();
+      evt.stopPropagation();
+      $(document).trigger('ldjem:offcanvas:overlay-bridge', [{
+        widgetId: widgetId,
+        source: 'elementor-overlay',
+        clickX: x,
+        clickY: y
+      }]);
+        hamburger.click();
+      }, true);
+    }
+  })(window.jQuery);
 }
