@@ -4,7 +4,7 @@ Tags: elementor, menu, responsive menu, mobile menu, navigation
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,11 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Changelog ==
 
+= 1.0.6 =
+* Renamed plugin branding and slug/text domain to `lancedesk-responsive-menu-for-elementor` for WordPress.org trademark compliance.
+* Replaced inline debug script output with `wp_add_inline_script()` on the frontend handle.
+* Hardened rendered menu HTML output escaping in standard and off-canvas paths.
+
 = 1.0.5 =
 * Added translators comments for placeholder-based i18n strings.
 * Hardened request action sanitization and cleanup routines for Plugin Check compliance.
@@ -98,6 +103,9 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+Recommended trademark-compliance and security-hardening update for WordPress.org review approval.
 
 = 1.0.5 =
 Recommended compliance update to satisfy WordPress.org Plugin Check and submission scanner requirements.
