@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: LanceDesk Elementor Menu
+ * Plugin Name: LanceDesk Responsive Menu for Elementor
  * Description: Responsive Elementor menu widget with device-aware layout control. Build responsive menus in Elementor with per-device layout settings (horizontal/vertical) without creating multiple widget instances.
  * Version: 1.0.5
  * Author: Lance Desk
  * Author URI: https://lancedesk.com
  * License: GPL-2.0+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: lancedesk-elementor-menu
+ * Text Domain: lancedesk-responsive-menu-for-elementor
  * Domain Path: /languages
  * Requires at least: 5.0
  * Tested up to: 6.9
@@ -16,7 +16,7 @@
  */
 
 /**
- * LanceDesk Elementor Menu Plugin
+ * LanceDesk Responsive Menu for Elementor Plugin
  *
  * @package     LDJEM
  * @author      Lance Desk <hello@lancedesk.com>
@@ -37,8 +37,8 @@ define('LDJEM_VERSION', '1.0.5');
 define('LDJEM_PLUGIN_FILE', __FILE__);
 define('LDJEM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('LDJEM_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('LDJEM_PLUGIN_SLUG', 'lancedesk-elementor-menu');
-define('LDJEM_TEXT_DOMAIN', 'lancedesk-elementor-menu');
+define('LDJEM_PLUGIN_SLUG', 'lancedesk-responsive-menu-for-elementor');
+define('LDJEM_TEXT_DOMAIN', 'lancedesk-responsive-menu-for-elementor');
 define('LDJEM_PREFIX', 'ldjem');
 define('LDJEM_CLASS_PREFIX', 'LDJEM_');
 
@@ -53,7 +53,7 @@ function ldjem_init_plugin() {
         add_action('admin_notices', function() {
             printf(
                 '<div class="notice notice-error"><p>%s</p></div>',
-                esc_html__('LanceDesk Elementor Menu requires PHP 7.4 or higher.', 'lancedesk-elementor-menu')
+                esc_html__('LanceDesk Responsive Menu for Elementor requires PHP 7.4 or higher.', 'lancedesk-responsive-menu-for-elementor')
             );
         });
         return;
@@ -71,7 +71,7 @@ function ldjem_init_plugin() {
         add_action('admin_notices', function() {
             printf(
                 '<div class="notice notice-error"><p>%s</p></div>',
-                esc_html__('LanceDesk Elementor Menu requires WordPress 5.0 or higher.', 'lancedesk-elementor-menu')
+                esc_html__('LanceDesk Responsive Menu for Elementor requires WordPress 5.0 or higher.', 'lancedesk-responsive-menu-for-elementor')
             );
         });
         return;
@@ -84,7 +84,7 @@ function ldjem_init_plugin() {
                 '<div class="notice notice-error"><p>%s</p></div>',
                 sprintf(
                     /* translators: %s: Required plugin name. */
-                    esc_html__('LanceDesk Elementor Menu requires %s to be installed and activated.', 'lancedesk-elementor-menu'),
+                    esc_html__('LanceDesk Responsive Menu for Elementor requires %s to be installed and activated.', 'lancedesk-responsive-menu-for-elementor'),
                     '<strong>Elementor</strong>'
                 )
             );
@@ -97,7 +97,7 @@ function ldjem_init_plugin() {
         add_action('admin_notices', function() {
             printf(
                 '<div class="notice notice-error"><p>%s</p></div>',
-                esc_html__('LanceDesk Elementor Menu requires Elementor 3.0 or higher.', 'lancedesk-elementor-menu')
+                esc_html__('LanceDesk Responsive Menu for Elementor requires Elementor 3.0 or higher.', 'lancedesk-responsive-menu-for-elementor')
             );
         });
         return;

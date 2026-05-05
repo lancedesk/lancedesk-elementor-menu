@@ -1,4 +1,4 @@
-=== LanceDesk Elementor Menu ===
+=== LanceDesk Responsive Menu for Elementor ===
 Contributors: lancedesk
 Tags: elementor, menu, responsive menu, mobile menu, navigation
 Requires at least: 5.0
@@ -12,7 +12,7 @@ Build responsive Elementor navigation menus with one widget. Control desktop, ta
 
 == Description ==
 
-LanceDesk Elementor Menu is a WordPress plugin for Elementor that helps you build flexible, responsive navigation menus using a single widget instance.
+LanceDesk Responsive Menu for Elementor is a WordPress plugin for Elementor that helps you build flexible, responsive navigation menus using a single widget instance.
 
 Instead of duplicating multiple menu widgets and hiding them per breakpoint, you can configure one menu for desktop, tablet, and mobile behavior directly inside Elementor.
 
@@ -36,7 +36,7 @@ Instead of duplicating multiple menu widgets and hiding them per breakpoint, you
 
 == Installation ==
 
-1. Upload the `lancedesk-elementor-menu` folder to the `/wp-content/plugins/` directory, or install the plugin through the WordPress plugins screen.
+1. Upload the `lancedesk-responsive-menu-for-elementor` folder to the `/wp-content/plugins/` directory, or install the plugin through the WordPress plugins screen.
 2. Activate the plugin through the `Plugins` screen in WordPress.
 3. Ensure Elementor is installed and activated.
 4. Edit a page with Elementor and search for `LanceDesk Responsive Menu`.

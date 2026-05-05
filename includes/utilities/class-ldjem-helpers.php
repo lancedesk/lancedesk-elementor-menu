@@ -188,9 +188,9 @@ class LDJEM_Helpers {
      */
     public static function get_layout_options() {
         return [
-            'horizontal' => esc_html__('Horizontal', 'lancedesk-elementor-menu'),
-            'vertical'   => esc_html__('Vertical', 'lancedesk-elementor-menu'),
-            'grid'       => esc_html__('Grid', 'lancedesk-elementor-menu'),
+            'horizontal' => esc_html__('Horizontal', 'lancedesk-responsive-menu-for-elementor'),
+            'vertical'   => esc_html__('Vertical', 'lancedesk-responsive-menu-for-elementor'),
+            'grid'       => esc_html__('Grid', 'lancedesk-responsive-menu-for-elementor'),
         ];
     }
 
@@ -201,10 +201,10 @@ class LDJEM_Helpers {
      */
     public static function get_animation_options() {
         return [
-            'fade'   => esc_html__('Fade', 'lancedesk-elementor-menu'),
-            'slide'  => esc_html__('Slide', 'lancedesk-elementor-menu'),
-            'bounce' => esc_html__('Bounce', 'lancedesk-elementor-menu'),
-            'none'   => esc_html__('None', 'lancedesk-elementor-menu'),
+            'fade'   => esc_html__('Fade', 'lancedesk-responsive-menu-for-elementor'),
+            'slide'  => esc_html__('Slide', 'lancedesk-responsive-menu-for-elementor'),
+            'bounce' => esc_html__('Bounce', 'lancedesk-responsive-menu-for-elementor'),
+            'none'   => esc_html__('None', 'lancedesk-responsive-menu-for-elementor'),
         ];
     }
 
@@ -215,9 +215,9 @@ class LDJEM_Helpers {
      */
     public static function get_submenu_trigger_options() {
         return [
-            'hover'       => esc_html__('Hover', 'lancedesk-elementor-menu'),
-            'click'       => esc_html__('Click', 'lancedesk-elementor-menu'),
-            'hover_click' => esc_html__('Hover & Click', 'lancedesk-elementor-menu'),
+            'hover'       => esc_html__('Hover', 'lancedesk-responsive-menu-for-elementor'),
+            'click'       => esc_html__('Click', 'lancedesk-responsive-menu-for-elementor'),
+            'hover_click' => esc_html__('Hover & Click', 'lancedesk-responsive-menu-for-elementor'),
         ];
     }
 

@@ -177,13 +177,13 @@ class LDJEM_Plugin {
      * Prevent cloning
      */
     public function __clone() {
-        _doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed for this singleton.', 'lancedesk-elementor-menu'), esc_html(LDJEM_VERSION));
+        _doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed for this singleton.', 'lancedesk-responsive-menu-for-elementor'), esc_html(LDJEM_VERSION));
     }
 
     /**
      * Prevent unserialization
      */
     public function __wakeup() {
-        _doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed for this singleton.', 'lancedesk-elementor-menu'), esc_html(LDJEM_VERSION));
+        _doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed for this singleton.', 'lancedesk-responsive-menu-for-elementor'), esc_html(LDJEM_VERSION));
     }
 }

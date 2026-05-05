@@ -43,7 +43,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
      * @return string Display name for widget selector
      */
     public function get_title() {
-        return esc_html__('LanceDesk Responsive Menu', 'lancedesk-elementor-menu');
+        return esc_html__('LanceDesk Responsive Menu', 'lancedesk-responsive-menu-for-elementor');
     }
 
     /**
@@ -127,7 +127,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_content',
             [
-                'label' => esc_html__('Content', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Content', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -135,38 +135,38 @@ class LDJEM_Menu_Widget extends Widget_Base {
         // Menu Selection
         $menu_options = LDJEM_Helpers::get_registered_menus();
         if (empty($menu_options)) {
-            $menu_options = ['' => esc_html__('No menus available', 'lancedesk-elementor-menu')];
+            $menu_options = ['' => esc_html__('No menus available', 'lancedesk-responsive-menu-for-elementor')];
         }
 
         $this->add_control(
             'menu_id',
             [
-                'label'       => esc_html__('Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
                 'label_block' => true,
-                'description' => esc_html__('Select a menu to display', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Select a menu to display', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
         $this->add_control(
             'use_device_specific_menus',
             [
-                'label'        => esc_html__('Use Device-Specific Menus', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Use Device-Specific Menus', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => '',
-                'description'  => esc_html__('Allow desktop, tablet, and mobile to use different menus.', 'lancedesk-elementor-menu'),
+                'description'  => esc_html__('Allow desktop, tablet, and mobile to use different menus.', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
         $this->add_control(
             'menu_id_desktop',
             [
-                'label'       => esc_html__('Desktop Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Desktop Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
@@ -180,7 +180,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_id_tablet',
             [
-                'label'       => esc_html__('Tablet Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Tablet Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
@@ -194,7 +194,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_id_mobile',
             [
-                'label'       => esc_html__('Mobile Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Mobile Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
@@ -208,13 +208,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'use_offcanvas_device_specific_menus',
             [
-                'label'        => esc_html__('Use Off-Canvas Specific Menus', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Use Off-Canvas Specific Menus', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => '',
-                'description'  => esc_html__('When enabled, off-canvas can use different menus per device.', 'lancedesk-elementor-menu'),
+                'description'  => esc_html__('When enabled, off-canvas can use different menus per device.', 'lancedesk-responsive-menu-for-elementor'),
                 'condition'    => [
                     'offcanvas_enable' => 'yes',
                 ],
@@ -224,7 +224,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_menu_id_desktop',
             [
-                'label'       => esc_html__('Off-Canvas Desktop Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Off-Canvas Desktop Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
@@ -250,7 +250,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_menu_id_tablet',
             [
-                'label'       => esc_html__('Off-Canvas Tablet Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Off-Canvas Tablet Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
@@ -276,7 +276,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_menu_id_mobile',
             [
-                'label'       => esc_html__('Off-Canvas Mobile Menu', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Off-Canvas Mobile Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $menu_options,
                 'default'     => '',
@@ -303,13 +303,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_depth',
             [
-                'label'   => esc_html__('Menu Depth', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Menu Depth', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::NUMBER,
                 'min'     => 1,
                 'max'     => 4,
                 'step'    => 1,
                 'default' => 3,
-                'description' => esc_html__('Maximum number of nested levels to display', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Maximum number of nested levels to display', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
@@ -317,13 +317,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'start_level',
             [
-                'label'   => esc_html__('Start Level', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Start Level', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::NUMBER,
                 'min'     => 0,
                 'max'     => 3,
                 'step'    => 1,
                 'default' => 0,
-                'description' => esc_html__('Begin displaying from this menu level', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Begin displaying from this menu level', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
@@ -331,7 +331,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'container_tag',
             [
-                'label'   => esc_html__('Container Tag', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Container Tag', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
                     'nav' => 'nav',
@@ -339,20 +339,20 @@ class LDJEM_Menu_Widget extends Widget_Base {
                     'ul'  => 'ul',
                 ],
                 'default' => 'nav',
-                'description' => esc_html__('HTML tag for menu wrapper', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('HTML tag for menu wrapper', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
         $this->add_control(
             'submenu_accordion',
             [
-                'label'        => esc_html__('Accordion Behavior', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Accordion Behavior', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('On', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('Off', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('On', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('Off', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
-                'description'  => esc_html__('When enabled, opening one submenu closes sibling submenus at the same level.', 'lancedesk-elementor-menu'),
+                'description'  => esc_html__('When enabled, opening one submenu closes sibling submenus at the same level.', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
@@ -368,7 +368,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_responsive',
             [
-                'label' => esc_html__('Responsive Layout', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Responsive Layout', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -376,7 +376,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'responsive_status_heading',
             [
-                'label'     => esc_html__('Device Off-Canvas Status', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Device Off-Canvas Status', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -386,7 +386,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_offcanvas_disabled',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Desktop: Standard | Tablet: Standard | Mobile: Standard', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Desktop: Standard | Tablet: Standard | Mobile: Standard', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'condition'       => [
                     'offcanvas_enable!' => 'yes',
@@ -398,7 +398,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_desktop_on',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Desktop: Off-Canvas', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Desktop: Off-Canvas', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
                 'conditions'      => [
                     'relation' => 'and',
@@ -422,7 +422,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_desktop_off',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Desktop: Standard', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Desktop: Standard', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'conditions'      => [
                     'relation' => 'or',
@@ -446,7 +446,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_tablet_on',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Tablet: Off-Canvas', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Tablet: Off-Canvas', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
                 'conditions'      => [
                     'relation' => 'and',
@@ -470,7 +470,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_tablet_off',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Tablet: Standard', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Tablet: Standard', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'conditions'      => [
                     'relation' => 'or',
@@ -494,7 +494,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_mobile_on',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Mobile: Off-Canvas', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Mobile: Off-Canvas', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
                 'conditions'      => [
                     'relation' => 'and',
@@ -518,7 +518,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'responsive_status_mobile_off',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Mobile: Standard', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Mobile: Standard', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'conditions'      => [
                     'relation' => 'or',
@@ -542,7 +542,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'heading_desktop_layout',
             [
-                'label'     => esc_html__('Desktop Layout (>1024px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Desktop Layout (>1024px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'conditions' => [
@@ -567,7 +567,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'desktop_layout_offcanvas_notice',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Desktop off-canvas is enabled. Desktop responsive layout controls are disabled here; configure Desktop Off-Canvas settings in the Off-Canvas sections below.', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Desktop off-canvas is enabled. Desktop responsive layout controls are disabled here; configure Desktop Off-Canvas settings in the Off-Canvas sections below.', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'conditions'      => [
                     'relation' => 'and',
@@ -590,19 +590,19 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'desktop_layout',
             [
-                'label'   => esc_html__('Layout Mode', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Layout Mode', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::CHOOSE,
                 'options' => [
                     'horizontal' => [
-                        'title' => esc_html__('Horizontal', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Horizontal', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-h-align-stretch',
                     ],
                     'vertical'   => [
-                        'title' => esc_html__('Vertical', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Vertical', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-v-align-stretch',
                     ],
                     'grid'       => [
-                        'title' => esc_html__('Grid', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Grid', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-table',
                     ],
                 ],
@@ -628,11 +628,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'desktop_flex_direction',
             [
-                'label'   => esc_html__('Flex Direction', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Flex Direction', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'row'    => esc_html__('Row (Left to Right)', 'lancedesk-elementor-menu'),
-                    'column' => esc_html__('Column (Top to Bottom)', 'lancedesk-elementor-menu'),
+                    'row'    => esc_html__('Row (Left to Right)', 'lancedesk-responsive-menu-for-elementor'),
+                    'column' => esc_html__('Column (Top to Bottom)', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'row',
                 'conditions' => [
@@ -666,13 +666,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'desktop_align_items',
             [
-                'label'   => esc_html__('Align Items', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Align Items', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'flex-start' => esc_html__('Start', 'lancedesk-elementor-menu'),
-                    'center'     => esc_html__('Center', 'lancedesk-elementor-menu'),
-                    'flex-end'   => esc_html__('End', 'lancedesk-elementor-menu'),
-                    'stretch'    => esc_html__('Stretch', 'lancedesk-elementor-menu'),
+                    'flex-start' => esc_html__('Start', 'lancedesk-responsive-menu-for-elementor'),
+                    'center'     => esc_html__('Center', 'lancedesk-responsive-menu-for-elementor'),
+                    'flex-end'   => esc_html__('End', 'lancedesk-responsive-menu-for-elementor'),
+                    'stretch'    => esc_html__('Stretch', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'center',
                 'selectors' => [
@@ -699,14 +699,14 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'desktop_justify_content',
             [
-                'label'   => esc_html__('Justify Content', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Justify Content', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'flex-start'    => esc_html__('Start', 'lancedesk-elementor-menu'),
-                    'center'        => esc_html__('Center', 'lancedesk-elementor-menu'),
-                    'flex-end'      => esc_html__('End', 'lancedesk-elementor-menu'),
-                    'space-between' => esc_html__('Space Between', 'lancedesk-elementor-menu'),
-                    'space-around'  => esc_html__('Space Around', 'lancedesk-elementor-menu'),
+                    'flex-start'    => esc_html__('Start', 'lancedesk-responsive-menu-for-elementor'),
+                    'center'        => esc_html__('Center', 'lancedesk-responsive-menu-for-elementor'),
+                    'flex-end'      => esc_html__('End', 'lancedesk-responsive-menu-for-elementor'),
+                    'space-between' => esc_html__('Space Between', 'lancedesk-responsive-menu-for-elementor'),
+                    'space-around'  => esc_html__('Space Around', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'flex-start',
                 'selectors' => [
@@ -734,7 +734,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'heading_tablet_layout',
             [
-                'label'     => esc_html__('Tablet Layout (768-1024px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Tablet Layout (768-1024px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'conditions' => [
@@ -759,7 +759,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'tablet_layout_offcanvas_notice',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Tablet off-canvas is enabled. Tablet responsive layout controls are disabled here; configure Tablet Off-Canvas settings in the Off-Canvas sections below.', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Tablet off-canvas is enabled. Tablet responsive layout controls are disabled here; configure Tablet Off-Canvas settings in the Off-Canvas sections below.', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'conditions'      => [
                     'relation' => 'and',
@@ -782,19 +782,19 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'tablet_layout',
             [
-                'label'   => esc_html__('Layout Mode', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Layout Mode', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::CHOOSE,
                 'options' => [
                     'horizontal' => [
-                        'title' => esc_html__('Horizontal', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Horizontal', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-h-align-stretch',
                     ],
                     'vertical'   => [
-                        'title' => esc_html__('Vertical', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Vertical', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-v-align-stretch',
                     ],
                     'grid'       => [
-                        'title' => esc_html__('Grid', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Grid', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-table',
                     ],
                 ],
@@ -821,7 +821,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'heading_mobile_layout',
             [
-                'label'     => esc_html__('Mobile Layout (<768px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Mobile Layout (<768px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'conditions' => [
@@ -846,7 +846,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             'mobile_layout_offcanvas_notice',
             [
                 'type'            => Controls_Manager::RAW_HTML,
-                'raw'             => esc_html__('Mobile off-canvas is enabled. Mobile responsive layout controls are disabled here; configure Mobile Off-Canvas settings in the Off-Canvas sections below.', 'lancedesk-elementor-menu'),
+                'raw'             => esc_html__('Mobile off-canvas is enabled. Mobile responsive layout controls are disabled here; configure Mobile Off-Canvas settings in the Off-Canvas sections below.', 'lancedesk-responsive-menu-for-elementor'),
                 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
                 'conditions'      => [
                     'relation' => 'and',
@@ -869,24 +869,24 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'mobile_layout',
             [
-                'label'   => esc_html__('Layout Mode', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Layout Mode', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::CHOOSE,
                 'options' => [
                     'vertical'   => [
-                        'title' => esc_html__('Vertical', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Vertical', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-v-align-stretch',
                     ],
                     'horizontal' => [
-                        'title' => esc_html__('Horizontal', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Horizontal', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-h-align-stretch',
                     ],
                     'grid'       => [
-                        'title' => esc_html__('Grid', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Grid', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-table',
                     ],
                 ],
                 'default' => 'vertical',
-                'description' => esc_html__('Note: Vertical layout is recommended for mobile', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Note: Vertical layout is recommended for mobile', 'lancedesk-responsive-menu-for-elementor'),
                 'conditions' => [
                     'relation' => 'or',
                     'terms'    => [
@@ -909,10 +909,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'mobile_hamburger_toggle',
             [
-                'label'   => esc_html__('Show Hamburger Menu', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Show Hamburger Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SWITCHER,
-                'label_on'  => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off' => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'  => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off' => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'default' => 'yes',
                 'conditions' => [
                     'relation' => 'and',
@@ -946,19 +946,19 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'mobile_hamburger_position',
             [
-                'label'   => esc_html__('Hamburger Position', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Hamburger Position', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::CHOOSE,
                 'options' => [
                     'left'  => [
-                        'title' => esc_html__('Left', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Left', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-h-align-left',
                     ],
                     'center' => [
-                        'title' => esc_html__('Center', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Center', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-h-align-center',
                     ],
                     'right' => [
-                        'title' => esc_html__('Right', 'lancedesk-elementor-menu'),
+                        'title' => esc_html__('Right', 'lancedesk-responsive-menu-for-elementor'),
                         'icon'  => 'eicon-h-align-right',
                     ],
                 ],
@@ -1004,7 +1004,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'heading_vertical_layout_style',
             [
-                'label'     => esc_html__('Vertical Layout Styling', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Vertical Layout Styling', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -1013,12 +1013,12 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'vertical_item_alignment',
             [
-                'label'   => esc_html__('Vertical Item Alignment', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Vertical Item Alignment', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'flex-start' => esc_html__('Left', 'lancedesk-elementor-menu'),
-                    'center'     => esc_html__('Center', 'lancedesk-elementor-menu'),
-                    'flex-end'   => esc_html__('Right', 'lancedesk-elementor-menu'),
+                    'flex-start' => esc_html__('Left', 'lancedesk-responsive-menu-for-elementor'),
+                    'center'     => esc_html__('Center', 'lancedesk-responsive-menu-for-elementor'),
+                    'flex-end'   => esc_html__('Right', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'flex-start',
                 'selectors' => [
@@ -1030,7 +1030,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'vertical_item_padding',
             [
-                'label'      => esc_html__('Vertical Item Padding', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Vertical Item Padding', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px'],
                 'selectors'  => [
@@ -1042,7 +1042,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'vertical_item_margin',
             [
-                'label'      => esc_html__('Vertical Item Margin', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Vertical Item Margin', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px'],
                 'selectors'  => [
@@ -1054,7 +1054,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'vertical_separator_heading',
             [
-                'label'     => esc_html__('Vertical Separators', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Vertical Separators', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -1063,11 +1063,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'vertical_separator_enabled',
             [
-                'label'   => esc_html__('Show Separators', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Show Separators', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'yes' => esc_html__('Show', 'lancedesk-elementor-menu'),
-                    'no'  => esc_html__('Hide', 'lancedesk-elementor-menu'),
+                    'yes' => esc_html__('Show', 'lancedesk-responsive-menu-for-elementor'),
+                    'no'  => esc_html__('Hide', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'yes',
                 'selectors' => [
@@ -1083,7 +1083,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'vertical_separator_width',
             [
-                'label'      => esc_html__('Separator Width', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Separator Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1108,7 +1108,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'vertical_separator_color',
             [
-                'label'     => esc_html__('Separator Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Separator Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#e0e0e0',
                 'selectors' => [
@@ -1132,7 +1132,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_style_menu_items',
             [
-                'label' => esc_html__('Menu Items', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Menu Items', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -1142,7 +1142,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             Group_Control_Typography::get_type(),
             [
                 'name'     => 'menu_item_typography',
-                'label'    => esc_html__('Typography', 'lancedesk-elementor-menu'),
+                'label'    => esc_html__('Typography', 'lancedesk-responsive-menu-for-elementor'),
                 'selector' => '{{WRAPPER}} .ldjem-menu-item a',
             ]
         );
@@ -1151,7 +1151,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_color_normal',
             [
-                'label'     => esc_html__('Text Color (Normal)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Text Color (Normal)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#333333',
                 'selectors' => [
@@ -1163,7 +1163,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_color_hover',
             [
-                'label'     => esc_html__('Text Color (Hover)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Text Color (Hover)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#0073aa',
                 'selectors' => [
@@ -1175,7 +1175,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_color_active',
             [
-                'label'     => esc_html__('Text Color (Active)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Text Color (Active)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#0073aa',
                 'selectors' => [
@@ -1187,7 +1187,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_underline_heading',
             [
-                'label'     => esc_html__('Underline', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Underline', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -1196,11 +1196,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_underline_hover',
             [
-                'label'   => esc_html__('Hover Underline', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Hover Underline', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'none'      => esc_html__('None', 'lancedesk-elementor-menu'),
-                    'underline' => esc_html__('Underline', 'lancedesk-elementor-menu'),
+                    'none'      => esc_html__('None', 'lancedesk-responsive-menu-for-elementor'),
+                    'underline' => esc_html__('Underline', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'none',
                 'selectors' => [
@@ -1212,11 +1212,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_underline_active',
             [
-                'label'   => esc_html__('Active Underline', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Active Underline', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'none'      => esc_html__('None', 'lancedesk-elementor-menu'),
-                    'underline' => esc_html__('Underline', 'lancedesk-elementor-menu'),
+                    'none'      => esc_html__('None', 'lancedesk-responsive-menu-for-elementor'),
+                    'underline' => esc_html__('Underline', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'none',
                 'selectors' => [
@@ -1228,7 +1228,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_underline_color',
             [
-                'label'     => esc_html__('Underline Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Underline Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-menu-item > a:hover, {{WRAPPER}} .ldjem-menu-item.current-menu-item > a, {{WRAPPER}} .ldjem-menu-item.current-menu-ancestor > a' => 'text-decoration-color: {{VALUE}};',
@@ -1239,7 +1239,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'menu_item_underline_thickness',
             [
-                'label'      => esc_html__('Underline Thickness', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Underline Thickness', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1257,7 +1257,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'menu_item_underline_offset',
             [
-                'label'      => esc_html__('Underline Offset', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Underline Offset', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1276,7 +1276,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_padding',
             [
-                'label'      => esc_html__('Padding', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Padding', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'default'    => [
@@ -1294,7 +1294,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'menu_item_margin',
             [
-                'label'      => esc_html__('Margin', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Margin', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
@@ -1308,7 +1308,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             Group_Control_Border::get_type(),
             [
                 'name'     => 'menu_item_border',
-                'label'    => esc_html__('Border', 'lancedesk-elementor-menu'),
+                'label'    => esc_html__('Border', 'lancedesk-responsive-menu-for-elementor'),
                 'selector' => '{{WRAPPER}} .ldjem-menu-item a',
             ]
         );
@@ -1325,7 +1325,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_style_submenus',
             [
-                'label' => esc_html__('Submenus', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Submenus', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -1334,7 +1334,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_animation',
             [
-                'label'   => esc_html__('Animation', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Animation', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => LDJEM_Helpers::get_animation_options(),
                 'default' => 'fade',
@@ -1344,7 +1344,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_animation_duration',
             [
-                'label'      => esc_html__('Animation Duration (ms)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Animation Duration (ms)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::NUMBER,
                 'min'        => 100,
                 'max'        => 1000,
@@ -1360,7 +1360,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_trigger',
             [
-                'label'   => esc_html__('Trigger on Desktop', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Trigger on Desktop', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => LDJEM_Helpers::get_submenu_trigger_options(),
                 'default' => 'hover',
@@ -1370,7 +1370,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_indicator_icon',
             [
-                'label'   => esc_html__('Submenu Toggle Icon', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Submenu Toggle Icon', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::ICONS,
                 'default' => [
                     'value'   => 'fas fa-chevron-down',
@@ -1382,7 +1382,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'submenu_indicator_spacing',
             [
-                'label'      => esc_html__('Toggle Icon Spacing', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Toggle Icon Spacing', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1405,7 +1405,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_background',
             [
-                'label'     => esc_html__('Background Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Background Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#ffffff',
                 'selectors' => [
@@ -1417,7 +1417,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_text_color',
             [
-                'label'     => esc_html__('Text Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Text Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#333333',
                 'selectors' => [
@@ -1429,7 +1429,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_border_radius',
             [
-                'label'      => esc_html__('Border Radius', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Border Radius', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1451,7 +1451,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'submenu_panel_padding',
             [
-                'label'      => esc_html__('Submenu Panel Padding', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Submenu Panel Padding', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em', 'rem'],
                 'selectors'  => [
@@ -1463,7 +1463,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'submenu_item_padding',
             [
-                'label'      => esc_html__('Submenu Item Padding', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Submenu Item Padding', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em', 'rem'],
                 'selectors'  => [
@@ -1476,7 +1476,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             Group_Control_Border::get_type(),
             [
                 'name'     => 'submenu_border',
-                'label'    => esc_html__('Submenu Border', 'lancedesk-elementor-menu'),
+                'label'    => esc_html__('Submenu Border', 'lancedesk-responsive-menu-for-elementor'),
                 'selector' => '{{WRAPPER}} .ldjem-submenu',
             ]
         );
@@ -1485,7 +1485,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             Group_Control_Box_Shadow::get_type(),
             [
                 'name'     => 'submenu_box_shadow',
-                'label'    => esc_html__('Dropdown Box Shadow', 'lancedesk-elementor-menu'),
+                'label'    => esc_html__('Dropdown Box Shadow', 'lancedesk-responsive-menu-for-elementor'),
                 'selector' => '{{WRAPPER}} .ldjem-submenu',
             ]
         );
@@ -1493,7 +1493,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_vertical_border_heading',
             [
-                'label'     => esc_html__('Vertical Layout Nested Border', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Vertical Layout Nested Border', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -1502,11 +1502,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_vertical_left_border_enabled',
             [
-                'label'        => esc_html__('Show Left Border', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Left Border', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SELECT,
                 'options'      => [
-                    'yes' => esc_html__('Show', 'lancedesk-elementor-menu'),
-                    'no'  => esc_html__('Hide', 'lancedesk-elementor-menu'),
+                    'yes' => esc_html__('Show', 'lancedesk-responsive-menu-for-elementor'),
+                    'no'  => esc_html__('Hide', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default'      => 'yes',
                 'selectors'    => [
@@ -1522,7 +1522,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'submenu_vertical_left_border_width',
             [
-                'label'      => esc_html__('Left Border Width', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Left Border Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1547,7 +1547,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'submenu_vertical_left_border_color',
             [
-                'label'     => esc_html__('Left Border Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Left Border Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#e0e0e0',
                 'selectors' => [
@@ -1571,7 +1571,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_style_mobile_menu',
             [
-                'label' => esc_html__('Mobile Menu', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Mobile Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -1580,7 +1580,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_icon_size',
             [
-                'label'      => esc_html__('Hamburger Icon Size', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Hamburger Icon Size', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1602,7 +1602,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_icon_color',
             [
-                'label'     => esc_html__('Hamburger Icon Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Hamburger Icon Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#333333',
                 'selectors' => [
@@ -1615,7 +1615,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_icon',
             [
-                'label'   => esc_html__('Toggle Icon', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Toggle Icon', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::ICONS,
                 'default' => [
                     'value'   => 'fas fa-bars',
@@ -1627,7 +1627,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_icon_hover_color',
             [
-                'label'     => esc_html__('Hamburger Icon Hover Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Hamburger Icon Hover Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-hamburger:hover, {{WRAPPER}} .ldjem-hamburger:hover i, {{WRAPPER}} .ldjem-hamburger:hover svg' => 'color: {{VALUE}};',
@@ -1639,7 +1639,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_icon_active_color',
             [
-                'label'     => esc_html__('Hamburger Icon Active Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Hamburger Icon Active Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-hamburger.is-open, {{WRAPPER}} .ldjem-hamburger.is-open i, {{WRAPPER}} .ldjem-hamburger.is-open svg' => 'color: {{VALUE}};',
@@ -1651,7 +1651,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_bg_color',
             [
-                'label'     => esc_html__('Hamburger Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Hamburger Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-hamburger' => 'background-color: {{VALUE}};',
@@ -1662,7 +1662,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_bg_hover_color',
             [
-                'label'     => esc_html__('Hamburger Hover Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Hamburger Hover Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-hamburger:hover' => 'background-color: {{VALUE}};',
@@ -1673,7 +1673,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_bg_active_color',
             [
-                'label'     => esc_html__('Hamburger Active Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Hamburger Active Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-hamburger.is-open' => 'background-color: {{VALUE}};',
@@ -1684,7 +1684,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_padding',
             [
-                'label'      => esc_html__('Hamburger Padding', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Hamburger Padding', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px'],
                 'selectors'  => [
@@ -1696,7 +1696,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'hamburger_border_radius',
             [
-                'label'      => esc_html__('Hamburger Border Radius', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Hamburger Border Radius', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1715,7 +1715,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             Group_Control_Border::get_type(),
             [
                 'name'     => 'hamburger_border',
-                'label'    => esc_html__('Hamburger Border', 'lancedesk-elementor-menu'),
+                'label'    => esc_html__('Hamburger Border', 'lancedesk-responsive-menu-for-elementor'),
                 'selector' => '{{WRAPPER}} .ldjem-hamburger',
             ]
         );
@@ -1724,7 +1724,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'mobile_menu_background',
             [
-                'label'     => esc_html__('Menu Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Menu Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#ffffff',
                 'selectors' => [
@@ -1745,7 +1745,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_offcanvas_menu',
             [
-                'label' => esc_html__('Off-Canvas Menu', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Off-Canvas Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -1753,10 +1753,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_enable',
             [
-                'label'        => esc_html__('Enable Off-Canvas Menu', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Enable Off-Canvas Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
             ]
@@ -1765,13 +1765,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_direction',
             [
-                'label'     => esc_html__('Slide Direction', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Slide Direction', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::SELECT,
                 'options'   => [
-                    'left'   => esc_html__('Left', 'lancedesk-elementor-menu'),
-                    'right'  => esc_html__('Right', 'lancedesk-elementor-menu'),
-                    'top'    => esc_html__('Top', 'lancedesk-elementor-menu'),
-                    'bottom' => esc_html__('Bottom', 'lancedesk-elementor-menu'),
+                    'left'   => esc_html__('Left', 'lancedesk-responsive-menu-for-elementor'),
+                    'right'  => esc_html__('Right', 'lancedesk-responsive-menu-for-elementor'),
+                    'top'    => esc_html__('Top', 'lancedesk-responsive-menu-for-elementor'),
+                    'bottom' => esc_html__('Bottom', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default'   => 'left',
                 'condition' => [
@@ -1783,7 +1783,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_animation_duration',
             [
-                'label'     => esc_html__('Animation Duration (ms)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Animation Duration (ms)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 200,
                 'max'       => 1000,
@@ -1798,13 +1798,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_animation_easing',
             [
-                'label'     => esc_html__('Animation Easing', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Animation Easing', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::SELECT,
                 'options'   => [
-                    'ease-in-out' => esc_html__('Ease In Out', 'lancedesk-elementor-menu'),
-                    'ease-in'     => esc_html__('Ease In', 'lancedesk-elementor-menu'),
-                    'ease-out'    => esc_html__('Ease Out', 'lancedesk-elementor-menu'),
-                    'linear'      => esc_html__('Linear', 'lancedesk-elementor-menu'),
+                    'ease-in-out' => esc_html__('Ease In Out', 'lancedesk-responsive-menu-for-elementor'),
+                    'ease-in'     => esc_html__('Ease In', 'lancedesk-responsive-menu-for-elementor'),
+                    'ease-out'    => esc_html__('Ease Out', 'lancedesk-responsive-menu-for-elementor'),
+                    'linear'      => esc_html__('Linear', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default'   => 'ease-in-out',
                 'condition' => [
@@ -1816,7 +1816,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_bg_color',
             [
-                'label'     => esc_html__('Panel Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Panel Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#ffffff',
                 'selectors' => [
@@ -1831,7 +1831,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_size',
             [
-                'label'      => esc_html__('Panel Width (Left/Right, px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Panel Width (Left/Right, px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1853,7 +1853,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_height',
             [
-                'label'      => esc_html__('Panel Height (Top/Bottom, px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Panel Height (Top/Bottom, px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1875,7 +1875,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'offcanvas_panel_offset_top',
             [
-                'label'      => esc_html__('Panel Top Offset', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Panel Top Offset', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -1896,7 +1896,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_z_index',
             [
-                'label'     => esc_html__('Panel Z-Index', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Panel Z-Index', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 100,
                 'max'       => 99999,
@@ -1911,10 +1911,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_show_header',
             [
-                'label'        => esc_html__('Show Header', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Header', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -1926,7 +1926,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_logo',
             [
-                'label'     => esc_html__('Logo Image', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Logo Image', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::MEDIA,
                 'condition' => [
                     'offcanvas_enable' => 'yes',
@@ -1938,9 +1938,9 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_logo_alt',
             [
-                'label'     => esc_html__('Logo Alt Text', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Logo Alt Text', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::TEXT,
-                'default'   => esc_html__('Logo', 'lancedesk-elementor-menu'),
+                'default'   => esc_html__('Logo', 'lancedesk-responsive-menu-for-elementor'),
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_header' => 'yes',
@@ -1951,7 +1951,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_logo_link',
             [
-                'label'     => esc_html__('Logo Link', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Logo Link', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::URL,
                 'condition' => [
                     'offcanvas_enable' => 'yes',
@@ -1963,7 +1963,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_header_text',
             [
-                'label'     => esc_html__('Header Text', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Header Text', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::TEXT,
                 'default'   => '',
                 'condition' => [
@@ -1976,10 +1976,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_show_header_text',
             [
-                'label'        => esc_html__('Show Header Text', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Header Text', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -1992,7 +1992,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_header_bg_color',
             [
-                'label'     => esc_html__('Header Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Header Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-bg: {{VALUE}};',
@@ -2008,7 +2008,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_header_text_color',
             [
-                'label'     => esc_html__('Header Text Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Header Text Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-logo-text' => 'color: {{VALUE}};',
@@ -2023,7 +2023,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_header_border_color',
             [
-                'label'     => esc_html__('Header Border Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Header Border Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-header-border-color: {{VALUE}};',
@@ -2039,11 +2039,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_header_separator_enabled',
             [
-                'label'   => esc_html__('Show Header Separator', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Show Header Separator', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'yes' => esc_html__('Show', 'lancedesk-elementor-menu'),
-                    'no'  => esc_html__('Hide', 'lancedesk-elementor-menu'),
+                    'yes' => esc_html__('Show', 'lancedesk-responsive-menu-for-elementor'),
+                    'no'  => esc_html__('Hide', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'yes',
                 'selectors' => [
@@ -2063,7 +2063,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_header_separator_width',
             [
-                'label'      => esc_html__('Header Separator Width', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Header Separator Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2091,7 +2091,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_logo_max_width',
             [
-                'label'      => esc_html__('Logo Max Width', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Logo Max Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2114,10 +2114,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_show_close_btn',
             [
-                'label'        => esc_html__('Show Close Button', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Close Button', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -2130,12 +2130,12 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_icon',
             [
-                'label'     => esc_html__('Close Icon', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Close Icon', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::SELECT,
                 'options'   => [
-                    'x'       => esc_html__('X', 'lancedesk-elementor-menu'),
-                    'arrow'   => esc_html__('Arrow', 'lancedesk-elementor-menu'),
-                    'chevron' => esc_html__('Chevron', 'lancedesk-elementor-menu'),
+                    'x'       => esc_html__('X', 'lancedesk-responsive-menu-for-elementor'),
+                    'arrow'   => esc_html__('Arrow', 'lancedesk-responsive-menu-for-elementor'),
+                    'chevron' => esc_html__('Chevron', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default'   => 'x',
                 'condition' => [
@@ -2148,7 +2148,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_color',
             [
-                'label'     => esc_html__('Close Button Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Close Button Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#333333',
                 'selectors' => [
@@ -2165,7 +2165,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_bg',
             [
-                'label'     => esc_html__('Close Button Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Close Button Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => 'transparent',
                 'selectors' => [
@@ -2182,7 +2182,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_size',
             [
-                'label'      => esc_html__('Close Button Size', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Close Button Size', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2205,7 +2205,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_icon_size',
             [
-                'label'      => esc_html__('Close Icon Size', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Close Icon Size', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2228,7 +2228,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_radius',
             [
-                'label'      => esc_html__('Close Button Border Radius', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Close Button Border Radius', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2251,7 +2251,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_border_width',
             [
-                'label'      => esc_html__('Close Button Border Width', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Close Button Border Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2274,7 +2274,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_border_color',
             [
-                'label'     => esc_html__('Close Button Border Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Close Button Border Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => 'transparent',
                 'selectors' => [
@@ -2291,7 +2291,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_offset_top',
             [
-                'label'     => esc_html__('Close Button Top Offset (px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Close Button Top Offset (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 0,
                 'max'       => 40,
@@ -2307,7 +2307,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_close_btn_offset_right',
             [
-                'label'     => esc_html__('Close Button Right Offset (px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Close Button Right Offset (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 0,
                 'max'       => 40,
@@ -2323,7 +2323,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_focus_outline_color',
             [
-                'label'     => esc_html__('Focus Outline Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Focus Outline Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#4A90E2',
                 'selectors' => [
@@ -2338,7 +2338,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_mobile_header_style_heading',
             [
-                'label'     => esc_html__('Mobile Header Overrides', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Mobile Header Overrides', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -2351,7 +2351,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'offcanvas_mobile_header_padding',
             [
-                'label'      => esc_html__('Header Padding (Mobile <=576px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Header Padding (Mobile <=576px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', 'rem'],
                 'selectors'  => [
@@ -2367,7 +2367,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_mobile_header_min_height',
             [
-                'label'      => esc_html__('Header Min Height (Mobile <=576px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Header Min Height (Mobile <=576px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2389,7 +2389,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_mobile_close_btn_size',
             [
-                'label'      => esc_html__('Close Button Size (Mobile <=576px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Close Button Size (Mobile <=576px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2411,7 +2411,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_mobile_close_icon_size',
             [
-                'label'      => esc_html__('Close Icon Size (Mobile <=576px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Close Icon Size (Mobile <=576px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2433,10 +2433,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_show_footer',
             [
-                'label'        => esc_html__('Show Social Footer', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Social Footer', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -2448,10 +2448,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_show_footer_title',
             [
-                'label'        => esc_html__('Show Footer Title', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Footer Title', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -2464,9 +2464,9 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_footer_title',
             [
-                'label'     => esc_html__('Footer Title', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Footer Title', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::TEXT,
-                'default'   => esc_html__('Follow Us', 'lancedesk-elementor-menu'),
+                'default'   => esc_html__('Follow Us', 'lancedesk-responsive-menu-for-elementor'),
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_show_footer' => 'yes',
@@ -2480,15 +2480,15 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $social_repeater->add_control(
             'social_platform',
             [
-                'label'   => esc_html__('Platform', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Platform', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'facebook'  => esc_html__('Facebook', 'lancedesk-elementor-menu'),
-                    'twitter'   => esc_html__('Twitter', 'lancedesk-elementor-menu'),
-                    'linkedin'  => esc_html__('LinkedIn', 'lancedesk-elementor-menu'),
-                    'instagram' => esc_html__('Instagram', 'lancedesk-elementor-menu'),
-                    'youtube'   => esc_html__('YouTube', 'lancedesk-elementor-menu'),
-                    'tiktok'    => esc_html__('TikTok', 'lancedesk-elementor-menu'),
+                    'facebook'  => esc_html__('Facebook', 'lancedesk-responsive-menu-for-elementor'),
+                    'twitter'   => esc_html__('Twitter', 'lancedesk-responsive-menu-for-elementor'),
+                    'linkedin'  => esc_html__('LinkedIn', 'lancedesk-responsive-menu-for-elementor'),
+                    'instagram' => esc_html__('Instagram', 'lancedesk-responsive-menu-for-elementor'),
+                    'youtube'   => esc_html__('YouTube', 'lancedesk-responsive-menu-for-elementor'),
+                    'tiktok'    => esc_html__('TikTok', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'facebook',
             ]
@@ -2497,7 +2497,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $social_repeater->add_control(
             'social_url',
             [
-                'label'       => esc_html__('URL', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('URL', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::URL,
                 'placeholder' => 'https://example.com',
             ]
@@ -2506,7 +2506,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_social_icons',
             [
-                'label'     => esc_html__('Social Media Links', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Social Media Links', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::REPEATER,
                 'fields'    => $social_repeater->get_controls(),
                 'default'   => [
@@ -2529,7 +2529,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_footer_bg_color',
             [
-                'label'     => esc_html__('Footer Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Footer Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-footer' => 'background-color: {{VALUE}};',
@@ -2544,7 +2544,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_footer_border_color',
             [
-                'label'     => esc_html__('Footer Border Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Footer Border Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-footer-border-color: {{VALUE}};',
@@ -2560,7 +2560,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_footer_title_color',
             [
-                'label'     => esc_html__('Footer Title Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Footer Title Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-footer-title' => 'color: {{VALUE}};',
@@ -2575,7 +2575,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_social_icon_size',
             [
-                'label'      => esc_html__('Social Icon Size', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Social Icon Size', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2598,7 +2598,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_social_icon_bg_color',
             [
-                'label'     => esc_html__('Social Icon Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Social Icon Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-social-link' => 'background-color: {{VALUE}};',
@@ -2613,7 +2613,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_social_icon_color',
             [
-                'label'     => esc_html__('Social Icon Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Social Icon Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-social-link' => 'color: {{VALUE}};',
@@ -2628,7 +2628,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_social_icon_hover_bg_color',
             [
-                'label'     => esc_html__('Social Icon Hover Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Social Icon Hover Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-social-link:hover' => 'background-color: {{VALUE}};',
@@ -2643,7 +2643,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_social_icon_hover_color',
             [
-                'label'     => esc_html__('Social Icon Hover Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Social Icon Hover Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-social-link:hover' => 'color: {{VALUE}};',
@@ -2658,7 +2658,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_links_heading',
             [
-                'label'     => esc_html__('Off-Canvas Menu Links', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Off-Canvas Menu Links', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -2681,7 +2681,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_link_color',
             [
-                'label'     => esc_html__('Link Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Link Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-menu-item > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a' => 'color: {{VALUE}};',
@@ -2695,7 +2695,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_link_hover_color',
             [
-                'label'     => esc_html__('Link Hover Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Link Hover Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-menu-item > a:hover, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a:hover' => 'color: {{VALUE}};',
@@ -2709,7 +2709,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_link_active_color',
             [
-                'label'     => esc_html__('Link Active Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Link Active Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-menu-item.is-active > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item.is-active > a' => 'color: {{VALUE}};',
@@ -2723,7 +2723,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_link_hover_bg',
             [
-                'label'     => esc_html__('Link Hover Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Link Hover Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-menu-item > a:hover, {{WRAPPER}} .ldjem-offcanvas-submenu-item > a:hover' => 'background-color: {{VALUE}};',
@@ -2737,7 +2737,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_link_active_bg',
             [
-                'label'     => esc_html__('Link Active Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Link Active Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-menu-item.is-active > a, {{WRAPPER}} .ldjem-offcanvas-submenu-item.is-active > a' => 'background-color: {{VALUE}};',
@@ -2751,7 +2751,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_nested_submenu_bg',
             [
-                'label'     => esc_html__('Nested Submenu Background', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Nested Submenu Background', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-nested-submenu-bg: {{VALUE}};',
@@ -2766,7 +2766,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'offcanvas_link_padding',
             [
-                'label'      => esc_html__('Link Padding', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Link Padding', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em', 'rem'],
                 'selectors'  => [
@@ -2781,7 +2781,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'offcanvas_item_margin',
             [
-                'label'      => esc_html__('Item Margin', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Item Margin', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em', 'rem'],
                 'selectors'  => [
@@ -2796,8 +2796,8 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'offcanvas_nav_top_spacing',
             [
-                'label'      => esc_html__('Header To Nav Spacing', 'lancedesk-elementor-menu'),
-                'description'=> esc_html__('Space between the off-canvas header (logo section) and the navigation list.', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Header To Nav Spacing', 'lancedesk-responsive-menu-for-elementor'),
+                'description'=> esc_html__('Space between the off-canvas header (logo section) and the navigation list.', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px', 'em', 'rem'],
                 'range'      => [
@@ -2818,7 +2818,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_separator_heading',
             [
-                'label'     => esc_html__('Item Separators', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Item Separators', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -2830,11 +2830,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_separator_enabled',
             [
-                'label'   => esc_html__('Show Separators', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Show Separators', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    'yes' => esc_html__('Show', 'lancedesk-elementor-menu'),
-                    'no'  => esc_html__('Hide', 'lancedesk-elementor-menu'),
+                    'yes' => esc_html__('Show', 'lancedesk-responsive-menu-for-elementor'),
+                    'no'  => esc_html__('Hide', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => 'yes',
                 'selectors' => [
@@ -2853,7 +2853,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_responsive_control(
             'offcanvas_separator_width',
             [
-                'label'      => esc_html__('Separator Width', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Separator Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -2879,7 +2879,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_separator_color',
             [
-                'label'     => esc_html__('Separator Color', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Separator Color', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#f0f0f0',
                 'selectors' => [
@@ -2904,12 +2904,12 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_offcanvas_presets',
             [
-                'label' => esc_html__('Off-Canvas Presets', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Off-Canvas Presets', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
 
-        $preset_options = ['none' => esc_html__('Custom (No Preset)', 'lancedesk-elementor-menu')];
+        $preset_options = ['none' => esc_html__('Custom (No Preset)', 'lancedesk-responsive-menu-for-elementor')];
         if (class_exists('LDJEM_Presets')) {
             $preset_options = LDJEM_Presets::get_preset_labels();
         }
@@ -2917,11 +2917,11 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_preset',
             [
-                'label'       => esc_html__('Preset', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Preset', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::SELECT,
                 'options'     => $preset_options,
                 'default'     => 'none',
-                'description' => esc_html__('Choose a starting preset, then customize controls below.', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Choose a starting preset, then customize controls below.', 'lancedesk-responsive-menu-for-elementor'),
                 'condition'   => [
                     'offcanvas_enable' => 'yes',
                 ],
@@ -2931,13 +2931,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_preset_auto_apply',
             [
-                'label'        => esc_html__('Auto-Apply Preset Updates', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Auto-Apply Preset Updates', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
-                'description'  => esc_html__('When enabled, selecting a preset will overwrite mapped off-canvas controls.', 'lancedesk-elementor-menu'),
+                'description'  => esc_html__('When enabled, selecting a preset will overwrite mapped off-canvas controls.', 'lancedesk-responsive-menu-for-elementor'),
                 'condition'    => [
                     'offcanvas_enable' => 'yes',
                     'offcanvas_preset!' => 'none',
@@ -2957,7 +2957,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_breakpoint_behavior',
             [
-                'label' => esc_html__('Off-Canvas by Device', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Off-Canvas by Device', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -2965,10 +2965,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_on_desktop',
             [
-                'label'        => esc_html__('Enable on Desktop', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Enable on Desktop', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'no',
                 'condition'    => [
@@ -2980,10 +2980,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_on_tablet',
             [
-                'label'        => esc_html__('Enable on Tablet', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Enable on Tablet', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -2995,10 +2995,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_on_mobile',
             [
-                'label'        => esc_html__('Enable on Mobile', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Enable on Mobile', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => 'yes',
                 'condition'    => [
@@ -3008,17 +3008,17 @@ class LDJEM_Menu_Widget extends Widget_Base {
         );
 
         $direction_options = [
-            'inherit' => esc_html__('Inherit Global Direction', 'lancedesk-elementor-menu'),
-            'left'    => esc_html__('Left', 'lancedesk-elementor-menu'),
-            'right'   => esc_html__('Right', 'lancedesk-elementor-menu'),
-            'top'     => esc_html__('Top', 'lancedesk-elementor-menu'),
-            'bottom'  => esc_html__('Bottom', 'lancedesk-elementor-menu'),
+            'inherit' => esc_html__('Inherit Global Direction', 'lancedesk-responsive-menu-for-elementor'),
+            'left'    => esc_html__('Left', 'lancedesk-responsive-menu-for-elementor'),
+            'right'   => esc_html__('Right', 'lancedesk-responsive-menu-for-elementor'),
+            'top'     => esc_html__('Top', 'lancedesk-responsive-menu-for-elementor'),
+            'bottom'  => esc_html__('Bottom', 'lancedesk-responsive-menu-for-elementor'),
         ];
 
         $this->add_control(
             'offcanvas_device_heading_desktop',
             [
-                'label'     => esc_html__('Desktop Overrides (>1024px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Desktop Overrides (>1024px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -3030,7 +3030,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_direction_desktop',
             [
-                'label'     => esc_html__('Desktop Direction', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Desktop Direction', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::SELECT,
                 'options'   => $direction_options,
                 'default'   => 'inherit',
@@ -3043,13 +3043,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_animation_duration_desktop',
             [
-                'label'     => esc_html__('Desktop Animation Duration (ms)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Desktop Animation Duration (ms)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 200,
                 'max'       => 1000,
                 'step'      => 50,
                 'default'   => 0,
-                'description' => esc_html__('Set 0 to inherit global animation duration.', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Set 0 to inherit global animation duration.', 'lancedesk-responsive-menu-for-elementor'),
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                 ],
@@ -3059,7 +3059,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_size_desktop',
             [
-                'label'      => esc_html__('Desktop Panel Width (px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Desktop Panel Width (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -3077,7 +3077,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_height_desktop',
             [
-                'label'      => esc_html__('Desktop Panel Height (px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Desktop Panel Height (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -3095,7 +3095,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_device_heading_tablet',
             [
-                'label'     => esc_html__('Tablet Overrides (768-1024px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Tablet Overrides (768-1024px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -3107,7 +3107,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_direction_tablet',
             [
-                'label'     => esc_html__('Tablet Direction', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Tablet Direction', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::SELECT,
                 'options'   => $direction_options,
                 'default'   => 'inherit',
@@ -3120,13 +3120,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_animation_duration_tablet',
             [
-                'label'     => esc_html__('Tablet Animation Duration (ms)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Tablet Animation Duration (ms)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 200,
                 'max'       => 1000,
                 'step'      => 50,
                 'default'   => 0,
-                'description' => esc_html__('Set 0 to inherit global animation duration.', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Set 0 to inherit global animation duration.', 'lancedesk-responsive-menu-for-elementor'),
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                 ],
@@ -3136,7 +3136,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_size_tablet',
             [
-                'label'      => esc_html__('Tablet Panel Width (px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Tablet Panel Width (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -3154,7 +3154,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_height_tablet',
             [
-                'label'      => esc_html__('Tablet Panel Height (px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Tablet Panel Height (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -3172,7 +3172,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_device_heading_mobile',
             [
-                'label'     => esc_html__('Mobile Overrides (<768px)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Mobile Overrides (<768px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -3184,7 +3184,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_direction_mobile',
             [
-                'label'     => esc_html__('Mobile Direction', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Mobile Direction', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::SELECT,
                 'options'   => $direction_options,
                 'default'   => 'inherit',
@@ -3197,13 +3197,13 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_animation_duration_mobile',
             [
-                'label'     => esc_html__('Mobile Animation Duration (ms)', 'lancedesk-elementor-menu'),
+                'label'     => esc_html__('Mobile Animation Duration (ms)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'      => Controls_Manager::NUMBER,
                 'min'       => 200,
                 'max'       => 1000,
                 'step'      => 50,
                 'default'   => 0,
-                'description' => esc_html__('Set 0 to inherit global animation duration.', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Set 0 to inherit global animation duration.', 'lancedesk-responsive-menu-for-elementor'),
                 'condition' => [
                     'offcanvas_enable' => 'yes',
                 ],
@@ -3213,7 +3213,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_size_mobile',
             [
-                'label'      => esc_html__('Mobile Panel Width (px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Mobile Panel Width (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -3231,7 +3231,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'offcanvas_panel_height_mobile',
             [
-                'label'      => esc_html__('Mobile Panel Height (px)', 'lancedesk-elementor-menu'),
+                'label'      => esc_html__('Mobile Panel Height (px)', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range'      => [
@@ -3258,7 +3258,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->start_controls_section(
             'section_advanced',
             [
-                'label' => esc_html__('Advanced', 'lancedesk-elementor-menu'),
+                'label' => esc_html__('Advanced', 'lancedesk-responsive-menu-for-elementor'),
                 'tab'   => Controls_Manager::TAB_ADVANCED,
             ]
         );
@@ -3267,9 +3267,9 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'custom_css_class',
             [
-                'label'       => esc_html__('Custom CSS Class', 'lancedesk-elementor-menu'),
+                'label'       => esc_html__('Custom CSS Class', 'lancedesk-responsive-menu-for-elementor'),
                 'type'        => Controls_Manager::TEXT,
-                'description' => esc_html__('Add custom CSS classes (space-separated)', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Add custom CSS classes (space-separated)', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
@@ -3277,12 +3277,12 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'link_target',
             [
-                'label'   => esc_html__('Link Target', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Link Target', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
-                    ''       => esc_html__('Default', 'lancedesk-elementor-menu'),
-                    '_blank' => esc_html__('New Window/Tab', 'lancedesk-elementor-menu'),
-                    '_self'  => esc_html__('Same Window', 'lancedesk-elementor-menu'),
+                    ''       => esc_html__('Default', 'lancedesk-responsive-menu-for-elementor'),
+                    '_blank' => esc_html__('New Window/Tab', 'lancedesk-responsive-menu-for-elementor'),
+                    '_self'  => esc_html__('Same Window', 'lancedesk-responsive-menu-for-elementor'),
                 ],
                 'default' => '',
             ]
@@ -3292,12 +3292,12 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'mark_active_item',
             [
-                'label'   => esc_html__('Mark Active Menu Item', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Mark Active Menu Item', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SWITCHER,
-                'label_on'  => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off' => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'  => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off' => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'default' => 'yes',
-                'description' => esc_html__('Highlight current page menu item', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Highlight current page menu item', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
@@ -3305,25 +3305,25 @@ class LDJEM_Menu_Widget extends Widget_Base {
         $this->add_control(
             'enable_accessibility',
             [
-                'label'   => esc_html__('Enable Accessibility Features', 'lancedesk-elementor-menu'),
+                'label'   => esc_html__('Enable Accessibility Features', 'lancedesk-responsive-menu-for-elementor'),
                 'type'    => Controls_Manager::SWITCHER,
-                'label_on'  => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off' => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'  => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off' => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'default' => 'yes',
-                'description' => esc_html__('Include ARIA attributes and keyboard navigation', 'lancedesk-elementor-menu'),
+                'description' => esc_html__('Include ARIA attributes and keyboard navigation', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
         $this->add_control(
             'enable_debug_output',
             [
-                'label'        => esc_html__('Show Debug Output', 'lancedesk-elementor-menu'),
+                'label'        => esc_html__('Show Debug Output', 'lancedesk-responsive-menu-for-elementor'),
                 'type'         => Controls_Manager::SWITCHER,
-                'label_on'     => esc_html__('Yes', 'lancedesk-elementor-menu'),
-                'label_off'    => esc_html__('No', 'lancedesk-elementor-menu'),
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
                 'return_value' => 'yes',
                 'default'      => '',
-                'description'  => esc_html__('When enabled, prints layout and off-canvas diagnostics under this widget in Elementor editor/preview.', 'lancedesk-elementor-menu'),
+                'description'  => esc_html__('When enabled, prints layout and off-canvas diagnostics under this widget in Elementor editor/preview.', 'lancedesk-responsive-menu-for-elementor'),
             ]
         );
 
@@ -3352,8 +3352,8 @@ class LDJEM_Menu_Widget extends Widget_Base {
         if (empty($menu_items_map)) {
             if (current_user_can('edit_posts')) {
                 echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">';
-                echo '<strong>' . esc_html__('Menu Not Selected', 'lancedesk-elementor-menu') . '</strong>';
-                echo '<p>' . esc_html__('Please select at least one valid menu in widget settings.', 'lancedesk-elementor-menu') . '</p>';
+                echo '<strong>' . esc_html__('Menu Not Selected', 'lancedesk-responsive-menu-for-elementor') . '</strong>';
+                echo '<p>' . esc_html__('Please select at least one valid menu in widget settings.', 'lancedesk-responsive-menu-for-elementor') . '</p>';
                 echo '</div>';
             }
             return;
@@ -3364,8 +3364,8 @@ class LDJEM_Menu_Widget extends Widget_Base {
         if (empty($menu_items)) {
             if (current_user_can('edit_posts')) {
                 echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">';
-                echo '<strong>' . esc_html__('Menu is Empty', 'lancedesk-elementor-menu') . '</strong>';
-                echo '<p>' . esc_html__('All selected menus are empty for the current depth/start-level settings.', 'lancedesk-elementor-menu') . '</p>';
+                echo '<strong>' . esc_html__('Menu is Empty', 'lancedesk-responsive-menu-for-elementor') . '</strong>';
+                echo '<p>' . esc_html__('All selected menus are empty for the current depth/start-level settings.', 'lancedesk-responsive-menu-for-elementor') . '</p>';
                 echo '</div>';
             }
             return;
@@ -3407,7 +3407,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             '<%1$s class="%2$s" role="navigation" aria-label="%3$s" data-ldjem-id="%4$s" data-submenu-trigger="%5$s" data-submenu-accordion="%6$s" data-desktop-layout="%7$s" data-tablet-layout="%8$s" data-mobile-layout="%9$s" data-offcanvas-enabled="%10$s" data-offcanvas-desktop="%11$s" data-offcanvas-tablet="%12$s" data-offcanvas-mobile="%13$s" data-menu-id-desktop="%14$d" data-menu-id-tablet="%15$d" data-menu-id-mobile="%16$d">',
             tag_escape($container_tag),
             esc_attr(implode(' ', array_filter($container_classes))),
-            esc_attr__('Main Menu', 'lancedesk-elementor-menu'),
+            esc_attr__('Main Menu', 'lancedesk-responsive-menu-for-elementor'),
             esc_attr($widget_id),
             esc_attr($submenu_trigger),
             esc_attr($submenu_accordion),
@@ -3432,7 +3432,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         // Render menu items
         printf(
             '<ul class="ldjem-menu ldjem-menu-root">%s</ul>',
-            $this->render_menu_items($menu_items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            wp_kses_post($this->render_menu_items($menu_items, 0, $settings))
         );
         $this->render_standard_menu_templates($menu_sets['standard'], $menu_items_map, $settings);
 
@@ -3585,7 +3585,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 '<ul class="ldjem-menu-template ldjem-menu-template-%1$s" data-ldjem-menu-variant="standard-%1$s" data-menu-id="%2$d">%3$s</ul>',
                 esc_attr($device),
                 intval($menu_id),
-                $this->render_menu_items($items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                wp_kses_post($this->render_menu_items($items, 0, $settings))
             );
         }
         echo '</div>';
@@ -3638,10 +3638,9 @@ class LDJEM_Menu_Widget extends Widget_Base {
         echo '</pre>';
         echo '<button type="button" class="ldjem-debug-copy-btn" data-ldjem-debug-copy="' . esc_attr($widget_id) . '" style="margin-top:8px;padding:6px 10px;border:1px solid #2b7ec9;border-radius:4px;background:#14324a;color:#9bd6ff;font-size:12px;cursor:pointer;">Copy Debug Log</button>';
         echo '<div class="ldjem-debug-runtime" data-ldjem-debug-runtime="' . esc_attr($widget_id) . '" style="margin-top:6px;padding:8px 10px;background:#1a1a1a;color:#7fd3ff;font-size:12px;line-height:1.35;border-radius:4px;"></div>';
-        ?>
-        <script>
+        $debug_script = <<<'JS'
         (function () {
-            var widgetId = <?php echo wp_json_encode($widget_id); ?>;
+            var widgetId = __WIDGET_ID__;
             var runtimeEl = document.querySelector('[data-ldjem-debug-runtime="' + widgetId + '"]');
             var debugEl = document.querySelector('[data-ldjem-debug-widget="' + widgetId + '"]');
             var copyBtn = document.querySelector('[data-ldjem-debug-copy="' + widgetId + '"]');
@@ -3836,8 +3835,10 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 observer.observe(topDoc.body, { attributes: true, attributeFilter: ['class'] });
             }
         })();
-        </script>
-        <?php
+JS;
+
+        $debug_script = str_replace('__WIDGET_ID__', wp_json_encode($widget_id), $debug_script);
+        wp_add_inline_script(LDJEM_PREFIX . '-frontend', $debug_script);
     }
 
     /**
@@ -3948,7 +3949,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             '<div class="ldjem-offcanvas-wrapper direction-%1$s" data-ldjem-id="%2$s" role="dialog" aria-modal="true" aria-hidden="true" aria-label="%3$s" style="--ldjem-offcanvas-animation-speed: %4$dms; --ldjem-offcanvas-easing: %5$s; --ldjem-offcanvas-z-index: %6$d; --ldjem-offcanvas-panel-size: %7$dpx; --ldjem-offcanvas-panel-height: %8$dpx; --ldjem-close-btn-size: %9$dpx; --ldjem-close-icon-size: %10$dpx; --ldjem-close-btn-radius: %11$dpx; --ldjem-close-btn-offset-top: %12$dpx; --ldjem-close-btn-offset-right: %13$dpx; --ldjem-close-btn-border-width: %14$dpx;">',
             esc_attr($direction),
             esc_attr($widget_id),
-            esc_attr__('Main Menu', 'lancedesk-elementor-menu'),
+            esc_attr__('Main Menu', 'lancedesk-responsive-menu-for-elementor'),
             intval($animation_duration),
             esc_attr($animation_easing),
             intval($z_index),
@@ -3969,7 +3970,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
         }
 
         echo '<div class="ldjem-offcanvas-menu-container">';
-        echo '<ul class="ldjem-offcanvas-menu">' . $this->render_offcanvas_menu_items($menu_items, 0, $settings) . '</ul>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<ul class="ldjem-offcanvas-menu">' . wp_kses_post($this->render_offcanvas_menu_items($menu_items, 0, $settings)) . '</ul>';
         echo '<div class="ldjem-offcanvas-device-templates" hidden aria-hidden="true">';
         foreach (['desktop', 'tablet', 'mobile'] as $device) {
             $menu_id = !empty($offcanvas_menu_ids[$device]) ? intval($offcanvas_menu_ids[$device]) : 0;
@@ -3978,7 +3979,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 '<ul class="ldjem-offcanvas-menu-template ldjem-offcanvas-menu-template-%1$s" data-ldjem-menu-variant="offcanvas-%1$s" data-menu-id="%2$d">%3$s</ul>',
                 esc_attr($device),
                 intval($menu_id),
-                $this->render_offcanvas_menu_items($items, 0, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                wp_kses_post($this->render_offcanvas_menu_items($items, 0, $settings))
             );
         }
         echo '</div>';
@@ -4029,7 +4030,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
     private function render_offcanvas_header($settings) {
         $logo = !empty($settings['offcanvas_logo']) ? $settings['offcanvas_logo'] : [];
         $header_text = !empty($settings['offcanvas_header_text']) ? $settings['offcanvas_header_text'] : '';
-        $logo_alt = !empty($settings['offcanvas_logo_alt']) ? $settings['offcanvas_logo_alt'] : esc_html__('Logo', 'lancedesk-elementor-menu');
+        $logo_alt = !empty($settings['offcanvas_logo_alt']) ? $settings['offcanvas_logo_alt'] : esc_html__('Logo', 'lancedesk-responsive-menu-for-elementor');
 
         echo '<div class="ldjem-offcanvas-logo">';
 
@@ -4066,7 +4067,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             printf(
                 '<button class="ldjem-offcanvas-close icon-%1$s" type="button" aria-label="%2$s"></button>',
                 esc_attr($icon),
-                esc_attr__('Close menu', 'lancedesk-elementor-menu')
+                esc_attr__('Close menu', 'lancedesk-responsive-menu-for-elementor')
             );
         }
     }
@@ -4161,7 +4162,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 $html .= sprintf(
                     '<ul class="ldjem-offcanvas-submenu ldjem-offcanvas-submenu-level-%1$d">%2$s</ul>',
                     intval($level + 1),
-                    $this->render_offcanvas_menu_items($item->children, $level + 1, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    wp_kses_post($this->render_offcanvas_menu_items($item->children, $level + 1, $settings))
                 );
             }
 
@@ -4208,7 +4209,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
             $button_classes .= ' has-custom-icon';
         }
 
-        echo '<button class="' . esc_attr($button_classes) . '" type="button" aria-label="' . esc_attr__('Toggle Menu', 'lancedesk-elementor-menu') . '" aria-expanded="false">';
+        echo '<button class="' . esc_attr($button_classes) . '" type="button" aria-label="' . esc_attr__('Toggle Menu', 'lancedesk-responsive-menu-for-elementor') . '" aria-expanded="false">';
         if ($has_custom_icon) {
             Icons_Manager::render_icon($settings['hamburger_icon'], ['aria-hidden' => 'true']);
         }
@@ -4263,7 +4264,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
 
             // Render submenu if has children
             if (!empty($item->children)) {
-                $html .= '<button class="ldjem-submenu-toggle" type="button" aria-label="' . esc_attr__('Toggle submenu', 'lancedesk-elementor-menu') . '" aria-expanded="false">';
+                $html .= '<button class="ldjem-submenu-toggle" type="button" aria-label="' . esc_attr__('Toggle submenu', 'lancedesk-responsive-menu-for-elementor') . '" aria-expanded="false">';
                 if (!empty($settings['submenu_indicator_icon']) && !empty($settings['submenu_indicator_icon']['value'])) {
                     ob_start();
                     Icons_Manager::render_icon($settings['submenu_indicator_icon'], ['aria-hidden' => 'true']);
@@ -4276,7 +4277,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
                 $html .= sprintf(
                     '<ul class="ldjem-submenu ldjem-submenu-level-%d">%s</ul>',
                     $level + 1,
-                    $this->render_menu_items($item->children, $level + 1, $settings) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    wp_kses_post($this->render_menu_items($item->children, $level + 1, $settings))
                 );
             }
 
@@ -4292,7 +4293,7 @@ class LDJEM_Menu_Widget extends Widget_Base {
      * @return void
      */
     public function render_plain_content() {
-        echo esc_html__('LanceDesk Responsive Menu', 'lancedesk-elementor-menu');
+        echo esc_html__('LanceDesk Responsive Menu', 'lancedesk-responsive-menu-for-elementor');
     }
 
     /**

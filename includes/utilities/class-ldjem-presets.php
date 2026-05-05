@@ -53,11 +53,11 @@ class LDJEM_Presets {
      */
     public static function get_preset_labels() {
         return [
-            'none' => esc_html__('Custom (No Preset)', 'lancedesk-elementor-menu'),
-            'classic-sidebar' => esc_html__('Classic Sidebar - Left', 'lancedesk-elementor-menu'),
-            'modern-dark' => esc_html__('Modern Dark - Right', 'lancedesk-elementor-menu'),
-            'top-navigation' => esc_html__('Top Navigation Bar', 'lancedesk-elementor-menu'),
-            'full-overlay' => esc_html__('Full Overlay - Left', 'lancedesk-elementor-menu'),
+            'none' => esc_html__('Custom (No Preset)', 'lancedesk-responsive-menu-for-elementor'),
+            'classic-sidebar' => esc_html__('Classic Sidebar - Left', 'lancedesk-responsive-menu-for-elementor'),
+            'modern-dark' => esc_html__('Modern Dark - Right', 'lancedesk-responsive-menu-for-elementor'),
+            'top-navigation' => esc_html__('Top Navigation Bar', 'lancedesk-responsive-menu-for-elementor'),
+            'full-overlay' => esc_html__('Full Overlay - Left', 'lancedesk-responsive-menu-for-elementor'),
         ];
     }
 
@@ -68,8 +68,8 @@ class LDJEM_Presets {
      */
     private static function get_preset_none() {
         return [
-            'name' => esc_html__('Custom', 'lancedesk-elementor-menu'),
-            'description' => esc_html__('Define all settings manually', 'lancedesk-elementor-menu'),
+            'name' => esc_html__('Custom', 'lancedesk-responsive-menu-for-elementor'),
+            'description' => esc_html__('Define all settings manually', 'lancedesk-responsive-menu-for-elementor'),
             'settings' => [],
         ];
     }
@@ -82,8 +82,8 @@ class LDJEM_Presets {
      */
     private static function get_preset_classic_sidebar() {
         return [
-            'name' => esc_html__('Classic Sidebar', 'lancedesk-elementor-menu'),
-            'description' => esc_html__('Left sidebar on mobile, horizontal on desktop', 'lancedesk-elementor-menu'),
+            'name' => esc_html__('Classic Sidebar', 'lancedesk-responsive-menu-for-elementor'),
+            'description' => esc_html__('Left sidebar on mobile, horizontal on desktop', 'lancedesk-responsive-menu-for-elementor'),
             'settings' => [
                 // General settings
                 'offcanvas_enable' => 'yes',
@@ -99,14 +99,14 @@ class LDJEM_Presets {
                 
                 // Header
                 'offcanvas_show_header' => 'yes',
-                'offcanvas_header_text' => esc_html__('Menu', 'lancedesk-elementor-menu'),
+                'offcanvas_header_text' => esc_html__('Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'offcanvas_header_bg_color' => '#ffffff',
                 'offcanvas_show_close_btn' => 'yes',
                 'offcanvas_close_icon' => 'x',
                 
                 // Footer
                 'offcanvas_show_footer' => 'yes',
-                'offcanvas_footer_title' => esc_html__('Follow Us', 'lancedesk-elementor-menu'),
+                'offcanvas_footer_title' => esc_html__('Follow Us', 'lancedesk-responsive-menu-for-elementor'),
                 'offcanvas_footer_bg_color' => '#f9f9f9',
                 'offcanvas_social_icon_size' => 36,
                 
@@ -132,8 +132,8 @@ class LDJEM_Presets {
      */
     private static function get_preset_modern_dark() {
         return [
-            'name' => esc_html__('Modern Dark', 'lancedesk-elementor-menu'),
-            'description' => esc_html__('Right sidebar with dark theme, premium feel', 'lancedesk-elementor-menu'),
+            'name' => esc_html__('Modern Dark', 'lancedesk-responsive-menu-for-elementor'),
+            'description' => esc_html__('Right sidebar with dark theme, premium feel', 'lancedesk-responsive-menu-for-elementor'),
             'settings' => [
                 // General settings
                 'offcanvas_enable' => 'yes',
@@ -149,14 +149,14 @@ class LDJEM_Presets {
                 
                 // Header
                 'offcanvas_show_header' => 'yes',
-                'offcanvas_header_text' => esc_html__('Navigate', 'lancedesk-elementor-menu'),
+                'offcanvas_header_text' => esc_html__('Navigate', 'lancedesk-responsive-menu-for-elementor'),
                 'offcanvas_header_bg_color' => '#242424',
                 'offcanvas_show_close_btn' => 'yes',
                 'offcanvas_close_icon' => 'arrow',
                 
                 // Footer
                 'offcanvas_show_footer' => 'yes',
-                'offcanvas_footer_title' => esc_html__('Connect', 'lancedesk-elementor-menu'),
+                'offcanvas_footer_title' => esc_html__('Connect', 'lancedesk-responsive-menu-for-elementor'),
                 'offcanvas_footer_bg_color' => '#242424',
                 'offcanvas_social_icon_size' => 40,
                 
@@ -182,8 +182,8 @@ class LDJEM_Presets {
      */
     private static function get_preset_top_navigation() {
         return [
-            'name' => esc_html__('Top Navigation', 'lancedesk-elementor-menu'),
-            'description' => esc_html__('Full-width menu slides down from top', 'lancedesk-elementor-menu'),
+            'name' => esc_html__('Top Navigation', 'lancedesk-responsive-menu-for-elementor'),
+            'description' => esc_html__('Full-width menu slides down from top', 'lancedesk-responsive-menu-for-elementor'),
             'settings' => [
                 // General settings
                 'offcanvas_enable' => 'yes',
@@ -227,8 +227,8 @@ class LDJEM_Presets {
      */
     private static function get_preset_full_overlay() {
         return [
-            'name' => esc_html__('Full Overlay', 'lancedesk-elementor-menu'),
-            'description' => esc_html__('Full-screen overlay menu for maximum mobile focus', 'lancedesk-elementor-menu'),
+            'name' => esc_html__('Full Overlay', 'lancedesk-responsive-menu-for-elementor'),
+            'description' => esc_html__('Full-screen overlay menu for maximum mobile focus', 'lancedesk-responsive-menu-for-elementor'),
             'settings' => [
                 // General settings
                 'offcanvas_enable' => 'yes',
@@ -244,14 +244,14 @@ class LDJEM_Presets {
                 
                 // Header
                 'offcanvas_show_header' => 'yes',
-                'offcanvas_header_text' => esc_html__('Menu', 'lancedesk-elementor-menu'),
+                'offcanvas_header_text' => esc_html__('Menu', 'lancedesk-responsive-menu-for-elementor'),
                 'offcanvas_header_bg_color' => '#f5f5f5',
                 'offcanvas_show_close_btn' => 'yes',
                 'offcanvas_close_icon' => 'chevron',
                 
                 // Footer
                 'offcanvas_show_footer' => 'yes',
-                'offcanvas_footer_title' => esc_html__('Social Media', 'lancedesk-elementor-menu'),
+                'offcanvas_footer_title' => esc_html__('Social Media', 'lancedesk-responsive-menu-for-elementor'),
                 'offcanvas_footer_bg_color' => '#f5f5f5',
                 'offcanvas_social_icon_size' => 44,
                 
