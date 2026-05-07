@@ -4,7 +4,7 @@ Tags: elementor, menu, responsive menu, mobile menu, navigation
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,11 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Changelog ==
 
+= 1.0.7 =
+* Preserve WordPress menu item CSS classes on frontend `<li>` output for standard and off-canvas renderers.
+* Respect per-menu-item link target (`target`) from WordPress menu settings instead of forcing widget-level target only.
+* Include menu item relationship (`rel`/XFN) values when set in WordPress menu item options.
+
 = 1.0.6 =
 * Renamed plugin branding and slug/text domain to `lancedesk-responsive-menu-for-elementor` for WordPress.org trademark compliance.
 * Replaced inline debug script output with `wp_add_inline_script()` on the frontend handle.
@@ -103,6 +108,9 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.7 =
+Recommended update to keep WordPress menu item classes and link attributes (target/rel) in frontend output.
 
 = 1.0.6 =
 Recommended trademark-compliance and security-hardening update for WordPress.org review approval.

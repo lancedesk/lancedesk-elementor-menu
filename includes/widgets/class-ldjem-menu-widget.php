@@ -4127,6 +4127,11 @@ JS;
 
         foreach ($items as $item) {
             $classes = [$level === 0 ? 'ldjem-offcanvas-menu-item' : 'ldjem-offcanvas-submenu-item'];
+            $item_classes = isset($item->classes) && is_array($item->classes) ? $item->classes : [];
+            $item_classes = array_filter(array_map('sanitize_html_class', $item_classes));
+            if (!empty($item_classes)) {
+                $classes = array_merge($classes, $item_classes);
+            }
 
             if (!empty($settings['mark_active_item']) && 'yes' === $settings['mark_active_item']) {
                 if (!empty($item->current)) {
@@ -4151,10 +4156,11 @@ JS;
             );
 
             $html .= sprintf(
-                '<a href="%1$s"%2$s%3$s>%4$s</a>',
+                '<a href="%1$s"%2$s%3$s%4$s>%5$s</a>',
                 esc_url($item->url),
-                (!empty($settings['link_target']) && in_array($settings['link_target'], ['_blank', '_self'], true)) ? ' target="' . esc_attr($settings['link_target']) . '"' : '',
+                !empty($item->target) ? ' target="' . esc_attr($item->target) . '"' : ((!empty($settings['link_target']) && in_array($settings['link_target'], ['_blank', '_self'], true)) ? ' target="' . esc_attr($settings['link_target']) . '"' : ''),
                 !empty($item->children) ? ' aria-haspopup="true" aria-expanded="false"' : '',
+                !empty($item->xfn) ? ' rel="' . esc_attr($item->xfn) . '"' : '',
                 esc_html($item->title)
             );
 
@@ -4234,6 +4240,11 @@ JS;
 
         foreach ($items as $item) {
             $classes = ['ldjem-menu-item'];
+            $item_classes = isset($item->classes) && is_array($item->classes) ? $item->classes : [];
+            $item_classes = array_filter(array_map('sanitize_html_class', $item_classes));
+            if (!empty($item_classes)) {
+                $classes = array_merge($classes, $item_classes);
+            }
 
             // Add active class if current page
             if (!empty($settings['mark_active_item']) && 'yes' === $settings['mark_active_item']) {
@@ -4255,10 +4266,11 @@ JS;
 
             // Render menu item
             $html .= sprintf(
-                '<li class="%s"><a href="%s"%s>%s</a>',
+                '<li class="%1$s"><a href="%2$s"%3$s%4$s>%5$s</a>',
                 esc_attr(implode(' ', $classes)),
                 LDJEM_Security::escape_url($item->url),
-                (!empty($settings['link_target']) && in_array($settings['link_target'], ['_blank', '_self'], true)) ? ' target="' . esc_attr($settings['link_target']) . '"' : '',
+                !empty($item->target) ? ' target="' . esc_attr($item->target) . '"' : ((!empty($settings['link_target']) && in_array($settings['link_target'], ['_blank', '_self'], true)) ? ' target="' . esc_attr($settings['link_target']) . '"' : ''),
+                !empty($item->xfn) ? ' rel="' . esc_attr($item->xfn) . '"' : '',
                 LDJEM_Security::escape_html($item->title)
             );
 
