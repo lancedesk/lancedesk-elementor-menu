@@ -4,7 +4,7 @@ Tags: elementor, menu, responsive menu, mobile menu, navigation
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,11 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 
 == Changelog ==
 
+= 1.0.8 =
+* Add optional off-canvas dark-mode logo with selectable trigger source: accessibility class, system preference, or auto.
+* Add responsive off-canvas logo controls for width, max width, height, padding, and margin.
+* Add responsive hamburger margin control for mobile menu placement.
+
 = 1.0.7 =
 * Preserve WordPress menu item CSS classes on frontend `<li>` output for standard and off-canvas renderers.
 * Respect per-menu-item link target (`target`) from WordPress menu settings instead of forcing widget-level target only.
@@ -108,6 +113,9 @@ The widget includes keyboard navigation support and ARIA attributes for submenu 
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.8 =
+Recommended update for dual light/dark off-canvas logos and responsive logo/hamburger spacing controls.
 
 = 1.0.7 =
 Recommended update to keep WordPress menu item classes and link attributes (target/rel) in frontend output.

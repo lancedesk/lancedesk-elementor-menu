@@ -141,6 +141,40 @@
   background-color: transparent;
 }
 
+.ldjem-offcanvas-logo-image {
+  display: block;
+}
+
+.ldjem-offcanvas-logo-image img {
+  display: block;
+}
+
+.ldjem-offcanvas-logo-dual .ldjem-offcanvas-logo-image-dark {
+  display: none;
+}
+
+html.hb-a11y-dark .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-auto .ldjem-offcanvas-logo-image-light,
+html.hb-a11y-dark .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-accessibility .ldjem-offcanvas-logo-image-light {
+  display: none;
+}
+
+html.hb-a11y-dark .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-auto .ldjem-offcanvas-logo-image-dark,
+html.hb-a11y-dark .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-accessibility .ldjem-offcanvas-logo-image-dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-auto .ldjem-offcanvas-logo-image-light,
+  .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-system .ldjem-offcanvas-logo-image-light {
+    display: none;
+  }
+
+  .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-auto .ldjem-offcanvas-logo-image-dark,
+  .ldjem-offcanvas-logo-dual.ldjem-logo-dark-mode-system .ldjem-offcanvas-logo-image-dark {
+    display: block;
+  }
+}
+
 .ldjem-offcanvas-logo-text {
   font-family: Poppins, sans-serif;
   font-size: 18px;

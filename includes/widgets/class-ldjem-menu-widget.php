@@ -1693,6 +1693,18 @@ class LDJEM_Menu_Widget extends Widget_Base {
             ]
         );
 
+        $this->add_responsive_control(
+            'hamburger_margin',
+            [
+                'label'      => esc_html__('Hamburger Margin', 'lancedesk-responsive-menu-for-elementor'),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-hamburger' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
         $this->add_control(
             'hamburger_border_radius',
             [
@@ -1949,6 +1961,55 @@ class LDJEM_Menu_Widget extends Widget_Base {
         );
 
         $this->add_control(
+            'offcanvas_dark_logo_enabled',
+            [
+                'label'        => esc_html__('Enable Dark Mode Logo', 'lancedesk-responsive-menu-for-elementor'),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'lancedesk-responsive-menu-for-elementor'),
+                'label_off'    => esc_html__('No', 'lancedesk-responsive-menu-for-elementor'),
+                'return_value' => 'yes',
+                'default'      => '',
+                'condition'    => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_logo_dark',
+            [
+                'label'     => esc_html__('Dark Mode Logo Image', 'lancedesk-responsive-menu-for-elementor'),
+                'type'      => Controls_Manager::MEDIA,
+                'condition' => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                    'offcanvas_dark_logo_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'offcanvas_logo_dark_mode_source',
+            [
+                'label'       => esc_html__('Dark Mode Source', 'lancedesk-responsive-menu-for-elementor'),
+                'type'        => Controls_Manager::SELECT,
+                'options'     => [
+                    'auto'          => esc_html__('Auto (Accessibility class or System preference)', 'lancedesk-responsive-menu-for-elementor'),
+                    'accessibility' => esc_html__('Accessibility Class Only (hb-a11y-dark)', 'lancedesk-responsive-menu-for-elementor'),
+                    'system'        => esc_html__('System Preference Only (prefers-color-scheme)', 'lancedesk-responsive-menu-for-elementor'),
+                ],
+                'default'     => 'auto',
+                'description' => esc_html__('Choose what triggers the dark logo. Auto works with the accessibility plugin and also falls back to device dark preference.', 'lancedesk-responsive-menu-for-elementor'),
+                'condition'   => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                    'offcanvas_dark_logo_enabled' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
             'offcanvas_logo_link',
             [
                 'label'     => esc_html__('Logo Link', 'lancedesk-responsive-menu-for-elementor'),
@@ -2088,21 +2149,117 @@ class LDJEM_Menu_Widget extends Widget_Base {
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
+            'offcanvas_logo_width',
+            [
+                'label'      => esc_html__('Logo Width', 'lancedesk-responsive-menu-for-elementor'),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px', '%', 'vw'],
+                'range'      => [
+                    'px' => [
+                        'min' => 16,
+                        'max' => 640,
+                    ],
+                    '%' => [
+                        'min' => 5,
+                        'max' => 100,
+                    ],
+                    'vw' => [
+                        'min' => 5,
+                        'max' => 100,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-logo img' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
             'offcanvas_logo_max_width',
             [
                 'label'      => esc_html__('Logo Max Width', 'lancedesk-responsive-menu-for-elementor'),
                 'type'       => Controls_Manager::SLIDER,
-                'size_units' => ['px'],
+                'size_units' => ['px', '%', 'vw'],
                 'range'      => [
                     'px' => [
                         'min' => 24,
-                        'max' => 240,
+                        'max' => 960,
+                    ],
+                    '%' => [
+                        'min' => 5,
+                        'max' => 100,
+                    ],
+                    'vw' => [
+                        'min' => 5,
+                        'max' => 100,
                     ],
                 ],
                 'selectors'  => [
                     '{{WRAPPER}} .ldjem-offcanvas-wrapper' => '--ldjem-offcanvas-logo-max-width: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .ldjem-offcanvas-logo img' => 'max-width: {{SIZE}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_logo_height',
+            [
+                'label'      => esc_html__('Logo Height', 'lancedesk-responsive-menu-for-elementor'),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'vh'],
+                'range'      => [
+                    'px' => [
+                        'min' => 12,
+                        'max' => 320,
+                    ],
+                    'vh' => [
+                        'min' => 2,
+                        'max' => 60,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-logo img' => 'height: {{SIZE}}{{UNIT}}; width: auto; object-fit: contain;',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_logo_padding',
+            [
+                'label'      => esc_html__('Logo Padding', 'lancedesk-responsive-menu-for-elementor'),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-logo' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+                'condition'  => [
+                    'offcanvas_enable' => 'yes',
+                    'offcanvas_show_header' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'offcanvas_logo_margin',
+            [
+                'label'      => esc_html__('Logo Margin', 'lancedesk-responsive-menu-for-elementor'),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em', 'rem'],
+                'selectors'  => [
+                    '{{WRAPPER}} .ldjem-offcanvas-logo' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
                 'condition'  => [
                     'offcanvas_enable' => 'yes',
@@ -4029,10 +4186,21 @@ JS;
      */
     private function render_offcanvas_header($settings) {
         $logo = !empty($settings['offcanvas_logo']) ? $settings['offcanvas_logo'] : [];
+        $logo_dark = !empty($settings['offcanvas_logo_dark']) ? $settings['offcanvas_logo_dark'] : [];
         $header_text = !empty($settings['offcanvas_header_text']) ? $settings['offcanvas_header_text'] : '';
         $logo_alt = !empty($settings['offcanvas_logo_alt']) ? $settings['offcanvas_logo_alt'] : esc_html__('Logo', 'lancedesk-responsive-menu-for-elementor');
+        $dark_logo_enabled = !empty($settings['offcanvas_dark_logo_enabled']) && 'yes' === $settings['offcanvas_dark_logo_enabled'];
+        $dark_mode_source = !empty($settings['offcanvas_logo_dark_mode_source']) ? sanitize_key($settings['offcanvas_logo_dark_mode_source']) : 'auto';
+        if (!in_array($dark_mode_source, ['auto', 'accessibility', 'system'], true)) {
+            $dark_mode_source = 'auto';
+        }
+        $has_dark_logo = $dark_logo_enabled && !empty($logo_dark['url']);
 
-        echo '<div class="ldjem-offcanvas-logo">';
+        $logo_wrapper_classes = 'ldjem-offcanvas-logo';
+        if ($has_dark_logo) {
+            $logo_wrapper_classes .= ' ldjem-offcanvas-logo-dual ldjem-logo-dark-mode-' . $dark_mode_source;
+        }
+        echo '<div class="' . esc_attr($logo_wrapper_classes) . '">';
 
         if (!empty($logo['url'])) {
             $logo_link = !empty($settings['offcanvas_logo_link']['url']) ? $settings['offcanvas_logo_link']['url'] : '';
@@ -4041,11 +4209,20 @@ JS;
                 printf('<a href="%s">', esc_url($logo_link));
             }
 
-            printf(
-                '<img src="%1$s" alt="%2$s">',
-                esc_url($logo['url']),
-                esc_attr($logo_alt)
-            );
+            if ($has_dark_logo) {
+                printf(
+                    '<span class="ldjem-offcanvas-logo-image ldjem-offcanvas-logo-image-light"><img src="%1$s" alt="%2$s"></span><span class="ldjem-offcanvas-logo-image ldjem-offcanvas-logo-image-dark"><img src="%3$s" alt="%2$s"></span>',
+                    esc_url($logo['url']),
+                    esc_attr($logo_alt),
+                    esc_url($logo_dark['url'])
+                );
+            } else {
+                printf(
+                    '<img src="%1$s" alt="%2$s">',
+                    esc_url($logo['url']),
+                    esc_attr($logo_alt)
+                );
+            }
 
             if (!empty($logo_link)) {
                 echo '</a>';
