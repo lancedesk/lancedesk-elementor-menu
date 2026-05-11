@@ -51,6 +51,10 @@ fi
 
 echo "==> Copying directory-assets -> assets/ (flat: banner, icon, screenshot-*.png)"
 cp -f "${PLUGIN_ROOT}/directory-assets/banner-772x250.png" "${SVN_ROOT}/assets/"
+# Optional HiDPI banner (1544x500); sharp on retina / wide layouts. Add file to directory-assets/ when ready.
+if [[ -f "${PLUGIN_ROOT}/directory-assets/banner-1544x500.png" ]]; then
+  cp -f "${PLUGIN_ROOT}/directory-assets/banner-1544x500.png" "${SVN_ROOT}/assets/"
+fi
 cp -f "${PLUGIN_ROOT}/directory-assets/icon-256x256.png" "${SVN_ROOT}/assets/"
 shopt -s nullglob
 for f in "${PLUGIN_ROOT}/directory-assets/screenshots/"*.png; do
