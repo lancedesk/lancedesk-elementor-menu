@@ -10,27 +10,44 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 SVN_ROOT="${1:?Usage: $0 /path/to/lancedesk-responsive-menu-for-elementor-svn-checkout}"
+PLUGIN_BASE="$(basename "${PLUGIN_ROOT}")"
 
 if [[ ! -d "${SVN_ROOT}/trunk" ]] || [[ ! -d "${SVN_ROOT}/assets" ]]; then
   echo "error: expected ${SVN_ROOT}/trunk and ${SVN_ROOT}/assets (run svn checkout first)." >&2
   exit 1
 fi
 
-if ! command -v rsync >/dev/null 2>&1; then
-  echo "error: rsync is required (Git for Windows Bash includes it, or use WSL)." >&2
+echo "==> Syncing plugin -> trunk (excludes .svn, VCS, GitHub, directory-assets, nested SVN dir \"${PLUGIN_BASE}\")"
+
+if command -v rsync >/dev/null 2>&1; then
+  rsync -a --delete \
+    --exclude '.svn/' \
+    --exclude '.git/' \
+    --exclude '.github/' \
+    --exclude 'directory-assets/' \
+    --exclude '.distignore' \
+    --exclude 'README.md' \
+    --exclude 'scripts/' \
+    --exclude "${PLUGIN_BASE}/" \
+    "${PLUGIN_ROOT}/" "${SVN_ROOT}/trunk/"
+elif command -v robocopy >/dev/null 2>&1 && command -v cygpath >/dev/null 2>&1; then
+  PLUGIN_WIN="$(cygpath -w "${PLUGIN_ROOT}")"
+  TRUNK_WIN="$(cygpath -w "${SVN_ROOT}/trunk")"
+  export MSYS2_ARG_CONV_EXCL='*'
+  set +e
+  robocopy "${PLUGIN_WIN}" "${TRUNK_WIN}" /MIR /E \
+    /XD .svn .git .github directory-assets scripts "${PLUGIN_BASE}" \
+    /XF README.md .distignore /NFL /NDL /NJH /NJS /NC /NS /NP
+  RC=$?
+  set -e
+  if [[ "${RC}" -ge 8 ]]; then
+    echo "error: robocopy failed (exit ${RC})." >&2
+    exit 1
+  fi
+else
+  echo "error: need rsync, or Git Bash with robocopy + cygpath." >&2
   exit 1
 fi
-
-echo "==> Syncing plugin -> trunk (excludes .svn, .git, GitHub, directory-assets)"
-rsync -a --delete \
-  --exclude '.svn/' \
-  --exclude '.git/' \
-  --exclude '.github/' \
-  --exclude 'directory-assets/' \
-  --exclude '.distignore' \
-  --exclude 'README.md' \
-  --exclude 'scripts/' \
-  "${PLUGIN_ROOT}/" "${SVN_ROOT}/trunk/"
 
 echo "==> Copying directory-assets -> assets/ (flat: banner, icon, screenshot-*.png)"
 cp -f "${PLUGIN_ROOT}/directory-assets/banner-772x250.png" "${SVN_ROOT}/assets/"
@@ -45,7 +62,7 @@ echo "Done. Next (from your machine, with SVN installed):"
 echo "  cd \"${SVN_ROOT}\""
 echo "  svn status"
 echo "  svn add --force trunk assets"
-echo "  svn commit -m \"Release 1.0.8 — sync trunk and directory assets\""
+echo "  svn commit -m \"Release 1.0.8 — sync trunk and plugin directory assets\""
 echo ""
 echo "If this is the first tagged build for this version on .org:"
 echo "  svn cp trunk tags/1.0.8"
