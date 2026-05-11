@@ -1,0 +1,6 @@
+# Paths excluded from WordPress.org trunk zip (e.g. 10up/action-wordpress-plugin-deploy).
+# Contents of directory-assets/ still belong in SVN assets/, not trunk.
+
+.github/
+README.md
+directory-assets/

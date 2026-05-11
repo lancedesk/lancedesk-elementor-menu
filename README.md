@@ -8,6 +8,8 @@ Responsive Elementor menu widget for WordPress with per-device layout controls, 
 ![PHP](https://img.shields.io/badge/php-7.4%2B-blue)
 ![Elementor](https://img.shields.io/badge/elementor-3.0%2B-blue)
 
+![LanceDesk Responsive Menu for Elementor](.github/readme-banner.png)
+
 ## Why This Plugin
 
 Most Elementor menu workflows require duplicated widgets and breakpoint visibility hacks.
